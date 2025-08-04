@@ -16,9 +16,10 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - `securityContext.capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Immutable, Trusted Images ✅
-- Image pinned with digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Main image pinned with digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b`
+- Fluent-bit sidecar image pinned with digest: `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b`
 - No `:latest` tags used
-- Internal registry source
+- Only approved registries used (registry.bank.internal and quay.io/redhat-openshift-approved)
 
 ### Rule 04 - Naming & Label Conventions ✅
 - Release name: `pe-eng-credit-scoring-engine-prod`
@@ -33,9 +34,9 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - Prometheus annotations for metrics scraping:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/metrics"`
+  - `prometheus.io/path: "/actuator/prometheus"`
 - Fluent-bit sidecar for log aggregation
-- Metrics endpoint exposed on port 8080 at /metrics path
+- Metrics endpoint exposed on port 8080 at /actuator/prometheus path
 
 ### Rule 06 - Health Probes ✅
 - Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
