@@ -5,9 +5,9 @@ This directory contains Kubernetes manifests that comply with enterprise k8s sta
 ## Standards Compliance
 
 ### ✅ Rule 01 - Resource Limits & Requests
-- CPU requests: 500m, limits: 2000m
-- Memory requests: 1536Mi, limits: 3072Mi
-- Follows 60% request-to-limit ratio for HPA headroom
+- CPU requests: 1200m, limits: 2000m (60% ratio)
+- Memory requests: 1536Mi, limits: 3072Mi (50% ratio)
+- Follows recommended request-to-limit ratio for HPA headroom
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` with user ID 1001
@@ -18,7 +18,7 @@ This directory contains Kubernetes manifests that comply with enterprise k8s sta
 ### ✅ Rule 03 - Immutable, Trusted Images
 - Pinned image with SHA256 digest (no `:latest` tags)
 - Uses approved registry: `registry.bank.internal/*`
-- Image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 
 ### ✅ Rule 04 - Naming & Label Conventions
 - Release name: `pe-eng-credit-scoring-engine-prod`
