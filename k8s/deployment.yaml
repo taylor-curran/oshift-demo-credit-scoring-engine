@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: banking-eng-credit-scoring-engine-prod
+  name: pe-eng-credit-scoring-engine-prod
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
@@ -45,6 +45,8 @@ spec:
           protocol: TCP
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           capabilities:
@@ -158,4 +160,4 @@ spec:
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: pe-eng-fluent-bit-config-prod
