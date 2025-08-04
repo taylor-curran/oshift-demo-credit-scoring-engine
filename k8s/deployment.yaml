@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
@@ -65,16 +65,16 @@ spec:
           mountPath: /models
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
-          timeoutSeconds: 20
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
-          timeoutSeconds: 20
+          failureThreshold: 1
       volumes:
       - name: tmp-volume
         emptyDir: {}
