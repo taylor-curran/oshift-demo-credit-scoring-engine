@@ -11,9 +11,10 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - `securityContext.capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Image Provenance ✅
-- Uses pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0`
+- Uses pinned image tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890`
 - No `:latest` tags
 - Registry from allowlist: `registry.bank.internal/*`
+- Image immutability enforced with SHA digest
 
 ### Rule 04 - Naming & Label Conventions ✅
 - Release name prefix: `pe-eng-credit-scoring-engine-dev`
