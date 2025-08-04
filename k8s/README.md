@@ -11,7 +11,7 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 - `securityContext.capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Image Provenance ✅
-- Uses pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0`
+- Uses pinned image tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466166c17b0f86df5aa0d1ccaab5b24cf48a4344f99d640dd2e89`
 - No `:latest` tags
 - Uses approved internal registry
 
