@@ -14,7 +14,7 @@ resources:
 - namespace.yaml
 - deployment-prod.yaml
 - service-prod.yaml
-- configmap.yaml
+- fluent-bit-configmap-prod.yaml
 - ingress.yaml
 - servicemonitor.yaml
 - hpa.yaml
