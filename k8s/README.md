@@ -58,12 +58,6 @@ kubectl apply -f ingress.yaml
 Database and Redis credentials should be managed separately using:
 - External secret management systems (e.g., HashiCorp Vault)
 - Kubernetes External Secrets Operator
-- Cloud provider secret management (AWS Secrets Manager, Azure Key Vault, etc.)
+- Cloud provider secret management services
 
-Example secret creation:
-```bash
-kubectl create secret generic pe-eng-credit-scoring-engine-prod-secrets \
-  --from-literal=DB_USERNAME=credit_user \
-  --from-literal=DB_PASSWORD=secure_password \
-  --from-literal=REDIS_PASSWORD=redis_password
-```
+Refer to your organization's security policies for proper secret management procedures.
