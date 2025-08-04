@@ -34,14 +34,18 @@ def validate_yaml_files():
     return all_valid
 
 def check_k8s_standards_compliance():
-    """Check compliance with the 4 k8s standards"""
+    """Check compliance with all 6 k8s standards"""
     print("\n=== K8s Standards Compliance Check ===")
     
     try:
         with open('k8s/deployment.yaml', 'r') as f:
             deployment = yaml.safe_load(f)
+        with open('k8s/service.yaml', 'r') as f:
+            service = yaml.safe_load(f)
+        with open('k8s/configmap.yaml', 'r') as f:
+            configmap = yaml.safe_load(f)
     except Exception as e:
-        print(f"✗ Could not load deployment.yaml: {e}")
+        print(f"✗ Could not load k8s manifests: {e}")
         return False
     
     issues = []
@@ -100,13 +104,53 @@ def check_k8s_standards_compliance():
         if label not in labels:
             issues.append(f"Rule 04: Missing required label {label}")
     
+    pod_annotations = deployment['spec']['template']['metadata'].get('annotations', {})
+    if pod_annotations.get('prometheus.io/scrape') != 'true':
+        issues.append("Rule 05: Missing prometheus.io/scrape annotation")
+    
+    if pod_annotations.get('prometheus.io/port') != '8080':
+        issues.append("Rule 05: Missing or incorrect prometheus.io/port annotation")
+    
+    app_properties = configmap.get('data', {}).get('application.properties', '')
+    if 'logging.pattern.console={"timestamp"' not in app_properties:
+        issues.append("Rule 05: JSON structured logging not configured")
+    
+    liveness_probe = container.get('livenessProbe', {})
+    readiness_probe = container.get('readinessProbe', {})
+    
+    if not liveness_probe:
+        issues.append("Rule 06: Missing liveness probe")
+    else:
+        liveness_path = liveness_probe.get('httpGet', {}).get('path', '')
+        if liveness_path != '/actuator/health/liveness':
+            issues.append("Rule 06: Incorrect liveness probe path")
+        
+        if liveness_probe.get('initialDelaySeconds') != 30:
+            issues.append("Rule 06: Incorrect liveness probe initial delay")
+        
+        if liveness_probe.get('failureThreshold') != 3:
+            issues.append("Rule 06: Incorrect liveness probe failure threshold")
+    
+    if not readiness_probe:
+        issues.append("Rule 06: Missing readiness probe")
+    else:
+        readiness_path = readiness_probe.get('httpGet', {}).get('path', '')
+        if readiness_path != '/actuator/health/readiness':
+            issues.append("Rule 06: Incorrect readiness probe path")
+        
+        if readiness_probe.get('initialDelaySeconds') != 10:
+            issues.append("Rule 06: Incorrect readiness probe initial delay")
+        
+        if readiness_probe.get('failureThreshold') != 1:
+            issues.append("Rule 06: Incorrect readiness probe failure threshold")
+    
     if issues:
         print("✗ K8s Standards Compliance Issues Found:")
         for issue in issues:
             print(f"  - {issue}")
         return False
     else:
-        print("✓ All K8s Standards (Rules 01-04) are compliant!")
+        print("✓ All K8s Standards (Rules 01-06) are compliant!")
         return True
 
 if __name__ == "__main__":
