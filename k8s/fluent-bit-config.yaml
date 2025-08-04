@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: "2.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubernetes
+    managed-by: helm
 data:
   fluent-bit.conf: |
     [SERVICE]
