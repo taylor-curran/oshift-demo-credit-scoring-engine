@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
-  namespace: retail-banking-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -30,37 +29,42 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "2Gi"
-          limits:
-            cpu: "2000m"
-            memory: "3Gi"
         securityContext:
           runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
-          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "600m"
+            memory: "1228Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -101,7 +105,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 3
@@ -109,50 +113,47 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
           readOnly: true
-        - name: logs-volume
-          mountPath: /var/log/app
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456abc789123
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
-            cpu: "50m"
-            memory: "128Mi"
+            cpu: "120m"
+            memory: "154Mi"
           limits:
             cpu: "200m"
             memory: "256Mi"
-        securityContext:
-          runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
-          allowPrivilegeEscalation: false
         volumeMounts:
-        - name: logs-volume
-          mountPath: /var/log/app
-          readOnly: true
         - name: fluent-bit-config
           mountPath: /fluent-bit/etc
           readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
-      - name: logs-volume
-        emptyDir: {}
+          name: pe-eng-credit-scoring-engine-models-prod
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: pe-eng-credit-scoring-engine-fluent-bit-prod

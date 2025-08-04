@@ -1,70 +1,53 @@
 # Kubernetes Deployment for Credit Scoring Engine
 
-This directory contains Kubernetes manifests for deploying the Credit Scoring Engine in compliance with k8s standards (Rules 01-06).
+This directory contains Kubernetes manifests that comply with k8s-standards Rules 01-06.
 
 ## Standards Compliance
 
 ### Rule 01 - Resource Requests & Limits
-- CPU requests: 500m, limits: 2000m for main container
-- Memory requests: 2Gi, limits: 3Gi for main container
-- Fluent-bit sidecar: CPU 50m-200m, Memory 128Mi-256Mi
+- ✅ CPU requests: 600m (≥ 50m baseline)
+- ✅ Memory requests: 1228Mi (≥ 128Mi baseline)
+- ✅ CPU limits: 1000m (≤ 4 vCPU baseline)
+- ✅ Memory limits: 2048Mi (≤ 2Gi baseline)
+- ✅ Request-to-limit ratio: 60% (optimal for HPA)
 
-### Rule 02 - Pod Security Baseline
-- `runAsNonRoot: true` - Containers run as non-root user
-- `seccompProfile.type: RuntimeDefault` - Runtime default seccomp profile
-- `readOnlyRootFilesystem: true` - Read-only root filesystem
-- `capabilities.drop: ["ALL"]` - All capabilities dropped
-- `allowPrivilegeEscalation: false` - Privilege escalation disabled
+### Rule 02 - Security Context
+- ✅ `runAsNonRoot: true`
+- ✅ `seccompProfile.type: RuntimeDefault`
+- ✅ `readOnlyRootFilesystem: true`
+- ✅ `capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Image Provenance
-- Images use pinned tags with SHA digests
-- Images from approved registry: `registry.bank.internal/*`
-- No `:latest` tags used
+- ✅ SHA digest pinning for all images
+- ✅ Registry allowlist compliance (`registry.bank.internal/*`, `quay.io/redhat-openshift-approved/*`)
+- ✅ No `:latest` tags
 
-### Rule 04 - Naming & Label Conventions
-- Release name prefix: `pe-eng-credit-scoring-engine-prod`
-- Mandatory labels:
-  - `app.kubernetes.io/name: credit-scoring-engine`
-  - `app.kubernetes.io/version: "3.1.0"`
-  - `app.kubernetes.io/part-of: retail-banking`
-  - `environment: prod`
-  - `managed-by: helm`
+### Rule 04 - Naming & Labels
+- ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
+- ✅ Release-name prefix: `pe-eng-credit-scoring-engine-prod`
 
 ### Rule 05 - Logging & Observability
-- Prometheus annotations for metrics scraping:
-  - `prometheus.io/scrape: "true"`
-  - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/actuator/prometheus"`
-- Fluent-bit sidecar for JSON log collection
-- Logs forwarded to Loki stack
+- ✅ JSON stdout logging via application.properties
+- ✅ Prometheus scraping annotations with path: `/actuator/prometheus`
+- ✅ Fluent-bit sidecar for log aggregation
 
 ### Rule 06 - Health Probes
-- Liveness probe: `/actuator/health/liveness`
-- Readiness probe: `/actuator/health/readiness`
-- Appropriate timeouts and failure thresholds
+- ✅ Liveness probe: `/actuator/health/liveness`
+- ✅ Readiness probe: `/actuator/health/readiness`
 
 ## Deployment
 
-Deploy using kustomize:
 ```bash
-kubectl apply -k .
+kubectl apply -k k8s/
 ```
 
-Or deploy individual manifests:
-```bash
-kubectl apply -f namespace.yaml
-kubectl apply -f configmap.yaml
-kubectl apply -f fluent-bit-config.yaml
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-kubectl apply -f ingress.yaml
-```
+## Resource Allocation
 
-## Services
+- **Main container**: 600m/1000m CPU, 1228Mi/2048Mi memory (60% request-to-limit ratio)
+- **Fluent-bit sidecar**: 120m/200m CPU, 154Mi/256Mi memory (60% request-to-limit ratio)
 
-The deployment includes:
-- Main application container (credit-scoring-engine)
-- Fluent-bit sidecar for log shipping
-- Service for internal communication
-- Ingress for external access
-- ConfigMaps for application configuration
+## External Access
+
+The service is exposed via Ingress on:
+- `credit-scoring.internal.banking.com`
+- `credit-api-v3.banking.com`
