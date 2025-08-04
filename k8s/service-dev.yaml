@@ -8,6 +8,9 @@ metadata:
     app.kubernetes.io/part-of: retail-banking
     environment: dev
     managed-by: helm
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
 spec:
   type: ClusterIP
   ports:
