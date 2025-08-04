@@ -13,6 +13,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
+      environment: dev
   template:
     metadata:
       labels:
@@ -20,6 +21,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: dev
+        managed-by: openshift
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -32,7 +34,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -46,8 +48,11 @@ spec:
         securityContext:
           runAsNonRoot: true
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         env:
         - name: SPRING_PROFILES_ACTIVE
           valueFrom:
