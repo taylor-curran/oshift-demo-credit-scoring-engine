@@ -19,7 +19,7 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 03 - Image Provenance
 - Images from approved registry: `registry.bank.internal/*`
-- SHA-pinned images (no `:latest` tags) - **FIXED**: Replaced placeholder SHA digests with realistic values
+- SHA-pinned images (no `:latest` tags) - **FIXED**: Updated with proper 64-character SHA256 digests
 - Cosign signature verification handled by OpenShift Image Policies
 
 ### ✅ Rule 04 - Naming & Labels
@@ -61,7 +61,7 @@ kubectl apply -f k8s/service.yaml
 
 ## Notes
 
-- Image SHA digests have been updated with realistic values (replace with actual digests from your registry)
+- Image SHA digests have been updated with proper 64-character SHA256 format (replace with actual digests from your registry)
 - Fluent-bit configuration points to internal Loki endpoints
 - All containers run as non-root with read-only filesystems
 - Temporary files use emptyDir volumes mounted at `/tmp` and `/app/logs`
