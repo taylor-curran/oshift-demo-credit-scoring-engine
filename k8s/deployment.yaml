@@ -33,8 +33,6 @@ spec:
         ports:
         - containerPort: 8080
           name: http
-        - containerPort: 8080
-          name: metrics
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
