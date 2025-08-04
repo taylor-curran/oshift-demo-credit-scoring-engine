@@ -4,7 +4,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 
 ## Standards Compliance
 
-This deployment follows all four mandatory k8s standards:
+This deployment follows all six mandatory k8s standards:
 
 ### Rule 01 - Resource Requests & Limits ✅
 - **CPU requests**: 500m (0.5 vCPU) 
@@ -86,3 +86,4 @@ kubectl apply -f ingress.yaml
 - TLS certificates need to be provided for ingress
 - Database and Redis connection details should be configured via secrets
 - API keys for external services (Experian, Equifax, etc.) must be securely managed
+- **CRITICAL**: Image SHA256 digests are currently placeholder values and must be replaced with actual signed image digests from the internal registry before production deployment
