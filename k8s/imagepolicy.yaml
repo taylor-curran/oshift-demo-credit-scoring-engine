@@ -20,8 +20,8 @@ spec:
       publicKey:
         keyData: |
           -----BEGIN PUBLIC KEY-----
-          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2G2Y6T4R9VQxvnwdZuYBstXvCqGM
-          qQvfYFfLZpHZqvYvxRzqBdHI6jvx+2sEqvYvxRzqBdHI6jvx+2sEqvYvxRzqBd
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYWnm/eBCCXIw06X4oqVe4FLPiCRn
+          BVqmTfyKwOnmuAiNjvQoaq30cINhw4Bq76MUfty0F2D+9lXGRUaXGzLHkHrVw==
           -----END PUBLIC KEY-----
     signedIdentity:
       type: matchRepository
