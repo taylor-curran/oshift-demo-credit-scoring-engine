@@ -11,11 +11,11 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 - ✅ `capabilities.drop: ["ALL"]`
 
 ### Rule 01 - Resource Requests & Limits
-- ✅ CPU requests: `500m` (0.5 vCPU)
+- ✅ CPU requests: `1200m` (1.2 vCPU)
 - ✅ CPU limits: `2000m` (2 vCPU) 
-- ✅ Memory requests: `1536Mi` (1.5 GB)
+- ✅ Memory requests: `1843Mi` (~1.8 GB)
 - ✅ Memory limits: `3072Mi` (3 GB)
-- ✅ Requests ≈ 50% of limits for HPA headroom
+- ✅ Requests ≈ 60% of limits for HPA headroom
 
 ### Rule 03 - Image Provenance
 - ✅ Pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
@@ -37,8 +37,9 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
   - `prometheus.io/port: "8080"`
 
 ### Rule 06 - Health Probes
-- ✅ Liveness probe: `/actuator/health/liveness`
-- ✅ Readiness probe: `/actuator/health/readiness`
+- ✅ Liveness probe: `/actuator/health/liveness` (30s initial delay, 10s period)
+- ✅ Readiness probe: `/actuator/health/readiness` (10s initial delay, 5s period)
+- ✅ Startup probe: `/actuator/health/readiness` (15s initial delay, 10s period, 30 failures max)
 
 ## Files
 
