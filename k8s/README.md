@@ -10,10 +10,10 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - ✅ Requests set to ~75% of limits for HPA headroom
 
 ### Rule 02 - Security Context
-- ✅ `runAsNonRoot: true`
-- ✅ `seccompProfile.type: RuntimeDefault`
-- ✅ `readOnlyRootFilesystem: true`
-- ✅ `capabilities.drop: ["ALL"]`
+- ✅ `runAsNonRoot: true` (container level)
+- ✅ `seccompProfile.type: RuntimeDefault` (container level)
+- ✅ `readOnlyRootFilesystem: true` (container level)
+- ✅ `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance
 - ✅ Pinned image tag with SHA digest
@@ -22,11 +22,11 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- ✅ Release name prefix: `credit-scoring-engine-prod`
+- ✅ Release name prefix: `banking-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
 
 ### Rule 05 - Logging & Observability
 - ✅ Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
-- ✅ JSON logging configuration in ConfigMap
+- ✅ JSON logging configuration in ConfigMap with structured format
 - ✅ Metrics endpoint exposed on port 8080
 
 ### Rule 06 - Health Probes
