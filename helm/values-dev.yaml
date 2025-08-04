@@ -9,7 +9,7 @@ resources:
     cpu: 1000m
     memory: 2Gi
   requests:
-    cpu: 500m
+    cpu: 600m
     memory: 1536Mi
 
 labels:

@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: helm
+    managed-by: kubectl
 spec:
   replicas: 4
   selector:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: helm
+        managed-by: kubectl
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -44,7 +44,7 @@ spec:
             drop: ["ALL"]
         resources:
           requests:
-            cpu: "500m"
+            cpu: "1200m"
             memory: "1536Mi"
           limits:
             cpu: "2000m"
