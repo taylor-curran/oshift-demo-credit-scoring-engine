@@ -119,22 +119,6 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
-        livenessProbe:
-          httpGet:
-            path: /actuator/health/liveness
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/readiness
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
