@@ -58,4 +58,4 @@ kubectl apply -f k8s/ingress.yaml
 - CPU: 600m request, 1000m limit (60% ratio for HPA headroom)
 - Memory: 1843Mi request, 3072Mi limit (60% ratio, matching Cloud Foundry 3GB allocation)
 - Replicas: 4 (matching Cloud Foundry configuration)
-- Fluent-bit sidecar: 60m CPU request, 100m limit; 77Mi memory request, 128Mi limit
+- Fluent-bit sidecar: 120m CPU request, 200m limit; 154Mi memory request, 256Mi limit
