@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: banking-credit-scoring-prod
+  name: pe-eng-credit-scoring-engine-prod
   namespace: banking-platform-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubernetes
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -20,9 +20,9 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
+        app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: kubernetes
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -45,6 +45,7 @@ spec:
             type: RuntimeDefault
           capabilities:
             drop: ["ALL"]
+          allowPrivilegeEscalation: false
         resources:
           requests:
             cpu: "500m"
@@ -60,41 +61,95 @@ spec:
         - name: JVM_OPTS
           value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
-          value: "https://api.experian.com/credit"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: experian-api-url
         - name: EQUIFAX_API_URL
-          value: "https://api.equifax.com/ews"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: equifax-api-url
         - name: TRANSUNION_API_URL
-          value: "https://api.transunion.com/credit"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: transunion-api-url
         - name: CREDIT_API_TIMEOUT
-          value: "15000"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: credit-api-timeout
         - name: FICO_MODEL_VERSION
-          value: "9.0"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: fico-model-version
         - name: VANTAGE_MODEL_VERSION
-          value: "4.0"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: vantage-model-version
         - name: CUSTOM_MODEL_PATH
-          value: "/models/proprietary-score-v2.3.pkl"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: custom-model-path
         - name: INCOME_VERIFICATION_API
-          value: "https://api.theworknumber.com"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: income-verification-api
         - name: BANK_STATEMENT_ANALYZER
-          value: "https://api.plaid.com/v2"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: bank-statement-analyzer
         - name: MIN_CREDIT_SCORE
-          value: "580"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: min-credit-score
         - name: MAX_DTI_RATIO
-          value: "0.43"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: max-dti-ratio
         - name: MIN_INCOME_VERIFICATION
-          value: "true"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: min-income-verification
         - name: FCRA_COMPLIANCE_MODE
-          value: "true"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: fcra-compliance-mode
         - name: ECOA_COMPLIANCE_MODE
-          value: "true"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: ecoa-compliance-mode
         - name: ADVERSE_ACTION_NOTIFICATIONS
-          value: "true"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: adverse-action-notifications
         - name: ML_FEATURE_COUNT
-          value: "247"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: ml-feature-count
         - name: MODEL_REFRESH_INTERVAL
-          value: "24h"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: model-refresh-interval
         - name: A_B_TEST_ENABLED
-          value: "true"
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-config
+              key: a-b-test-enabled
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
