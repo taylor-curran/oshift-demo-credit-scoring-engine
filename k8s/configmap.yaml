@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pe-eng-credit-scoring-engine-prod
+  namespace: retail-banking
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  application.properties: |
+    spring.profiles.active=production,scoring
+    server.port=8080
+    
+    management.endpoints.web.exposure.include=health,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.endpoint.health.probes.enabled=true
+    management.health.livenessstate.enabled=true
+    management.health.readinessstate.enabled=true
+    management.metrics.export.prometheus.enabled=true
+    
+    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+    logging.level.com.banking.credit=INFO
+    logging.level.org.springframework.web=INFO
+    
+    credit.api.experian.url=https://api.experian.com/credit
+    credit.api.equifax.url=https://api.equifax.com/ews
+    credit.api.transunion.url=https://api.transunion.com/credit
+    credit.api.timeout=15000
+    
+    credit.model.fico.version=9.0
+    credit.model.vantage.version=4.0
+    credit.model.custom.path=/models/proprietary-score-v2.3.pkl
+    
+    credit.scoring.min-score=580
+    credit.scoring.max-dti-ratio=0.43
+    credit.scoring.min-income-verification=true
+    
+    credit.compliance.fcra.enabled=true
+    credit.compliance.ecoa.enabled=true
+    credit.compliance.adverse-action.enabled=true
+    
+    credit.ml.feature-count=247
+    credit.ml.model-refresh-interval=24h
+    credit.ml.ab-test.enabled=true

@@ -36,6 +36,36 @@ mvn spring-boot:run
 ```
 
 ### Deploy
+
+#### Cloud Foundry
 ```bash
 cf push
 ```
+
+#### Kubernetes
+```bash
+# Build and push container image
+docker build -t registry.bank.internal/credit-scoring-engine:3.1.0 .
+docker push registry.bank.internal/credit-scoring-engine:3.1.0
+
+# Deploy using Helm (recommended)
+helm install credit-scoring-engine ./helm/credit-scoring-engine \
+  --namespace retail-banking \
+  --create-namespace
+
+# Or deploy using kubectl
+kubectl apply -f k8s/
+```
+
+## Kubernetes Standards Compliance
+
+This application is fully compliant with k8s-standards-library rules:
+
+- **Rule 01**: Resource requests/limits configured
+- **Rule 02**: Pod security baseline with non-root user, seccomp, read-only filesystem
+- **Rule 03**: Pinned image tags from approved registry
+- **Rule 04**: Proper naming conventions and mandatory labels
+- **Rule 05**: JSON logging and Prometheus metrics on port 8080
+- **Rule 06**: Health probes for liveness and readiness
+
+See [k8s/README.md](k8s/README.md) for detailed deployment instructions.
