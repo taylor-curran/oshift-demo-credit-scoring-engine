@@ -31,19 +31,23 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
-            cpu: "300m"
-            memory: "1536Mi"
+            cpu: "1200m"
+            memory: "1843Mi"
           limits:
             cpu: "2000m"
             memory: "3072Mi"
