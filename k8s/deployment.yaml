@@ -1,0 +1,245 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pe-eng-credit-scoring-engine-prod
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: credit-scoring-engine
+      environment: prod
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/version: "3.1.0"
+        app.kubernetes.io/part-of: retail-banking
+        environment: prod
+        managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.8@sha256:8e9f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
+        env:
+        - name: LOKI_URL
+          value: "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
+      - name: credit-scoring-engine
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:f4e3d2c1b0a9876543210fedcba9876543210fedcba9876543210fedcba98765
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "1800m"
+            memory: "1843Mi"
+          limits:
+            cpu: "3000m"
+            memory: "3072Mi"
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "production,scoring"
+        - name: JBP_CONFIG_OPEN_JDK_JRE
+          value: '[jre: {version: 17.+}]'
+        - name: JVM_OPTS
+          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+        - name: EXPERIAN_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: experian.api.url
+        - name: EQUIFAX_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: equifax.api.url
+        - name: TRANSUNION_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: transunion.api.url
+        - name: CREDIT_API_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: credit.api.timeout
+        - name: FICO_MODEL_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: fico.model.version
+        - name: VANTAGE_MODEL_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: vantage.model.version
+        - name: CUSTOM_MODEL_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: custom.model.path
+        - name: INCOME_VERIFICATION_API
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: income.verification.api
+        - name: BANK_STATEMENT_ANALYZER
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: bank.statement.analyzer
+        - name: MIN_CREDIT_SCORE
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: min.credit.score
+        - name: MAX_DTI_RATIO
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: max.dti.ratio
+        - name: MIN_INCOME_VERIFICATION
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: min.income.verification
+        - name: FCRA_COMPLIANCE_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: fcra.compliance.mode
+        - name: ECOA_COMPLIANCE_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: ecoa.compliance.mode
+        - name: ADVERSE_ACTION_NOTIFICATIONS
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: adverse.action.notifications
+        - name: ML_FEATURE_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: ml.feature.count
+        - name: MODEL_REFRESH_INTERVAL
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: model.refresh.interval
+        - name: A_B_TEST_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-prod-config
+              key: ab.test.enabled
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        - name: models-volume
+          mountPath: /models
+          readOnly: true
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
+      volumes:
+      - name: tmp-volume
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: models-volume
+        emptyDir:
+          sizeLimit: 2Gi
+      - name: config-volume
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-config
+          defaultMode: 0444
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-fluent-bit-config
+          defaultMode: 0444
+      - name: varlog
+        emptyDir:
+          sizeLimit: 500Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
