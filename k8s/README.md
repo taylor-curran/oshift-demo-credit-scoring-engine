@@ -33,8 +33,9 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - Prometheus annotations for metrics scraping:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
+  - `prometheus.io/path: "/metrics"`
 - Fluent-bit sidecar for log aggregation
-- Metrics endpoint exposed on port 8080
+- Metrics endpoint exposed on port 8080 at /metrics path
 
 ### Rule 06 - Health Probes ✅
 - Liveness probe: `/actuator/health/liveness` (60s initial delay, 3 failure threshold)
