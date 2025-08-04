@@ -1,21 +1,38 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: credit-scoring-config
+  name: credit-scoring-engine-config
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
-    environment: dev
-    managed-by: helm
+    environment: prod
+    managed-by: openshift
 data:
-  experian-api-url: "https://api.experian.com/credit"
-  equifax-api-url: "https://api.equifax.com/ews"
-  transunion-api-url: "https://api.transunion.com/credit"
-  credit-api-timeout: "15000"
-  fico-model-version: "9.0"
-  vantage-model-version: "4.0"
-  min-credit-score: "580"
-  max-dti-ratio: "0.43"
-  fcra-compliance-mode: "true"
-  ecoa-compliance-mode: "true"
+  SPRING_PROFILES_ACTIVE: "production,scoring"
+  JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
+  JVM_OPTS: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  
+  EXPERIAN_API_URL: "https://api.experian.com/credit"
+  EQUIFAX_API_URL: "https://api.equifax.com/ews"
+  TRANSUNION_API_URL: "https://api.transunion.com/credit"
+  CREDIT_API_TIMEOUT: "15000"
+  
+  FICO_MODEL_VERSION: "9.0"
+  VANTAGE_MODEL_VERSION: "4.0"
+  CUSTOM_MODEL_PATH: "/models/proprietary-score-v2.3.pkl"
+  
+  INCOME_VERIFICATION_API: "https://api.theworknumber.com"
+  BANK_STATEMENT_ANALYZER: "https://api.plaid.com/v2"
+  
+  MIN_CREDIT_SCORE: "580"
+  MAX_DTI_RATIO: "0.43"
+  MIN_INCOME_VERIFICATION: "true"
+  
+  FCRA_COMPLIANCE_MODE: "true"
+  ECOA_COMPLIANCE_MODE: "true"
+  ADVERSE_ACTION_NOTIFICATIONS: "true"
+  
+  ML_FEATURE_COUNT: "247"
+  MODEL_REFRESH_INTERVAL: "24h"
+  A_B_TEST_ENABLED: "true"
