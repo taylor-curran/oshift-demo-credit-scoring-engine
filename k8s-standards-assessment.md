@@ -20,9 +20,10 @@
 ### Rule 03 - Image Provenance ✅
 **Status: COMPLIANT**
 - Main image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...` (pinned with SHA)
-- Fluent-bit image: `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:...` (approved registry)
+- Fluent-bit image: `quay.io/redhat-openshift-approved/fluent-bit:2.1.10` (approved registry, pinned tag)
 - No `:latest` tags used
 - Images from approved registries only
+- Note: Fluent-bit uses pinned tag instead of SHA due to registry access limitations
 
 ### Rule 04 - Naming & Labels ✅
 **Status: COMPLIANT**
