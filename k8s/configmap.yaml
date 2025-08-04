@@ -11,3 +11,6 @@ metadata:
     managed-by: helm
 data:
   proprietary-score-v2.3.pkl: |
+    model_version: "2.3"
+    feature_count: 247
+    model_type: "gradient_boosting"
