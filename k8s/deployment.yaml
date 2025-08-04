@@ -1,18 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: banking-credit-scoring-prod
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: openshift
+    managed-by: helm
 spec:
   replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
+      environment: prod
   template:
     metadata:
       labels:
@@ -20,13 +21,16 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: openshift
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -35,9 +39,13 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
           seccompProfile:
@@ -45,10 +53,10 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "1200Mi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "2Gi"
+            memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -119,4 +127,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-credit-scoring-engine-models-prod
