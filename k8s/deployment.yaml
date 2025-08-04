@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
-  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -55,8 +54,8 @@ spec:
             - ALL
         resources:
           requests:
-            cpu: "500m"
-            memory: "2Gi"
+            cpu: "1200m"
+            memory: "1800Mi"
           limits:
             cpu: "2000m"
             memory: "3Gi"
@@ -67,6 +66,21 @@ spec:
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
           value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: banking-credit-scoring-secrets
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: banking-credit-scoring-secrets
+              key: DB_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: banking-credit-scoring-secrets
+              key: REDIS_PASSWORD
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -125,9 +139,15 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: banking-credit-scoring-models
+      - name: config-volume
+        configMap:
+          name: banking-credit-scoring-config
