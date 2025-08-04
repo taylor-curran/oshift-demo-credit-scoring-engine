@@ -35,6 +35,31 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
@@ -53,11 +78,11 @@ spec:
             drop: ["ALL"]
         resources:
           requests:
-            cpu: "1200m"
-            memory: "2Gi"
+            cpu: "300m"
+            memory: "1536Mi"
           limits:
-            cpu: "2000m"
-            memory: "3Gi"
+            cpu: "500m"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -105,7 +130,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -113,10 +138,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -129,3 +154,6 @@ spec:
       - name: models-volume
         configMap:
           name: ml-models-config
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config

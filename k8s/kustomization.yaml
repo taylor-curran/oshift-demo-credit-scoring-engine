@@ -15,6 +15,7 @@ resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
+- fluent-bit-configmap.yaml
 - networkpolicy.yaml
 - ingress.yaml
 
