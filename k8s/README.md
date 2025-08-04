@@ -18,7 +18,7 @@ This directory contains Kubernetes manifests that comply with the banking organi
 - `capabilities.drop: ["ALL"]` - Drops all Linux capabilities
 
 ### ✅ Rule 03 - Image Provenance
-- Uses pinned image with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Uses pinned image with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcda593d120e1e32dc6d15540478e6a0b2a45aaa21eba`
 - No `:latest` tags used
 - Images from trusted internal registry
 
