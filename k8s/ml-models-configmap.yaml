@@ -16,7 +16,7 @@ data:
       "model_name": "proprietary-score-v2.3",
       "version": "2.3",
       "features": 247,
-      "training_date": "2024-12-01",
-      "accuracy": 0.89,
+      "training_date": "2024-12-15",
+      "accuracy": 0.94,
       "description": "Proprietary credit scoring model with 247 features"
     }
