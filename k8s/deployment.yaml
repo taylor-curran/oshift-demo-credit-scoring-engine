@@ -122,9 +122,36 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8a45e65b0a5f15b4d2c6e69846f7cbc6e9f34267ccd8ecfb5c1fe3a4725b27c8
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          privileged: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
           name: credit-scoring-models
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
