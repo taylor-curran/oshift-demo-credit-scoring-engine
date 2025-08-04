@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  tag: "3.1.0-test"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+
+resources:
+  limits:
+    cpu: 1500m
+    memory: 2Gi
+  requests:
+    cpu: 800m
+    memory: 1536Mi
+
+labels:
+  environment: test
+
+env:
+  SPRING_PROFILES_ACTIVE: "test,scoring"
+  A_B_TEST_ENABLED: "true"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
