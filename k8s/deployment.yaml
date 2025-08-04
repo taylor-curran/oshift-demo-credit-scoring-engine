@@ -35,6 +35,35 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.8@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
+        env:
+        - name: LOKI_URL
+          value: "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
@@ -205,5 +234,12 @@ spec:
         configMap:
           name: pe-eng-credit-scoring-engine-prod-config
           defaultMode: 0444
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-fluent-bit-config
+          defaultMode: 0444
+      - name: varlog
+        emptyDir:
+          sizeLimit: 500Mi
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
