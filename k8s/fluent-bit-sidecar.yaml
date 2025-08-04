@@ -78,7 +78,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY
         ports:
         - containerPort: 8080
           name: http
@@ -97,10 +97,10 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "2Gi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -130,7 +130,7 @@ spec:
         - name: app-logs
           mountPath: /var/log/app
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
