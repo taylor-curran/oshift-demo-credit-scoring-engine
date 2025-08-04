@@ -12,7 +12,7 @@ metadata:
 data:
   SPRING_PROFILES_ACTIVE: "production,scoring"
   JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
-  JVM_OPTS: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  JVM_OPTS: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
   
   EXPERIAN_API_URL: "https://api.experian.com/credit"
   EQUIFAX_API_URL: "https://api.equifax.com/ews"
