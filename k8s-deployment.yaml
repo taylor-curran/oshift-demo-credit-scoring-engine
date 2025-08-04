@@ -69,10 +69,10 @@ spec:
         resources:
           limits:
             cpu: 2000m
-            memory: 3Gi
+            memory: 2Gi
           requests:
             cpu: 1200m
-            memory: 2Gi
+            memory: 1536Mi
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
