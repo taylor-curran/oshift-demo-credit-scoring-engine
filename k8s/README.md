@@ -27,7 +27,7 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 - Consistent naming pattern: `banking-eng-credit-scoring-engine-{env}` (follows `<team>-<app>-<env>` format)
 
 ### ✅ Rule 05 - Logging & Observability
-- Prometheus scrape annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
+- Prometheus scrape annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"` (metrics endpoint at `/metrics`)
 - Fluent-bit sidecar for centralized logging to Loki
 - JSON structured logging to stdout
 
