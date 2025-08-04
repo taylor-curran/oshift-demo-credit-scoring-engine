@@ -1,0 +1,54 @@
++ set -e
++ echo '🔍 K8s Standards Compliance Validation'
+🔍 K8s Standards Compliance Validation
++ echo ======================================
+======================================
++ K8S_DIR=k8s
++ DEPLOYMENT_FILE=k8s/deployment.yaml
++ '[' '!' -d k8s ']'
++ '[' '!' -f k8s/deployment.yaml ']'
++ echo ''
+
++ echo '📋 Rule 01: Resource Requests & Limits'
+📋 Rule 01: Resource Requests & Limits
++ echo --------------------------------------
+--------------------------------------
++ grep -q requests: k8s/deployment.yaml
++ grep -q limits: k8s/deployment.yaml
++ echo '✅ Resource requests and limits are configured'
+✅ Resource requests and limits are configured
+++ grep -A1 requests: k8s/deployment.yaml
+++ grep cpu:
+++ awk '{print $2}'
+++ tr -d '"'
++ echo '   CPU Requests: 1000m'
+   CPU Requests: 1000m
+++ grep -A2 requests: k8s/deployment.yaml
+++ grep memory:
+++ awk '{print $2}'
+++ tr -d '"'
++ echo '   Memory Requests: 1536Mi'
+   Memory Requests: 1536Mi
+++ grep -A1 limits: k8s/deployment.yaml
+++ grep cpu:
+++ awk '{print $2}'
+++ tr -d '"'
++ echo '   CPU Limits: 2000m'
+   CPU Limits: 2000m
+++ grep -A2 limits: k8s/deployment.yaml
+++ grep memory:
+++ awk '{print $2}'
+++ tr -d '"'
++ echo '   Memory Limits: 3072Mi'
+   Memory Limits: 3072Mi
++ echo ''
+
++ echo '🔒 Rule 02: Pod Security Baseline'
+🔒 Rule 02: Pod Security Baseline
++ echo --------------------------------
+--------------------------------
++ security_checks=0
++ grep -q 'runAsNonRoot: true' k8s/deployment.yaml
++ echo '✅ runAsNonRoot: true configured'
+✅ runAsNonRoot: true configured
++ (( security_checks++ ))

@@ -1,0 +1,14 @@
+🔍 K8s Standards Compliance Validation
+======================================
+
+📋 Rule 01: Resource Requests & Limits
+--------------------------------------
+✅ Resource requests and limits are configured
+   CPU Requests: 1000m
+   Memory Requests: 1536Mi
+   CPU Limits: 2000m
+   Memory Limits: 3072Mi
+
+🔒 Rule 02: Pod Security Baseline
+--------------------------------
+✅ runAsNonRoot: true configured
