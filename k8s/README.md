@@ -16,7 +16,7 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - ✅ `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance
-- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:abc123...`
+- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 - ✅ Uses approved registry: `registry.bank.internal`
 - ✅ No `:latest` tags
 
