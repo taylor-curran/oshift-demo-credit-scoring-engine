@@ -78,7 +78,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b90f17d1a8b4c5c4e1c5c5c5c5c5c5c5c5
         ports:
         - containerPort: 8080
           name: http
@@ -130,7 +130,7 @@ spec:
         - name: app-logs
           mountPath: /var/log/app
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8f9e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
