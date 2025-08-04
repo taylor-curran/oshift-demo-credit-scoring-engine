@@ -52,19 +52,19 @@ This audit report evaluates the Kubernetes manifests in the credit scoring engin
 - Full image reference: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...` ✅
 
 ### ✅ Rule 04 - Naming & Label Conventions
-**Status**: FULLY COMPLIANT (Fixed in this audit)
+**Status**: FULLY COMPLIANT
 
 **Mandatory Labels Present** (across all resources):
 - `app.kubernetes.io/name: credit-scoring-engine` ✅
 - `app.kubernetes.io/version: "3.1.0"` ✅
-- `app.kubernetes.io/part-of: banking-platform` ✅ (Fixed: was inconsistent)
+- `app.kubernetes.io/part-of: retail-banking` ✅ (Consistent across all manifests)
 - `environment: prod` ✅
 - `managed-by: helm` ✅
 
 **Release Name**: `pe-eng-credit-scoring-engine-prod` ✅  
 (follows `<team>-<app>-<env>` pattern: pe-eng = platform engineering team)
 
-**Fix Applied**: Corrected inconsistent `app.kubernetes.io/part-of` labels from "retail-banking" to "banking-platform" across deployment.yaml, service.yaml, and configmap.yaml.
+**Current Status**: All manifests consistently use `app.kubernetes.io/part-of: retail-banking` which aligns with the credit scoring engine being part of the retail banking business domain.
 
 ### ✅ Rule 05 - Logging & Observability
 **Status**: FULLY COMPLIANT
@@ -124,7 +124,7 @@ This audit report evaluates the Kubernetes manifests in the credit scoring engin
 | 01 | Resource Limits | ✅ COMPLIANT | High-performance ML workload configuration |
 | 02 | Security Context | ✅ COMPLIANT | Full pod security baseline implementation |
 | 03 | Image Provenance | ✅ COMPLIANT | Digest pinning + trusted registry |
-| 04 | Naming & Labels | ✅ COMPLIANT | Fixed label consistency issues |
+| 04 | Naming & Labels | ✅ COMPLIANT | All mandatory labels present and consistent |
 | 05 | Observability | ✅ COMPLIANT | Prometheus + structured JSON logging |
 | 06 | Health Probes | ✅ COMPLIANT | Spring Boot actuator endpoints |
 
@@ -139,6 +139,6 @@ This audit report evaluates the Kubernetes manifests in the credit scoring engin
 
 All Kubernetes manifests are **FULLY COMPLIANT** with banking k8s standards and ready for production deployment. The configuration demonstrates enterprise-grade security, observability, and operational practices suitable for a mission-critical credit scoring system.
 
-**Total Issues Found**: 1 (label consistency - RESOLVED)  
+**Total Issues Found**: 1 (audit report inconsistency - RESOLVED)  
 **Total Issues Remaining**: 0  
 **Compliance Score**: 100%
