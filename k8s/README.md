@@ -4,6 +4,13 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ## Standards Compliance
 
+### Rule 01 - Resource Requests & Limits ✅
+- CPU requests: `500m` (0.5 vCPU)
+- Memory requests: `2Gi`
+- CPU limits: `2000m` (2 vCPU)
+- Memory limits: `3Gi`
+- Requests ≈ 60% of limits for HPA headroom
+
 ### Rule 02 - Pod Security Baseline ✅
 - `runAsNonRoot: true`
 - `seccompProfile.type: RuntimeDefault`
