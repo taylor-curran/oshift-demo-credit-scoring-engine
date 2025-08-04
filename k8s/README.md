@@ -10,6 +10,7 @@ All manifests in this directory comply with the following standards:
 - CPU requests: 600m (60% of 1000m limit)
 - Memory requests: 1843Mi (60% of 3072Mi limit)
 - Prevents noisy-neighbor issues in multi-tenant clusters
+- Follows 60% request-to-limit ratio for HPA headroom
 
 ### Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` - No root user execution
@@ -19,8 +20,9 @@ All manifests in this directory comply with the following standards:
 
 ### Rule 03 - Immutable, Trusted Images
 - Uses pinned image with SHA digest from approved registry
-- Registry: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Registry: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
 - No `:latest` tags allowed
+- Image digest must be updated with actual SHA from registry build
 
 ### Rule 04 - Naming & Label Conventions
 - Consistent naming: `pe-eng-credit-scoring-engine-prod`
