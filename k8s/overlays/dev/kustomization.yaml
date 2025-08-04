@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: credit-scoring-dev
+
+resources:
+- ../../base
+
+namePrefix: pe-eng-credit-scoring-dev-
+
+commonLabels:
+  environment: dev
+
+patchesStrategicMerge:
+- deployment-patch.yaml
+
+images:
+- name: registry.bank.internal/credit-scoring-engine
+  newTag: "3.1.0-dev"

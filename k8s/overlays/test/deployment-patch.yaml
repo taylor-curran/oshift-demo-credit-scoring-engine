@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-scoring-engine
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: credit-scoring-engine
+        resources:
+          requests:
+            cpu: "375m"
+            memory: "1152Mi"
+          limits:
+            cpu: "1500m"
+            memory: "2304Mi"
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "test,scoring"
