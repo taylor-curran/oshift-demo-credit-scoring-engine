@@ -1,6 +1,6 @@
 # Kubernetes Deployment for Credit Scoring Engine
 
-This directory contains Kubernetes manifests that are fully compliant with k8s standards (Rules 01-04).
+This directory contains Kubernetes manifests that are fully compliant with k8s standards (Rules 01-06).
 
 ## Standards Compliance
 
@@ -40,9 +40,17 @@ This directory contains Kubernetes manifests that are fully compliant with k8s s
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
 
-### Health Checks
-- Liveness probe: `/actuator/health/liveness`
-- Readiness probe: `/actuator/health/readiness`
+### ✅ Rule 05 - Logging and Observability
+- JSON structured logging to stdout via Spring Boot
+- Fluent-bit sidecar for log shipping to Loki stack
+- Prometheus annotations for metrics scraping:
+  - `prometheus.io/scrape: "true"`
+  - `prometheus.io/port: "8080"`
+
+### ✅ Rule 06 - Health Probes
+- Liveness probe: `/actuator/health/liveness` (Spring Boot Actuator)
+- Readiness probe: `/actuator/health/readiness` (Spring Boot Actuator)
+- Proper timing configuration for JVM applications
 
 ## Deployment Instructions
 
@@ -51,6 +59,7 @@ This directory contains Kubernetes manifests that are fully compliant with k8s s
    ```bash
    kubectl apply -f namespace.yaml
    kubectl apply -f configmap.yaml
+   kubectl apply -f fluent-bit-configmap.yaml
    kubectl apply -f deployment.yaml
    kubectl apply -f service.yaml
    ```

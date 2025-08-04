@@ -100,12 +100,16 @@ spec:
             path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
@@ -113,9 +117,39 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: logs-volume
+          mountPath: /app/logs
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
           name: ml-models-config
+      - name: logs-volume
+        emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
