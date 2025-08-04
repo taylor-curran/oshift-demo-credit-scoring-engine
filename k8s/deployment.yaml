@@ -26,9 +26,13 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -37,13 +41,18 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
         resources:
           requests:
             cpu: "1800m"
@@ -100,18 +109,20 @@ spec:
           value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg"}%n'
         livenessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
