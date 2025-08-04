@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +13,6 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      app.kubernetes.io/part-of: retail-banking
       environment: prod
   template:
     metadata:
@@ -38,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
         - containerPort: 8080
           name: http
@@ -52,15 +50,14 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-            drop:
-            - ALL
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "500m"
-            memory: "1536Mi"
+            memory: "2Gi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -104,10 +101,6 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
-        - name: LOGGING_LEVEL_ROOT
-          value: "INFO"
-        - name: LOGGING_PATTERN_CONSOLE
-          value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg"}%n'
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -135,4 +128,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: pe-eng-credit-scoring-engine-prod-config
+          name: ml-models-config

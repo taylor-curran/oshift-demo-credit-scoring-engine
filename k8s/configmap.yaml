@@ -1,8 +1,7 @@
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pe-eng-credit-scoring-engine-prod-config
+  name: ml-models-config
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -10,10 +9,4 @@ metadata:
     environment: prod
     managed-by: helm
 data:
-  model-config.properties: |
-    fico.model.version=9.0
-    vantage.model.version=4.0
-    custom.model.path=/models/proprietary-score-v2.3.pkl
-    model.refresh.interval=24h
-    ml.feature.count=247
   proprietary-score-v2.3.pkl: |
