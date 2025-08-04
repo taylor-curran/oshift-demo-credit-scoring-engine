@@ -15,6 +15,6 @@ spec:
       environment: prod
   endpoints:
   - port: http
-    path: /actuator/prometheus
+    path: /metrics
     interval: 30s
     scrapeTimeout: 10s
