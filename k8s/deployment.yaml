@@ -7,13 +7,12 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: openshift
+    managed-by: helm
 spec:
   replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      environment: prod
   template:
     metadata:
       labels:
@@ -21,36 +20,45 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: openshift
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1fc7dbd01f3456c5e54552d0bef03ca0307ebcd4710c05b716f34e6b9baaf0752
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
         resources:
           requests:
-            cpu: "300m"
-            memory: "1536Mi"
+            cpu: "500m"
+            memory: "2Gi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
           value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
@@ -94,20 +102,55 @@ spec:
             path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+          readOnly: true
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:b074542c9baaf0752d907d26563d854e4fe2f7a1fc7dbd01f3456c5e54552d0b
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
-        emptyDir: {}
+        configMap:
+          name: pe-eng-ml-models-config-prod
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-fluent-bit-config-prod
