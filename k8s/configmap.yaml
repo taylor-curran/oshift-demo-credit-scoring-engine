@@ -37,3 +37,9 @@ data:
   ML_FEATURE_COUNT: "247"
   MODEL_REFRESH_INTERVAL: "24h"
   A_B_TEST_ENABLED: "true"
+  
+  model-config.properties: |
+    model.version=2.3
+    model.type=proprietary-score
+    model.features=247
+    model.refresh.interval=24h

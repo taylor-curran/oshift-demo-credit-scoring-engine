@@ -10,10 +10,10 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - Requests set to ~60% of limits for HPA headroom
 
 ### Rule 02 - Pod Security Baseline ✅
-- `runAsNonRoot: true`
-- `seccompProfile.type: RuntimeDefault`
-- `readOnlyRootFilesystem: true`
-- `capabilities.drop: ["ALL"]`
+- `securityContext.runAsNonRoot: true`
+- `securityContext.seccompProfile.type: RuntimeDefault`
+- `securityContext.readOnlyRootFilesystem: true`
+- `securityContext.capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Immutable, Trusted Images ✅
 - Image pinned with digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
@@ -29,14 +29,34 @@ This directory contains Kubernetes manifests that comply with the banking platfo
   - `environment: prod`
   - `managed-by: helm`
 
+### Rule 05 - Logging & Observability ✅
+- Prometheus annotations for metrics scraping:
+  - `prometheus.io/scrape: "true"`
+  - `prometheus.io/port: "8080"`
+- Fluent-bit sidecar for log aggregation
+- Metrics endpoint exposed on port 8080
+
+### Rule 06 - Health Probes ✅
+- Liveness probe: `/actuator/health/liveness` (60s initial delay, 3 failure threshold)
+- Readiness probe: `/actuator/health/readiness` (30s initial delay, 3 failure threshold)
+- Detailed health check: `/actuator/health/detailed`
+
 ## Deployment
 
 ```bash
+# Apply all manifests
 kubectl apply -f k8s/
+
+# Or apply individually
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/ingress.yaml
 ```
 
-## Health Checks
+## Resource Limits
 
-- Liveness: `/actuator/health/liveness`
-- Readiness: `/actuator/health/readiness`
-- Detailed: `/actuator/health/detailed`
+- Main container: CPU 200m-1000m, Memory 1536Mi-3072Mi
+- Fluent-bit sidecar: CPU 50m-100m, Memory 64Mi-128Mi
+- Replicas: 4 (matching Cloud Foundry configuration)
