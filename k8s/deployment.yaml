@@ -26,7 +26,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -66,7 +66,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -127,6 +127,33 @@ spec:
           readOnly: true
         - name: logs-volume
           mountPath: /app/logs
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:f1c2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
@@ -135,3 +162,6 @@ spec:
           name: pe-eng-credit-scoring-engine-prod-config
       - name: logs-volume
         emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-fluent-bit-config
