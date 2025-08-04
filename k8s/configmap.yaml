@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ml-models-config
+  name: banking-credit-scoring-models
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine

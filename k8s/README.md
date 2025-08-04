@@ -6,7 +6,7 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ### Rule 01 - Resource Limits
 - CPU requests: 500m, limits: 2000m
-- Memory requests: 1Gi, limits: 3Gi
+- Memory requests: 1Gi, limits: 2Gi
 - Follows 60% request-to-limit ratio for HPA headroom
 
 ### Rule 02 - Pod Security Baseline
@@ -22,7 +22,7 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ### Rule 04 - Naming & Labels
 - Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- Release name prefix: `credit-scoring-engine-prod`
+- Release name prefix: `banking-credit-scoring-prod`
 
 ### Rule 05 - Logging & Observability
 - Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
