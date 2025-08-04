@@ -31,12 +31,23 @@ This directory contains Kubernetes manifests that comply with the k8s standards:
   - `environment: prod`
   - `managed-by: helm`
 
+### Rule 05 - Logging & Observability ✅
+- JSON structured logging via fluent-bit sidecar (both dev and prod)
+- Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
+- Logs forwarded to OpenShift Loki stack
+
+### Rule 06 - Health Probes ✅
+- Liveness probe: `/actuator/health/liveness` (30s initial delay, 30s period)
+- Readiness probe: `/actuator/health/readiness` (10s initial delay, 10s period)
+- Consistent configuration across dev and prod environments
+
 ## Files
 
 ### Development Environment
-- `deployment-dev.yaml` - Development deployment with 4 replicas and basic monitoring
+- `deployment-dev.yaml` - Development deployment with 4 replicas, fluent-bit sidecar for logging
 - `service-dev.yaml` - ClusterIP service exposing port 8080 for dev
 - `configmap-dev.yaml` - Development ML model configuration
+- `fluent-bit-configmap-dev.yaml` - Fluent-bit logging configuration for dev
 
 ### Production Environment
 - `deployment-prod.yaml` - Production deployment with fluent-bit sidecar for logging
