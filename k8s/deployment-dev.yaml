@@ -47,10 +47,10 @@ spec:
           runAsGroup: 1001
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
-          capabilities:
-            drop: ["ALL"]
           seccompProfile:
             type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "300m"
@@ -113,10 +113,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -124,7 +124,7 @@ spec:
           mountPath: /models
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:4c7c68cc75f6d6f0be648b0d7137c88a7e8b8e0b8c8b8b8b8b8b8b8b8b8b8b8b
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         resources:
           requests:
             cpu: "30m"
