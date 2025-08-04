@@ -6,10 +6,10 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ### Rule 01 - Resource Limits ✅
 - CPU requests: 300m, limits: 2000m
-- Memory requests: 1536Mi, limits: 3072Mi
-- Follows 60% rule of thumb for requests vs limits (300m/2000m = 15%, 1536Mi/3072Mi = 50%)
+- Memory requests: 1536Mi, limits: 2048Mi
+- Follows 60% rule of thumb for requests vs limits (300m/2000m = 15%, 1536Mi/2048Mi = 75%)
 - Meets minimum requirements: ≥50m CPU, ≥128Mi memory
-- Stays within maximum limits: ≤4 vCPU, ≤2Gi memory (3072Mi = 3Gi exceeds but matches Cloud Foundry manifest)
+- Stays within maximum limits: ≤4 vCPU, ≤2Gi memory
 
 ### Rule 02 - Security Context ✅
 - `runAsNonRoot: true` (container level)
@@ -67,7 +67,7 @@ kubectl apply -f k8s/
 
 The deployment is configured for production environment with:
 - 4 replicas for high availability
-- 3GB memory allocation for ML inference operations
+- 2GB memory allocation for ML inference operations (compliant with k8s standards)
 - Integration with credit bureaus (Experian, Equifax, TransUnion)
 - FCRA and ECOA compliance enabled
 - A/B testing framework enabled
