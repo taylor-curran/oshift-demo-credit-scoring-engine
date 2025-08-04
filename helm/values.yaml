@@ -56,10 +56,10 @@ ingress:
 resources:
   requests:
     cpu: "500m"
-    memory: "2Gi"
+    memory: "1228Mi"
   limits:
     cpu: "2000m"
-    memory: "3Gi"
+    memory: "2048Mi"
 
 autoscaling:
   enabled: false
@@ -76,7 +76,7 @@ affinity: {}
 app:
   environment: prod
   springProfiles: "production,scoring"
-  jvmOpts: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  jvmOpts: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
   
   creditBureaus:
     experian:
