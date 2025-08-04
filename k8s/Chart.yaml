@@ -1,0 +1,17 @@
+apiVersion: v2
+name: credit-scoring-engine
+description: A Helm chart for Credit Scoring Engine
+type: application
+version: 3.1.0
+appVersion: "3.1.0"
+maintainers:
+- name: Platform Engineering Team
+  email: pe-eng@banking.com
+keywords:
+- credit-scoring
+- banking
+- ml
+- fintech
+home: https://github.com/taylor-curran/oshift-demo-credit-scoring-engine
+sources:
+- https://github.com/taylor-curran/oshift-demo-credit-scoring-engine
