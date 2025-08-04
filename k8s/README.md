@@ -28,12 +28,12 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - Prometheus annotations:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/actuator/prometheus"`
+  - `prometheus.io/path: "/metrics"`
 - JSON structured logging via Spring Boot Actuator
 
 ### Rule 06 - Health Probes ✅
-- Liveness probe: `/actuator/health/liveness`
-- Readiness probe: `/actuator/health/readiness`
+- Liveness probe: `/actuator/health/liveness` (initialDelaySeconds: 30s, failureThreshold: 3)
+- Readiness probe: `/actuator/health/readiness` (initialDelaySeconds: 10s, failureThreshold: 1)
 - Startup probe configured for JVM applications
 
 ## Deployment
