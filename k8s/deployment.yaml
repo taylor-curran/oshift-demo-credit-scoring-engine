@@ -26,16 +26,16 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
-      securityContext:
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         ports:
         - containerPort: 8080
           name: http
@@ -56,18 +56,25 @@ spec:
         envFrom:
         - configMapRef:
             name: credit-scoring-config
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 20
+          failureThreshold: 30
+          periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 0
           failureThreshold: 3
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
+          initialDelaySeconds: 0
           failureThreshold: 1
           periodSeconds: 5
         volumeMounts:
@@ -77,7 +84,14 @@ spec:
           mountPath: /fluent-bit/etc
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:def456789012345678901234567890123456789012345678901234567890123456
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:4f58bd6e7827691bc8e57c8c4bb0065df956f0d6b8d2b5a3c1e2f3a4b5c6d7e8
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "120m"
