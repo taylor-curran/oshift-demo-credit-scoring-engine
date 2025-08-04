@@ -14,11 +14,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      environment: prod
+      app.kubernetes.io/instance: credit-scoring-engine
   template:
     metadata:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/instance: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
@@ -45,7 +46,7 @@ spec:
         resources:
           requests:
             cpu: "1200m"
-            memory: "1536Mi"
+            memory: "1800Mi"
           limits:
             cpu: "2000m"
             memory: "2Gi"
@@ -96,14 +97,18 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
-          failureThreshold: 1
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -115,4 +120,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: credit-scoring-engine-models
