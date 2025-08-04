@@ -90,6 +90,21 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: credit-team-credit-scoring-engine-prod-secrets
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credit-team-credit-scoring-engine-prod-secrets
+              key: DB_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credit-team-credit-scoring-engine-prod-secrets
+              key: REDIS_PASSWORD
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
