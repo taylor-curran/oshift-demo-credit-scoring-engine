@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: prod
-    managed-by: kubernetes
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -33,7 +33,7 @@ spec:
         fsGroup: 1001
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
         - containerPort: 8080
           name: http
@@ -50,11 +50,11 @@ spec:
             drop: ["ALL"]
         resources:
           requests:
+            cpu: "300m"
+            memory: "1200Mi"
+          limits:
             cpu: "500m"
             memory: "2Gi"
-          limits:
-            cpu: "2000m"
-            memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -125,4 +125,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-ml-models-config-prod
