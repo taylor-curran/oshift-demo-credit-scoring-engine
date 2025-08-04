@@ -23,6 +23,7 @@ commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/part-of: retail-banking
   environment: prod
+  managed-by: kubernetes
 
 images:
 - name: registry.bank.internal/credit-scoring-engine

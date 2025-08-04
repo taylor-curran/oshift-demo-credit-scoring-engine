@@ -28,10 +28,14 @@ data:
         Refresh_Interval  5
 
     [OUTPUT]
-        Name  forward
+        Name  loki
         Match *
         Host  loki-gateway.observability.svc.cluster.local
         Port  3100
+        Labels job=credit-scoring-engine, environment=prod
+        Label_keys $app_name,$environment
+        Remove_keys time
+        Line_format json
 
   parsers.conf: |
     [PARSER]
