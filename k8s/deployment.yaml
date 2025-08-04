@@ -115,4 +115,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: credit-scoring-models-prod

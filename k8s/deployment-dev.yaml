@@ -71,6 +71,12 @@ spec:
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
+        - name: models-volume
+          mountPath: /models
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
+      - name: models-volume
+        configMap:
+          name: credit-scoring-models-dev
