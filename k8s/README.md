@@ -10,10 +10,10 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - Follows 60% rule of thumb for requests vs limits
 
 ### Rule 02 - Security Context ✅
-- `runAsNonRoot: true`
-- `seccompProfile.type: RuntimeDefault`
-- `readOnlyRootFilesystem: true`
-- `capabilities.drop: ["ALL"]`
+- `runAsNonRoot: true` (container level)
+- `seccompProfile.type: RuntimeDefault` (container level)
+- `readOnlyRootFilesystem: true` (container level)
+- `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance ✅
 - Uses pinned tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
@@ -33,12 +33,12 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - Prometheus annotations:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-- JSON structured logging configured
+- JSON structured logging configured via ConfigMap
 - Metrics endpoint exposed on port 8080
 
 ### Rule 06 - Health Probes ✅
-- Liveness probe: `/actuator/health/liveness`, 30s initial delay, 3 failure threshold
-- Readiness probe: `/actuator/health/readiness`, 10s initial delay, 1 failure threshold
+- Liveness probe: `/actuator/health/liveness`, 30s initial delay, 10s period, 5s timeout, 3 failure threshold
+- Readiness probe: `/actuator/health/readiness`, 10s initial delay, 5s period, 3s timeout, 1 failure threshold
 
 ## Files
 

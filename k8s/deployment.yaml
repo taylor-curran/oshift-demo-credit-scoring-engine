@@ -26,15 +26,15 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
-      securityContext:
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
@@ -89,17 +89,24 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        envFrom:
+        - configMapRef:
+            name: credit-scoring-engine-config-prod
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
