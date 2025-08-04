@@ -4,6 +4,12 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 
 ## Standards Compliance
 
+### Rule 01 - Resource Requests & Limits ✅
+- All containers have proper CPU and memory requests and limits
+- Main container: 500m CPU request, 1000m CPU limit, 1228Mi memory request, 2048Mi memory limit
+- Fluent-bit sidecar: 50m CPU request, 100m CPU limit, 64Mi memory request, 128Mi memory limit
+- Follows 60% rule of thumb for requests vs limits
+
 ### Rule 02 - Pod Security Baseline ✅
 - `securityContext.runAsNonRoot: true`
 - `securityContext.seccompProfile.type: RuntimeDefault`
@@ -24,10 +30,11 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
   - `managed-by: helm`
 
 ### Rule 05 - Logging & Observability ✅
-- Prometheus annotations for metrics scraping:
+- Prometheus annotations for metrics scraping on all resources:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-- JSON logging configured in ConfigMap
+- JSON structured logging configured in application.properties
+- Fluent-bit sidecar for log shipping to OpenShift Loki stack
 - Metrics endpoint exposed on port 8080
 
 ### Rule 06 - Health Probes ✅

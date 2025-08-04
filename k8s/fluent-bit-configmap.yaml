@@ -20,11 +20,10 @@ data:
         HTTP_Port     2020
 
     [INPUT]
-        Name              tail
-        Path              /tmp/*.log
-        Parser            json
+        Name              forward
+        Listen            0.0.0.0
+        Port              24224
         Tag               credit-scoring-engine
-        Refresh_Interval  5
 
     [OUTPUT]
         Name  forward
