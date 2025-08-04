@@ -8,7 +8,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - CPU requests: 500m (0.5 vCPU)
 - CPU limits: 2000m (2 vCPU) 
 - Memory requests: 1536Mi (~60% of limits)
-- Memory limits: 3072Mi (3GB as per original manifest)
+- Memory limits: 2Gi (compliant with Rule 01 baseline ≤2Gi)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` - Prevents root execution
@@ -73,6 +73,6 @@ curl http://localhost:8080/actuator/health/detailed
 This k8s deployment maintains feature parity with the original Cloud Foundry `manifest.yml`:
 - Same environment variables and configuration
 - Same health check endpoints
-- Same resource allocation (3GB memory)
+- Adjusted resource allocation (2GB memory limit for k8s standards compliance)
 - Same external service dependencies
 - Same routing configuration via ingress

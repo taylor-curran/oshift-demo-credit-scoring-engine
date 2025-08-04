@@ -7,10 +7,10 @@ image:
 resources:
   limits:
     cpu: 1500m
-    memory: 2.5Gi
+    memory: 2Gi
   requests:
     cpu: 800m
-    memory: 1.5Gi
+    memory: 1536Mi
 
 labels:
   environment: test
