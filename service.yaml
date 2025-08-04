@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: retail-banking
+    app.kubernetes.io/part-of: banking-platform
     environment: dev
     managed-by: helm
   annotations:
@@ -16,7 +16,7 @@ spec:
   selector:
     app.kubernetes.io/name: credit-scoring-engine
   ports:
-  - port: 80
+  - port: 8080
     targetPort: 8080
     protocol: TCP
     name: http

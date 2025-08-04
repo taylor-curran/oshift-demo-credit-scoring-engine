@@ -5,11 +5,11 @@ metadata:
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: retail-banking
+    app.kubernetes.io/part-of: banking-platform
     environment: dev
     managed-by: helm
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
@@ -18,8 +18,9 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: retail-banking
+        app.kubernetes.io/part-of: banking-platform
         environment: dev
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -27,39 +28,95 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:placeholder
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+          name: http
+          protocol: TCP
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
           seccompProfile:
             type: RuntimeDefault
-          capabilities:
-            drop: ["ALL"]
         resources:
           requests:
             cpu: "500m"
-            memory: "2Gi"
+            memory: "1536Mi"
           limits:
-            cpu: "1000m"
-            memory: "3Gi"
+            cpu: "2000m"
+            memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
-          valueFrom:
-            configMapKeyRef:
-              name: pe-eng-credit-scoring-engine-config-dev
-              key: SPRING_PROFILES_ACTIVE
+          value: "production,scoring"
+        - name: JBP_CONFIG_OPEN_JDK_JRE
+          value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
+          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+        - name: EXPERIAN_API_URL
           valueFrom:
-            configMapKeyRef:
-              name: pe-eng-credit-scoring-engine-config-dev
-              key: JVM_OPTS
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-creds-dev
+              key: EXPERIAN_API_URL
+        - name: EQUIFAX_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-creds-dev
+              key: EQUIFAX_API_URL
+        - name: TRANSUNION_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-creds-dev
+              key: TRANSUNION_API_URL
+        - name: CREDIT_API_TIMEOUT
+          value: "15000"
+        - name: FICO_MODEL_VERSION
+          value: "9.0"
+        - name: VANTAGE_MODEL_VERSION
+          value: "4.0"
+        - name: CUSTOM_MODEL_PATH
+          value: "/models/proprietary-score-v2.3.pkl"
+        - name: INCOME_VERIFICATION_API
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-creds-dev
+              key: INCOME_VERIFICATION_API
+        - name: BANK_STATEMENT_ANALYZER
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-creds-dev
+              key: BANK_STATEMENT_ANALYZER
+        - name: MIN_CREDIT_SCORE
+          value: "580"
+        - name: MAX_DTI_RATIO
+          value: "0.43"
+        - name: MIN_INCOME_VERIFICATION
+          value: "true"
+        - name: FCRA_COMPLIANCE_MODE
+          value: "true"
+        - name: ECOA_COMPLIANCE_MODE
+          value: "true"
+        - name: ADVERSE_ACTION_NOTIFICATIONS
+          value: "true"
+        - name: ML_FEATURE_COUNT
+          value: "247"
+        - name: MODEL_REFRESH_INTERVAL
+          value: "24h"
+        - name: A_B_TEST_ENABLED
+          value: "true"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -67,25 +124,33 @@ spec:
               key: DATABASE_URL
         livenessProbe:
           httpGet:
-            path: /api/v1/credit/health/detailed
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /api/v1/credit/health/detailed
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: logs-volume
           mountPath: /deployments/logs
+        - name: models-volume
+          mountPath: /models
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: logs-volume
         emptyDir: {}
+      - name: models-volume
+        configMap:
+          name: pe-eng-credit-scoring-engine-config-dev
