@@ -1,29 +1,29 @@
-name: Standards Application CI
+# name: Standards Application CI
 
-on: 
-  push:
+# on: 
+#   push:
 
-jobs:
-  devin-code-review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Get full history for diff analysis
+# jobs:
+#   devin-code-review:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0  # Get full history for diff analysis
       
-      - name: Get git information
-        id: git-info
-        run: |
-          echo "commit_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
-          echo "ref_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          echo "repository=${{ github.repository }}" >> $GITHUB_OUTPUT
-          echo "event_name=${{ github.event_name }}" >> $GITHUB_OUTPUT
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "base_ref=${{ github.base_ref }}" >> $GITHUB_OUTPUT
-            echo "head_ref=${{ github.head_ref }}" >> $GITHUB_OUTPUT
-            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          fi
+#       - name: Get git information
+#         id: git-info
+#         run: |
+#           echo "commit_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+#           echo "ref_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+#           echo "repository=${{ github.repository }}" >> $GITHUB_OUTPUT
+#           echo "event_name=${{ github.event_name }}" >> $GITHUB_OUTPUT
+#           if [ "${{ github.event_name }}" = "pull_request" ]; then
+#             echo "base_ref=${{ github.base_ref }}" >> $GITHUB_OUTPUT
+#             echo "head_ref=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+#             echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+#           fi
       
       # - name: Run code review
       #   run: |
