@@ -10,7 +10,7 @@ metadata:
     managed-by: kubernetes
 data:
   application.properties: |
-    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","message":"%msg"}%n
     logging.level.com.banking.credit=INFO
     logging.level.org.springframework=WARN
     
