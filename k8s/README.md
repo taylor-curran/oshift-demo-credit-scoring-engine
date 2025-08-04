@@ -22,6 +22,9 @@ This directory contains Kubernetes manifests that are compliant with k8s standar
   - `app.kubernetes.io/part-of: retail-banking`
   - `environment: prod`
   - `managed-by: helm`
+- Resource names follow `<team>-<app>-<env>` pattern:
+  - Deployment: `banking-credit-scoring-prod`
+  - Service: `banking-credit-scoring-service`
 
 ### ✅ Rule 05 - Logging & Observability
 - Prometheus annotations for metrics scraping:
@@ -51,6 +54,8 @@ This directory contains Kubernetes manifests that are compliant with k8s standar
    ```bash
    kubectl get pods -n credit-scoring
    kubectl logs -n credit-scoring -l app.kubernetes.io/name=credit-scoring-engine
+   kubectl get deployment banking-credit-scoring-prod -n credit-scoring
+   kubectl get service banking-credit-scoring-service -n credit-scoring
    ```
 
 ## Security Notes
