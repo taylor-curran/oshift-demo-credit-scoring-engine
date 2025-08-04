@@ -6,12 +6,19 @@ This report documents the audit of the oshift-demo-credit-scoring-engine reposit
 ## Audit Results
 
 ### ✅ Rule 02 - Security Context Baseline
-**Status: COMPLIANT**
+**Status: COMPLIANT (AFTER FIXES)**
 - `securityContext.runAsNonRoot: true` ✅
+- `securityContext.runAsUser: 1001` ✅ (explicit user ID)
+- `securityContext.runAsGroup: 1001` ✅ (explicit group ID)
+- `securityContext.fsGroup: 1001` ✅ (file system group)
 - `securityContext.seccompProfile.type: RuntimeDefault` ✅  
-- `securityContext.readOnlyRootFilesystem: true` ✅
-- `securityContext.capabilities.drop: ["ALL"]` ✅
+- `securityContext.readOnlyRootFilesystem: true` ✅ (container-level)
+- `securityContext.capabilities.drop: ["ALL"]` ✅ (container-level)
 - `allowPrivilegeEscalation: false` ✅ (additional security)
+
+**Issues Fixed:**
+- Moved `readOnlyRootFilesystem` and `capabilities.drop` from pod-level to container-level securityContext
+- Added explicit `runAsUser`, `runAsGroup`, and `fsGroup` for better security
 
 ### ✅ Rule 04 - Naming & Label Conventions  
 **Status: COMPLIANT**
@@ -40,10 +47,16 @@ This report documents the audit of the oshift-demo-credit-scoring-engine reposit
 - Requests ≈ 60% of limits (good practice) ✅
 
 ### ✅ Rule 05 - Logging & Observability
-**Status: COMPLIANT**
+**Status: COMPLIANT (AFTER FIXES)**
 - Prometheus scraping enabled: `prometheus.io/scrape: "true"` ✅
-- Metrics port configured: `prometheus.io/port: "9090"` ✅
-- Metrics endpoint exposed on port 9090 ✅
+- Metrics port configured: `prometheus.io/port: "8080"` ✅
+- Metrics path configured: `prometheus.io/path: "/actuator/prometheus"` ✅
+- Metrics endpoint exposed on correct port 8080 ✅
+
+**Issues Fixed:**
+- Corrected Prometheus port from 9090 to 8080 (Spring Boot Actuator default)
+- Added explicit metrics path `/actuator/prometheus`
+- Removed separate metrics port configuration
 
 ### ✅ Rule 06 - Health Probes
 **Status: COMPLIANT**
@@ -52,7 +65,7 @@ This report documents the audit of the oshift-demo-credit-scoring-engine reposit
 - Appropriate timeouts and failure thresholds set ✅
 
 ## Summary
-All Kubernetes manifests in the `k8s/` directory are **FULLY COMPLIANT** with the k8s-standards-library requirements. No remediation actions are required.
+All Kubernetes manifests in the `k8s/` directory are now **FULLY COMPLIANT** with the k8s-standards-library requirements after applying necessary fixes.
 
 ## Files Audited
 - `k8s/deployment.yaml` - Deployment manifest with security contexts, resource limits, and health probes
