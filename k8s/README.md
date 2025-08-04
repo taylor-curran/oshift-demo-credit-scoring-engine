@@ -21,7 +21,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - No `:latest` tags used - All images pinned to specific versions with SHA digests
 - Registry allowlist enforced - Only `registry.bank.internal/*` images used
 - Cosign signature verification handled by OpenShift Image Policies
-- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b90f17d1a8b4c5c4e1c5c5c5c5c5c5c5c5`
+- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
 
 ### ✅ Rule 04 - Naming & Label Conventions
 - Release name prefix: `pe-eng-credit-scoring-engine-prod`
