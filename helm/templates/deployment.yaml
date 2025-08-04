@@ -34,13 +34,13 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-            {{- if .Values.extraCaps }}
             capabilities:
               drop:
               - ALL
+              {{- if .Values.extraCaps }}
               add:
               {{- toYaml .Values.extraCaps | nindent 14 }}
-            {{- end }}
+              {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
