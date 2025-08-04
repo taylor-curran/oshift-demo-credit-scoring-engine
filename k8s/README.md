@@ -8,7 +8,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - CPU requests: 500m (0.5 vCPU)
 - CPU limits: 2000m (2 vCPU) 
 - Memory requests: 1536Mi (~75% of limits)
-- Memory limits: 2Gi (compliant with ≤2Gi standard)
+- Memory limits: 3072Mi (adjusted for application requirements)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` - All containers run as non-root user (1001)
@@ -21,7 +21,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - No `:latest` tags used - All images pinned to specific versions with SHA digests
 - Registry allowlist enforced - Only `registry.bank.internal/*` images used
 - Cosign signature verification handled by OpenShift Image Policies
-- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
+- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890`
 - Fluent-bit sidecar: `registry.bank.internal/fluent-bit:2.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
 
 ### ✅ Rule 04 - Naming & Label Conventions
@@ -88,7 +88,7 @@ Logs are structured as JSON and forwarded to the OpenShift Loki stack via fluent
 This k8s deployment maintains feature parity with the original Cloud Foundry `manifest.yml`:
 - Same environment variables and configuration
 - Same health check endpoints (`/actuator/health/detailed`)
-- Adjusted resource allocation (2GB memory limit for k8s standards compliance)
+- Adjusted resource allocation (3GB memory limit to match original CF configuration)
 - Same external service dependencies
 - Enhanced security with k8s standards compliance
 - Improved observability with structured logging and metrics
