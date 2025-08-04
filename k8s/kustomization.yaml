@@ -10,7 +10,7 @@ commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/part-of: retail-banking
   environment: dev
-  managed-by: helm
+  managed-by: openshift
 
 namePrefix: credit-scoring-engine-dev-
 
