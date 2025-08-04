@@ -16,6 +16,7 @@
 - `securityContext.capabilities.drop: ["ALL"]` ✅
 
 ### Rule 03 - Image Provenance ✅ COMPLIANT
+- **FIXED**: Removed fake SHA digest, using pinned tag instead
 - Uses approved registry: `registry.bank.internal` ✅
 - No `:latest` tag usage ✅
 - Pinned to specific version tag: `3.1.0` ✅
@@ -44,6 +45,13 @@ securityContext:
     drop: ["ALL"]
 ```
 
+### Rule 06 - Health Probes ✅ FIXED
+- **FIXED**: Updated to use Spring Boot Actuator standard endpoints:
+  - Liveness probe: `/actuator/health/liveness` ✅
+  - Readiness probe: `/actuator/health/readiness` ✅
+- Proper failure thresholds set per k8s standards ✅
+- Initial delays follow recommended values ✅
+
 ### Resource Allocation (deployment.yaml lines 45-51)
 ```yaml
 resources:
@@ -65,9 +73,12 @@ image: registry.bank.internal/credit-scoring-engine:3.1.0
 - Consistent labeling strategy for service discovery and cost allocation
 
 ## Summary
-All k8s-standards Rules 01-04 are now fully compliant. Key achievements:
-1. **Resource Management**: Proper CPU/memory requests and limits enforced
-2. **Security Hardening**: Non-root execution with restricted capabilities
-3. **Image Security**: Production-ready image reference without fake digest
-4. **Operational Excellence**: Consistent naming and labeling for automation
-5. **Banking Compliance**: Meets financial services security requirements
+All k8s-standards Rules 01-06 are now fully compliant. Key achievements:
+1. **Resource Management**: Proper CPU/memory requests and limits enforced (Rule 01)
+2. **Security Hardening**: Non-root execution with restricted capabilities (Rule 02)
+3. **Image Security**: Production-ready image reference without fake digest (Rule 03)
+4. **Operational Excellence**: Consistent naming and labeling for automation (Rule 04)
+5. **Health Monitoring**: Updated health probes to use Spring Boot Actuator standard endpoints (Rule 06)
+6. **Banking Compliance**: Meets financial services security requirements
+
+**Note**: In production, the image should use a real SHA digest or be verified through OpenShift Image Policies with Cosign signatures.

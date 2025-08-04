@@ -51,7 +51,7 @@ securityContext:
 **Implementation Location:** `deployment.yaml` line 33
 
 ```yaml
-image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+image: registry.bank.internal/credit-scoring-engine:3.1.0
 ```
 
 ### Rule 04 - Naming & Labels ✅ COMPLIANT
@@ -129,7 +129,7 @@ readinessProbe:
 
 ## Recommendations
 
-1. **Production Deployment**: Replace placeholder SHA digest in image reference with actual built image digest
+1. **Production Deployment**: Add SHA digest to image reference when actual built image digest is available
 2. **Secret Management**: Update placeholder values in `secret.yaml` with actual credentials before deployment
 3. **Monitoring**: Verify Prometheus metrics collection is working in target environment
 4. **Testing**: Validate application functionality with strict security contexts in staging environment
