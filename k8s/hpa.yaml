@@ -1,18 +1,18 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pe-eng-credit-scoring-engine-dev
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
-    environment: dev
-    managed-by: helm
+    environment: prod
+    managed-by: openshift
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pe-eng-credit-scoring-engine-dev
+    name: pe-eng-credit-scoring-engine-prod
   minReplicas: 4
   maxReplicas: 12
   metrics:
