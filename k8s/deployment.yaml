@@ -1,12 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
-    environment: production
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
     managed-by: helm
 spec:
   replicas: 4
@@ -18,8 +19,8 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
-        environment: production
+        app.kubernetes.io/part-of: retail-banking
+        environment: prod
         managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
@@ -49,15 +50,14 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-            drop:
-            - ALL
+            drop: ["ALL"]
         resources:
           requests:
-            cpu: "500m"
-            memory: "2Gi"
+            cpu: "1200m"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
