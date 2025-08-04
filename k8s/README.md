@@ -7,7 +7,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 ### Rule 01 - Resource Requests & Limits ✅
 - **CPU Requests**: 500m (0.5 vCPU)
 - **CPU Limits**: 2000m (2 vCPU) 
-- **Memory Requests**: 1536Mi (~60% of limit for HPA headroom)
+- **Memory Requests**: 1843Mi (~60% of limit for HPA headroom)
 - **Memory Limits**: 3072Mi (3GB as per original Cloud Foundry config)
 
 ### Rule 02 - Pod Security Baseline ✅
