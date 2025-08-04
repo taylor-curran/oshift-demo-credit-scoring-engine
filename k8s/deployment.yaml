@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:abc123def456789012345678901234567890abcdef1234567890abcdef123456
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
