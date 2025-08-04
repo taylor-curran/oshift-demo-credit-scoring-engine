@@ -26,19 +26,12 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+        {{- if .Values.fluentBit.enabled }}
         - name: fluent-bit
           image: "{{ .Values.fluentBit.image.repository }}:{{ .Values.fluentBit.image.tag }}@{{ .Values.fluentBit.image.digest }}"
+          imagePullPolicy: {{ .Values.fluentBit.image.pullPolicy }}
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            seccompProfile:
-              type: RuntimeDefault
+            {{- toYaml .Values.fluentBit.securityContext | nindent 12 }}
           resources:
             {{- toYaml .Values.fluentBit.resources | nindent 12 }}
           volumeMounts:
@@ -47,6 +40,7 @@ spec:
               readOnly: true
             - name: tmp-volume
               mountPath: /tmp
+        {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -82,9 +76,11 @@ spec:
         - name: models-volume
           configMap:
             name: {{ include "credit-scoring-engine.fullname" . }}-ml-models
+        {{- if .Values.fluentBit.enabled }}
         - name: fluent-bit-config
           configMap:
-            name: {{ include "credit-scoring-engine.fullname" . }}-fluent-bit
+            name: {{ include "credit-scoring-engine.fullname" . }}-fluent-bit-config
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
