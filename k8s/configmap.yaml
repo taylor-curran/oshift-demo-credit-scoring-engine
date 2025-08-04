@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: banking-platform
+    environment: prod
+    managed-by: kubernetes
+data:
+  experian-api-url: "https://api.experian.com/credit"
+  equifax-api-url: "https://api.equifax.com/ews"
+  transunion-api-url: "https://api.transunion.com/credit"
+  credit-api-timeout: "15000"
+  fico-model-version: "9.0"
+  vantage-model-version: "4.0"
+  custom-model-path: "/models/proprietary-score-v2.3.pkl"
+  income-verification-api: "https://api.theworknumber.com"
+  bank-statement-analyzer: "https://api.plaid.com/v2"
+  min-credit-score: "580"
+  max-dti-ratio: "0.43"
+  min-income-verification: "true"
+  fcra-compliance-mode: "true"
+  ecoa-compliance-mode: "true"
+  adverse-action-notifications: "true"
+  ml-feature-count: "247"
+  model-refresh-interval: "24h"
+  a-b-test-enabled: "true"
