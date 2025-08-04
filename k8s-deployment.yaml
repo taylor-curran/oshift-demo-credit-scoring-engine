@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -41,8 +42,13 @@ spec:
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         imagePullPolicy: IfNotPresent
         securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
           capabilities:
             drop:
             - ALL
@@ -133,6 +139,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -158,6 +165,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -169,6 +177,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pe-eng-credit-scoring-engine-prod-models
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
