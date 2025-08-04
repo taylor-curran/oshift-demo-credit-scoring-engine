@@ -14,8 +14,9 @@ These manifests comply with all required k8s standards:
 
 ### Rule 01 - Resource Limits & Requests
 - CPU requests: 600m, limits: 1000m
-- Memory requests: 1843Mi, limits: 3072Mi
+- Memory requests: 1228Mi, limits: 2048Mi
 - Follows 60% rule of thumb for requests vs limits
+- Complies with maximum memory limit of 2Gi (2048Mi)
 
 ### Rule 02 - Security Context
 - `runAsNonRoot: true`
