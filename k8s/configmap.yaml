@@ -38,6 +38,25 @@ data:
   MODEL_REFRESH_INTERVAL: "24h"
   A_B_TEST_ENABLED: "true"
   
+  application.properties: |
+    spring.datasource.url=jdbc:postgresql://credit-postgres-primary:5432/creditdb
+    spring.datasource.username=${DB_USERNAME}
+    spring.datasource.password=${DB_PASSWORD}
+    spring.jpa.hibernate.ddl-auto=validate
+    spring.jpa.show-sql=false
+    
+    spring.redis.host=credit-redis-cluster
+    spring.redis.port=6379
+    spring.redis.password=${REDIS_PASSWORD}
+    
+    management.endpoints.web.exposure.include=health,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    logging.level.com.banking.credit=INFO
+    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+    logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+  
   model-config.properties: |
     model.version=2.3
     model.type=proprietary-score

@@ -48,9 +48,11 @@ spec:
         envFrom:
         - configMapRef:
             name: pe-eng-credit-scoring-engine-prod
+        - secretRef:
+            name: pe-eng-credit-scoring-engine-prod-secrets
         resources:
           requests:
-            cpu: "200m"
+            cpu: "600m"
             memory: "1228Mi"
           limits:
             cpu: "1000m"
