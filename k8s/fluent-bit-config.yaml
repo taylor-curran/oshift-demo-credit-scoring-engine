@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pe-eng-fluent-bit-config-prod
+  labels:
+    app.kubernetes.io/name: fluent-bit
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/credit-scoring-engine*.log
+        Parser            json
+        Tag               credit-scoring.*
+        Refresh_Interval  5
+
+    [OUTPUT]
+        Name  loki
+        Match credit-scoring.*
+        Host  loki.monitoring.svc.cluster.local
+        Port  3100
+        Labels job=credit-scoring-engine, environment=prod
+
+  parsers.conf: |
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
