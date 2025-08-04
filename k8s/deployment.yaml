@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76fd84062c8c291a11cdb5c6a35c9a45afa8
+        image: registry.bank.internal/credit-scoring-engine:3.1.0
         ports:
         - containerPort: 8080
           name: http
