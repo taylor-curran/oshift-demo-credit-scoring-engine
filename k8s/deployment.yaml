@@ -60,49 +60,9 @@ spec:
           limits:
             cpu: "2000m"
             memory: "2048Mi"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
-        - name: JVM_OPTS
-          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
-        - name: EXPERIAN_API_URL
-          value: "https://api.experian.com/credit"
-        - name: EQUIFAX_API_URL
-          value: "https://api.equifax.com/ews"
-        - name: TRANSUNION_API_URL
-          value: "https://api.transunion.com/credit"
-        - name: CREDIT_API_TIMEOUT
-          value: "15000"
-        - name: FICO_MODEL_VERSION
-          value: "9.0"
-        - name: VANTAGE_MODEL_VERSION
-          value: "4.0"
-        - name: CUSTOM_MODEL_PATH
-          value: "/models/proprietary-score-v2.3.pkl"
-        - name: INCOME_VERIFICATION_API
-          value: "https://api.theworknumber.com"
-        - name: BANK_STATEMENT_ANALYZER
-          value: "https://api.plaid.com/v2"
-        - name: MIN_CREDIT_SCORE
-          value: "580"
-        - name: MAX_DTI_RATIO
-          value: "0.43"
-        - name: MIN_INCOME_VERIFICATION
-          value: "true"
-        - name: FCRA_COMPLIANCE_MODE
-          value: "true"
-        - name: ECOA_COMPLIANCE_MODE
-          value: "true"
-        - name: ADVERSE_ACTION_NOTIFICATIONS
-          value: "true"
-        - name: ML_FEATURE_COUNT
-          value: "247"
-        - name: MODEL_REFRESH_INTERVAL
-          value: "24h"
-        - name: A_B_TEST_ENABLED
-          value: "true"
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-prod-config
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
