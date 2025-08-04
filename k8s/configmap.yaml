@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  credit-api-timeout: "15000"
+  fico-model-version: "9.0"
+  vantage-model-version: "4.0"
+  min-credit-score: "580"
+  max-dti-ratio: "0.43"
+  min-income-verification: "true"
+  fcra-compliance-mode: "true"
+  ecoa-compliance-mode: "true"
+  adverse-action-notifications: "true"
+  ml-feature-count: "247"
+  model-refresh-interval: "24h"
+  a-b-test-enabled: "true"
