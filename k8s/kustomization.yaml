@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+- ingress.yaml
+
+labels:
+- pairs:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+
+namePrefix: pe-eng-
+nameSuffix: -prod
