@@ -104,6 +104,8 @@ spec:
         - name: logs-volume
           mountPath: /app/logs
           readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
