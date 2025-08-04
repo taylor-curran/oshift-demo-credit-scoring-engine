@@ -23,6 +23,10 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -96,20 +100,26 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: LOGGING_LEVEL_ROOT
+          value: "INFO"
+        - name: LOGGING_PATTERN_CONSOLE
+          value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","logger":"%logger{36}","message":"%msg"}%n'
         livenessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
