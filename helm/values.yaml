@@ -118,19 +118,6 @@ app:
   version: "3.1.0"
   partOf: retail-banking
 
-fluentBit:
-  image:
-    repository: registry.bank.internal/fluent-bit
-    tag: "2.1.0"
-    digest: "sha256:abc123def456789012345678901234567890abcdef1234567890abcdef123456"
-  resources:
-    requests:
-      cpu: "50m"
-      memory: "64Mi"
-    limits:
-      cpu: "100m"
-      memory: "128Mi"
-
 env:
   SPRING_PROFILES_ACTIVE: "production,scoring"
   JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
@@ -159,7 +146,7 @@ fluentBit:
   image:
     repository: registry.bank.internal/fluent-bit
     tag: "2.1.0"
-    digest: "sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890"
+    digest: "sha256:7f8c9d2e1a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d"
     pullPolicy: IfNotPresent
   securityContext:
     runAsNonRoot: true
