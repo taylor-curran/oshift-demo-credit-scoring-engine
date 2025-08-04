@@ -42,8 +42,8 @@ spec:
           name: http
         resources:
           requests:
-            cpu: "1200m"
-            memory: "1228Mi"
+            cpu: "500m"
+            memory: "1200Mi"
           limits:
             cpu: "2000m"
             memory: "2048Mi"
@@ -53,7 +53,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
