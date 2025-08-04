@@ -107,9 +107,9 @@ spec:
           value: "15000"
         envFrom:
         - configMapRef:
-            name: credit-scoring-config
+            name: pe-eng-credit-scoring-engine-prod-config
         - secretRef:
-            name: credit-scoring-secrets
+            name: pe-eng-credit-scoring-engine-prod-secrets
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
