@@ -115,4 +115,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: banking-credit-scoring-engine-models-prod
+          name: pe-eng-credit-scoring-engine-models-prod
