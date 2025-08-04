@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -20,14 +20,14 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/path: "/metrics"
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/instance: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: kubectl
+        managed-by: helm
     spec:
       serviceAccountName: pe-eng-credit-scoring-engine-prod
       securityContext:
@@ -145,11 +145,11 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
-    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/path: "/metrics"
 spec:
   type: ClusterIP
   ports:
@@ -171,7 +171,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -183,7 +183,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 data:
   model-config.json: |
     {
