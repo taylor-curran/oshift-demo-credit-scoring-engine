@@ -43,8 +43,6 @@ spec:
           protocol: TCP
         securityContext:
           runAsNonRoot: true
-          runAsUser: 1001
-          runAsGroup: 1001
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           seccompProfile:
