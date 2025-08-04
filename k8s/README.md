@@ -25,7 +25,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - Prometheus annotations configured:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/actuator/prometheus"`
+  - `prometheus.io/path: "/metrics"`
 - JSON logs output to stdout via Spring Boot
 - Metrics exposed on port 8080
 

@@ -17,7 +17,7 @@ serviceAccount:
 podAnnotations:
   prometheus.io/scrape: "true"
   prometheus.io/port: "8080"
-  prometheus.io/path: "/actuator/prometheus"
+  prometheus.io/path: "/metrics"
 
 podSecurityContext:
   runAsNonRoot: true
@@ -28,8 +28,13 @@ podSecurityContext:
     type: RuntimeDefault
 
 securityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
   capabilities:
     drop:
     - ALL
