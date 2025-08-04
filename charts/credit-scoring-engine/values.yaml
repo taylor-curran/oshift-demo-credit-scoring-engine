@@ -4,6 +4,7 @@ image:
   repository: registry.bank.internal/credit-scoring-engine
   pullPolicy: IfNotPresent
   tag: "3.1.0"
+  digest: "sha256:7d865e959b2466166c17b0f56f4bb0e547ac74b1a0ee9f115ddc93acf3bb37a0"
 
 nameOverride: ""
 fullnameOverride: ""
