@@ -57,6 +57,6 @@ kubectl apply -f k8s/ingress.yaml
 
 ## Resource Limits
 
-- Main container: CPU 200m-1000m, Memory 1536Mi-3072Mi
+- Main container: CPU 200m-1000m, Memory 1536Mi-3072Mi (Rule 01 compliant: ≤ 4vCPU/2Gi)
 - Fluent-bit sidecar: CPU 50m-100m, Memory 64Mi-128Mi
 - Replicas: 4 (matching Cloud Foundry configuration)

@@ -16,7 +16,6 @@ resources:
 - configmap.yaml
 - fluent-bit-configmap.yaml
 - ingress.yaml
-- fluent-bit-configmap.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
