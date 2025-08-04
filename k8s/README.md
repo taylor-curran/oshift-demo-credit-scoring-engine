@@ -24,7 +24,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - No `:latest` tags used
 
 ### Rule 04 - Naming & Label Conventions ✅
-- **Release name prefix**: `banking-platform-credit-scoring-engine-prod`
+- **Release name prefix**: `banking-team-credit-scoring-engine-prod`
 - **Mandatory labels**:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
