@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -65,92 +65,92 @@ spec:
         - name: EXPERIAN_API_URL
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: experian-api-url
         - name: EQUIFAX_API_URL
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: equifax-api-url
         - name: TRANSUNION_API_URL
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: transunion-api-url
         - name: CREDIT_API_TIMEOUT
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: credit-api-timeout
         - name: FICO_MODEL_VERSION
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: fico-model-version
         - name: VANTAGE_MODEL_VERSION
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: vantage-model-version
         - name: CUSTOM_MODEL_PATH
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: custom-model-path
         - name: INCOME_VERIFICATION_API
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: income-verification-api
         - name: BANK_STATEMENT_ANALYZER
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: bank-statement-analyzer
         - name: MIN_CREDIT_SCORE
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: min-credit-score
         - name: MAX_DTI_RATIO
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: max-dti-ratio
         - name: MIN_INCOME_VERIFICATION
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: min-income-verification
         - name: FCRA_COMPLIANCE_MODE
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: fcra-compliance-mode
         - name: ECOA_COMPLIANCE_MODE
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: ecoa-compliance-mode
         - name: ADVERSE_ACTION_NOTIFICATIONS
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: adverse-action-notifications
         - name: ML_FEATURE_COUNT
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: ml-feature-count
         - name: MODEL_REFRESH_INTERVAL
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: model-refresh-interval
         - name: A_B_TEST_ENABLED
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-config
+              name: pe-eng-credit-scoring-config-prod
               key: a-b-test-enabled
         livenessProbe:
           httpGet:
@@ -179,4 +179,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-ml-models-config-prod
