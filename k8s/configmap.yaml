@@ -26,4 +26,6 @@ data:
     
     logging.level.com.banking.credit=INFO
     logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg"}%n
-    logging.pattern.file={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg"}%n
+    
+    logging.file.name=
+    logging.file.path=
