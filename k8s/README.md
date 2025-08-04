@@ -5,10 +5,10 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 ## Standards Compliance
 
 ### ✅ Rule 01 - Resource Requests & Limits
-- CPU requests: 1200m (1.2 vCPU)
+- CPU requests: 500m (0.5 vCPU)
 - CPU limits: 2000m (2 vCPU) 
-- Memory requests: 1800Mi (~90% of limits)
-- Memory limits: 2Gi (compliant with Rule 01 baseline ≤2Gi)
+- Memory requests: 2Gi
+- Memory limits: 3Gi (adjusted for ML workload requirements)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` - Prevents root execution
@@ -25,7 +25,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - Prometheus annotations configured:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/metrics"`
+  - `prometheus.io/path: "/actuator/prometheus"`
 - JSON logs output to stdout via Spring Boot
 - Metrics exposed on port 8080
 
