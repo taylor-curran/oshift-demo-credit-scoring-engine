@@ -33,7 +33,7 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - Prometheus annotations for metrics scraping:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/metrics"`
+  - `prometheus.io/path: "/actuator/prometheus"`
 - Fluent-bit sidecar for log aggregation
 - Metrics endpoint exposed on port 8080 at /metrics path
 
