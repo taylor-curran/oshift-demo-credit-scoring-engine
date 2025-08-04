@@ -12,8 +12,8 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 ## Standards Compliance
 
 ### Rule 01 - Resource Limits ✅
-- CPU requests: 500m (0.5 vCPU), limits: 2000m (2 vCPU)
-- Memory requests: 1200Mi (~1.2GB), limits: 2048Mi (2GB)
+- CPU requests: 600m (0.6 vCPU), limits: 2000m (2 vCPU)
+- Memory requests: 1228Mi (~1.2GB), limits: 2048Mi (2GB)
 - Fluent-bit sidecar: CPU 50m-200m, Memory 128Mi-256Mi
 - Requests ≈ 60% of limits for HPA headroom
 
@@ -45,8 +45,8 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - Metrics exposed on port 8080
 
 ### Rule 06 - Health Probes ✅
-- Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
-- Readiness probe: `/actuator/health/readiness` (10s initial delay, 1 failure threshold)
+- Liveness probe: `/actuator/health` (30s initial delay, 10s period, 5s timeout, 3 failure threshold)
+- Readiness probe: `/actuator/health` (10s initial delay, 5s period, 3s timeout, 1 failure threshold)
 
 ## Deployment
 
