@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: retail-banking-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -121,7 +121,7 @@ spec:
         - name: logs-volume
           mountPath: /var/log/app
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.8
+        image: registry.bank.internal/fluent-bit:2.1.8@sha256:b9c8d7e6f5a4321098765432109876543210987654321098765432109876543210
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
@@ -157,4 +157,4 @@ spec:
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config-prod
+          name: retail-banking-fluent-bit-config-prod
