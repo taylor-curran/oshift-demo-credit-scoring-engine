@@ -1,0 +1,45 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+spec:
+  host: credit-scoring.internal.banking.com
+  to:
+    kind: Service
+    name: pe-eng-credit-scoring-engine-prod
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: pe-eng-credit-scoring-engine-api-prod
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+spec:
+  host: credit-api-v3.banking.com
+  to:
+    kind: Service
+    name: pe-eng-credit-scoring-engine-prod
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
