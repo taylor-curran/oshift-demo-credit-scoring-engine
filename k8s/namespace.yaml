@@ -4,6 +4,7 @@ metadata:
   name: banking-platform-dev
   labels:
     app.kubernetes.io/name: banking-platform
+    app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: dev
     managed-by: kubernetes

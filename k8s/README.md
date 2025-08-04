@@ -17,8 +17,8 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 
 ### Rule 04 - Naming & Label Conventions ✅
 - Release name prefix: `credit-scoring-engine-dev`
-- Mandatory labels:
-  - `app.kubernetes.io/name: credit-scoring-engine`
+- Mandatory labels (applied to ALL resources including namespace):
+  - `app.kubernetes.io/name: credit-scoring-engine` (or `banking-platform` for namespace)
   - `app.kubernetes.io/version: "3.1.0"`
   - `app.kubernetes.io/part-of: banking-platform`
   - `environment: dev`
