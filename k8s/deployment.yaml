@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: dev
     managed-by: helm
 spec:
@@ -19,7 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
+        app.kubernetes.io/part-of: retail-banking
         environment: dev
         managed-by: helm
       annotations:
@@ -31,6 +31,7 @@ spec:
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
           seccompProfile:
             type: RuntimeDefault
           readOnlyRootFilesystem: true
@@ -48,13 +49,13 @@ spec:
             memory: "3072Mi"
         livenessProbe:
           httpGet:
-            path: /actuator/health/liveness
+            path: /actuator/health/detailed
             port: 8080
           initialDelaySeconds: 30
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health/readiness
+            path: /actuator/health/detailed
             port: 8080
           initialDelaySeconds: 10
           failureThreshold: 1
