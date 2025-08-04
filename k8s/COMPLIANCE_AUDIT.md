@@ -65,7 +65,7 @@ All images follow security best practices:
 - `registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1`
 
 ### ✅ Rule 04 - Naming & Label Conventions
-**Status: COMPLIANT**
+**Status: COMPLIANT** (Fixed selector mismatch issues)
 
 All resources follow consistent naming and labeling:
 
@@ -83,7 +83,7 @@ All resources follow consistent naming and labeling:
 
 **Label Consistency:**
 - All resources have consistent labeling
-- Selectors properly match labels
+- **FIXED**: Selectors now properly match labels in deployment-dev.yaml and service-dev.yaml
 - Kustomization commonLabels applied
 
 ## Additional Compliance Features
