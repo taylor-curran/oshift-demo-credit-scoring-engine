@@ -1,8 +1,15 @@
 # Kubernetes Deployment for Credit Scoring Engine
 
-This directory contains Kubernetes manifests that comply with k8s-standards Rules 02-06.
+This directory contains Kubernetes manifests that comply with k8s-standards Rules 01-06.
 
 ## Standards Compliance
+
+### Rule 01 - Resource Requests & Limits
+- ✅ CPU requests: 600m (≥ 50m baseline)
+- ✅ Memory requests: 1228Mi (≥ 128Mi baseline)
+- ✅ CPU limits: 1000m (≤ 4 vCPU baseline)
+- ✅ Memory limits: 2048Mi (≤ 2Gi baseline)
+- ✅ Request-to-limit ratio: 60% (optimal for HPA)
 
 ### Rule 02 - Security Context
 - ✅ `runAsNonRoot: true`
@@ -36,7 +43,7 @@ kubectl apply -k k8s/
 
 ## Resource Allocation
 
-- **Main container**: 600m/1000m CPU, 1843Mi/3072Mi memory (60% request-to-limit ratio)
+- **Main container**: 600m/1000m CPU, 1228Mi/2048Mi memory (60% request-to-limit ratio)
 - **Fluent-bit sidecar**: 120m/200m CPU, 154Mi/256Mi memory (60% request-to-limit ratio)
 
 ## External Access
