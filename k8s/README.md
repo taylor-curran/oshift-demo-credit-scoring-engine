@@ -6,7 +6,7 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 
 ### Rule 01 - Resource Requests & Limits ✅
 - CPU requests: 200m, limits: 1000m
-- Memory requests: 1228Mi, limits: 2048Mi
+- Memory requests: 1229Mi, limits: 2048Mi
 - Requests set to ~60% of limits for HPA headroom
 
 ### Rule 02 - Pod Security Baseline ✅
@@ -57,6 +57,6 @@ kubectl apply -f k8s/ingress.yaml
 
 ## Resource Limits
 
-- Main container: CPU 200m-1000m, Memory 1228Mi-2048Mi (Rule 01 compliant: ≤ 4vCPU/2Gi)
+- Main container: CPU 200m-1000m, Memory 1229Mi-2048Mi (Rule 01 compliant: ≤ 4vCPU/2Gi)
 - Fluent-bit sidecar: CPU 50m-100m, Memory 64Mi-128Mi
 - Replicas: 4 (matching Cloud Foundry configuration)
