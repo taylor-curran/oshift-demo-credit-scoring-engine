@@ -24,7 +24,8 @@ spec:
         managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9090"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -40,11 +41,11 @@ spec:
           name: metrics
         resources:
           requests:
-            cpu: "500m"
+            cpu: "600m"
             memory: "1200Mi"
           limits:
-            cpu: "2000m"
-            memory: "2048Mi"
+            cpu: "1000m"
+            memory: "2000Mi"
         securityContext:
           runAsNonRoot: true
           seccompProfile:
@@ -73,7 +74,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1400m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
