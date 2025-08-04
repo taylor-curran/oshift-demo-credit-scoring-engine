@@ -12,8 +12,9 @@ This audit report documents the compliance status of the Credit Scoring Engine K
 - **CPU Requests**: 500m (meets ≥50m requirement)
 - **Memory Requests**: 1536Mi (meets ≥128Mi requirement)  
 - **CPU Limits**: 2000m (within ≤4 vCPU limit)
-- **Memory Limits**: 3072Mi (within ≤2Gi limit, scaled for banking workload)
+- **Memory Limits**: 2048Mi (within ≤2Gi limit)
 - **Request/Limit Ratio**: ~75% (within recommended 60% guideline)
+- **JVM Heap Size**: 1536m (aligned with memory requests to prevent OOM)
 
 **Evidence**: `k8s/deployment.yaml` lines 45-52
 
@@ -32,7 +33,7 @@ This audit report documents the compliance status of the Credit Scoring Engine K
 
 - **Tag Pinning**: Uses specific version `3.1.0` with SHA256 digest
 - **Registry Allow-list**: Uses `registry.bank.internal/*` (approved registry)
-- **Image Format**: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123...`
+- **Image Format**: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 
 **Evidence**: `k8s/deployment.yaml` line 35
 
