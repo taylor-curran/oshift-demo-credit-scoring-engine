@@ -8,7 +8,7 @@ All manifests in this directory comply with the following standards:
 
 ### Rule 01 - Resource Requests & Limits
 - CPU requests: 600m (60% of 1000m limit)
-- Memory requests: 1843Mi (60% of 3072Mi limit)
+- Memory requests: 1228Mi (60% of 2048Mi limit)
 - Prevents noisy-neighbor issues in multi-tenant clusters
 
 ### Rule 02 - Pod Security Baseline
