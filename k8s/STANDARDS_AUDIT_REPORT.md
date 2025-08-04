@@ -25,7 +25,7 @@ This report documents the audit of the Credit Scoring Engine Kubernetes manifest
 
 ### ✅ Rule 03 - Image Provenance
 **Status: COMPLIANT (Fixed)**
-- **Issue Found**: Images missing SHA digest pinning
+- **Issue Found**: Images missing SHA digest pinning for immutable references
 - **Fix Applied**: Added SHA digest placeholders to all images:
   - `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
   - `registry.bank.internal/fluent-bit:2.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
