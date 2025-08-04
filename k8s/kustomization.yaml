@@ -26,10 +26,11 @@ resources:
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/part-of: retail-banking
-  environment: prod
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
-  newTag: "3.1.0"
+  newName: registry.bank.internal/credit-scoring-engine
+  digest: sha256:7d865e959b2466f8239fcba1a2b6b0e729e235fb2b2c3a8b8a5c9f1e4d6c8a2b
 - name: registry.bank.internal/fluent-bit
-  newTag: "2.1.0"
+  newName: registry.bank.internal/fluent-bit
+  digest: sha256:9f8e7d6c5b4a3928374650192837465019283746501928374650192837465019
