@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fluent-bit-config
-  namespace: credit-scoring
+  name: banking-eng-fluent-bit-config-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -24,13 +23,13 @@ data:
         Name              tail
         Path              /app/logs/*.log
         Parser            json
-        Tag               credit-scoring.*
+        Tag               credit-scoring-engine.prod
         Refresh_Interval  5
 
     [OUTPUT]
         Name  loki
         Match *
-        Host  loki-gateway.observability.svc.cluster.local
+        Host  loki.internal.banking.com
         Port  3100
         Labels job=credit-scoring-engine, environment=prod
         Label_keys $app_name,$environment
@@ -44,17 +43,3 @@ data:
         Time_Key    timestamp
         Time_Format %Y-%m-%dT%H:%M:%S.%L
         Time_Keep   On
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ml-models-config
-  namespace: credit-scoring
-  labels:
-    app.kubernetes.io/name: credit-scoring-engine
-    app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: retail-banking
-    environment: prod
-    managed-by: kubernetes
-data:
-  proprietary-score-v2.3.pkl: |

@@ -42,68 +42,23 @@ spec:
         ports:
         - containerPort: 8080
           name: http
-          protocol: TCP
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
           runAsGroup: 1001
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
           seccompProfile:
             type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "500m"
-            memory: "1536Mi"
+            memory: "1Gi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
-        - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
-        - name: EXPERIAN_API_URL
-          value: "https://api.experian.com/credit"
-        - name: EQUIFAX_API_URL
-          value: "https://api.equifax.com/ews"
-        - name: TRANSUNION_API_URL
-          value: "https://api.transunion.com/credit"
-        - name: CREDIT_API_TIMEOUT
-          value: "15000"
-        - name: FICO_MODEL_VERSION
-          value: "9.0"
-        - name: VANTAGE_MODEL_VERSION
-          value: "4.0"
-        - name: CUSTOM_MODEL_PATH
-          value: "/models/proprietary-score-v2.3.pkl"
-        - name: INCOME_VERIFICATION_API
-          value: "https://api.theworknumber.com"
-        - name: BANK_STATEMENT_ANALYZER
-          value: "https://api.plaid.com/v2"
-        - name: MIN_CREDIT_SCORE
-          value: "580"
-        - name: MAX_DTI_RATIO
-          value: "0.43"
-        - name: MIN_INCOME_VERIFICATION
-          value: "true"
-        - name: FCRA_COMPLIANCE_MODE
-          value: "true"
-        - name: ECOA_COMPLIANCE_MODE
-          value: "true"
-        - name: ADVERSE_ACTION_NOTIFICATIONS
-          value: "true"
-        - name: ML_FEATURE_COUNT
-          value: "247"
-        - name: MODEL_REFRESH_INTERVAL
-          value: "24h"
-        - name: A_B_TEST_ENABLED
-          value: "true"
+            memory: "2Gi"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -128,14 +83,32 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "production,scoring"
+        - name: JVM_OPTS
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
+        - name: EXPERIAN_API_URL
+          value: "https://api.experian.com/credit"
+        - name: EQUIFAX_API_URL
+          value: "https://api.equifax.com/ews"
+        - name: TRANSUNION_API_URL
+          value: "https://api.transunion.com/credit"
+        - name: CREDIT_API_TIMEOUT
+          value: "15000"
+        - name: FICO_MODEL_VERSION
+          value: "9.0"
+        - name: VANTAGE_MODEL_VERSION
+          value: "4.0"
+        - name: FCRA_COMPLIANCE_MODE
+          value: "true"
+        - name: ECOA_COMPLIANCE_MODE
+          value: "true"
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: logs-volume
           mountPath: /app/logs
-        - name: models-volume
-          mountPath: /models
-          readOnly: true
       - name: fluent-bit
         image: registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1
         securityContext:
@@ -158,20 +131,14 @@ spec:
         volumeMounts:
         - name: fluent-bit-config
           mountPath: /fluent-bit/etc
-          readOnly: true
         - name: logs-volume
           mountPath: /app/logs
           readOnly: true
-        - name: tmp-volume
-          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: logs-volume
         emptyDir: {}
-      - name: models-volume
-        configMap:
-          name: ml-models-config
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: banking-eng-fluent-bit-config-prod
