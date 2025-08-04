@@ -21,9 +21,9 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - Mandatory labels:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
-  - `app.kubernetes.io/part-of: banking-platform`
+  - `app.kubernetes.io/part-of: retail-banking`
   - `environment: dev`
-  - `managed-by: kubernetes`
+  - `managed-by: helm`
 
 ### Rule 05 - Logging & Observability ✅
 - Prometheus annotations:

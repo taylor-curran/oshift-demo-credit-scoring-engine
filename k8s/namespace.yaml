@@ -4,6 +4,6 @@ metadata:
   name: banking-platform-dev
   labels:
     app.kubernetes.io/name: banking-platform
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: dev
-    managed-by: kubernetes
+    managed-by: helm
