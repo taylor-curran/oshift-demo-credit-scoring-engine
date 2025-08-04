@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456
         securityContext:
           runAsNonRoot: true
           seccompProfile:
@@ -84,7 +84,7 @@ spec:
           mountPath: /fluent-bit/etc
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:4f58bd6e7827691bc8e57c8c4bb0065df956f0d6b8d2b5a3c1e2f3a4b5c6d7e8
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:b8c9d0e1f2a3456789012345678901234567890abcdef1234567890abcdef12
         securityContext:
           runAsNonRoot: true
           seccompProfile:
