@@ -27,6 +27,7 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        readOnlyRootFilesystem: true
         seccompProfile:
           type: RuntimeDefault
       containers:
