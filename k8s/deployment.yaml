@@ -30,12 +30,9 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
         fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
-        supplementalGroups: []
       containers:
         - name: credit-scoring-engine
           image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
@@ -45,8 +42,6 @@ spec:
               protocol: TCP
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             privileged: false
@@ -130,8 +125,6 @@ spec:
           image: registry.bank.internal/fluent-bit:2.1.0@sha256:8a45e65b0a5f15b4d2c6e69846f7cbc6e9f34267ccd8ecfb5c1fe3a4725b27c8
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             privileged: false
