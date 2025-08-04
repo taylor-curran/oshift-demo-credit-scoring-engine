@@ -26,95 +26,95 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76fd84062c8c291a11cdb5c6a35c9a45afa8
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
         resources:
           requests:
             cpu: "500m"
-            memory: "1536Mi"
+            memory: "2Gi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "3Gi"
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-prod
         env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
-        - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
-        - name: EXPERIAN_API_URL
-          value: "https://api.experian.com/credit"
-        - name: EQUIFAX_API_URL
-          value: "https://api.equifax.com/ews"
-        - name: TRANSUNION_API_URL
-          value: "https://api.transunion.com/credit"
-        - name: CREDIT_API_TIMEOUT
-          value: "15000"
-        - name: FICO_MODEL_VERSION
-          value: "9.0"
-        - name: VANTAGE_MODEL_VERSION
-          value: "4.0"
-        - name: CUSTOM_MODEL_PATH
-          value: "/models/proprietary-score-v2.3.pkl"
-        - name: INCOME_VERIFICATION_API
-          value: "https://api.theworknumber.com"
-        - name: BANK_STATEMENT_ANALYZER
-          value: "https://api.plaid.com/v2"
-        - name: MIN_CREDIT_SCORE
-          value: "580"
-        - name: MAX_DTI_RATIO
-          value: "0.43"
-        - name: MIN_INCOME_VERIFICATION
-          value: "true"
-        - name: FCRA_COMPLIANCE_MODE
-          value: "true"
-        - name: ECOA_COMPLIANCE_MODE
-          value: "true"
-        - name: ADVERSE_ACTION_NOTIFICATIONS
-          value: "true"
-        - name: ML_FEATURE_COUNT
-          value: "247"
-        - name: MODEL_REFRESH_INTERVAL
-          value: "24h"
-        - name: A_B_TEST_ENABLED
-          value: "true"
+        - name: SERVER_PORT
+          value: "8080"
+        - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+          value: "health,info,prometheus"
+        - name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS
+          value: "always"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
           failureThreshold: 3
+          successThreshold: 1
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
-          failureThreshold: 1
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
+        - name: logs-volume
+          mountPath: /app/logs
         - name: models-volume
           mountPath: /models
           readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
+      - name: logs-volume
+        emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: ml-models-config
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
