@@ -48,7 +48,7 @@ environment: {{ .Values.environment }}
 Selector labels
 */}}
 {{- define "credit-scoring-engine.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "credit-scoring-engine.name" . }}
+app.kubernetes.io/name: {{ .Values.app.name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
