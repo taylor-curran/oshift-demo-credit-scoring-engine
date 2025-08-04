@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -26,8 +27,9 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/path: "/metrics"
     spec:
+      serviceAccountName: pe-eng-credit-scoring-engine-prod
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -55,11 +57,11 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "500m"
-            memory: "2Gi"
+            cpu: "1200m"
+            memory: "1800Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
