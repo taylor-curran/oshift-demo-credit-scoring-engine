@@ -6,10 +6,10 @@ This directory contains Kubernetes manifests that comply with k8s-standards Rule
 
 ### Rule 01 - Resource Requests & Limits
 - ✅ CPU requests: 500m (≥ 50m baseline)
-- ✅ Memory requests: 1228Mi (≥ 128Mi baseline, 60% of 2048Mi limit)
+- ✅ Memory requests: 1024Mi (≥ 128Mi baseline, ~67% of 1536Mi limit)
 - ✅ CPU limits: 1000m (≤ 4 vCPU baseline)
-- ✅ Memory limits: 2048Mi (≤ 2Gi baseline compliance)
-- ✅ Request-to-limit ratio: 60% (optimal for HPA)
+- ✅ Memory limits: 1536Mi (≤ 2Gi baseline compliance)
+- ✅ Request-to-limit ratio: ~67% (optimal for HPA)
 
 ### Rule 02 - Security Context
 - ✅ `runAsNonRoot: true`
@@ -47,8 +47,8 @@ kubectl apply -k k8s/
 
 ## Resource Allocation
 
-- **Main container**: 500m/1000m CPU, 1228Mi/2048Mi memory (60% request-to-limit ratio)
-- **Total memory**: 2048Mi (complies with Rule 01 ≤2Gi baseline)
+- **Main container**: 500m/1000m CPU, 1024Mi/1536Mi memory (~67% request-to-limit ratio)
+- **Total memory**: 1536Mi (complies with Rule 01 ≤2Gi baseline)
 
 ## External Access
 
