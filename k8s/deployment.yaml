@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: banking-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -35,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
@@ -64,17 +64,17 @@ spec:
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: credit-scoring-secrets
+              name: banking-credit-scoring-secrets-prod
               key: DB_USERNAME
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: credit-scoring-secrets
+              name: banking-credit-scoring-secrets-prod
               key: DB_PASSWORD
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: credit-scoring-secrets
+              name: banking-credit-scoring-secrets-prod
               key: REDIS_PASSWORD
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
@@ -116,7 +116,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -124,10 +124,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -142,7 +142,7 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: banking-credit-scoring-models-prod
       - name: config-volume
         configMap:
-          name: credit-scoring-config
+          name: banking-credit-scoring-config-prod
