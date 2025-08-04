@@ -22,7 +22,7 @@ data:
 
     [INPUT]
         Name              tail
-        Path              /tmp/*.log
+        Path              /proc/1/fd/1
         Parser            json
         Tag               credit-scoring-engine
         Refresh_Interval  5
