@@ -31,6 +31,17 @@ This directory contains Kubernetes manifests that comply with the k8s standards:
   - `environment: prod`
   - `managed-by: helm`
 
+### Rule 05 - Logging & Observability ✅
+- JSON stdout logs via Spring Boot structured logging
+- Prometheus metrics on port 8080 with proper annotations
+- Fluent-bit sidecar for production log shipping to Loki
+- Prometheus auto-discovery enabled
+
+### Rule 06 - Health Probes ✅
+- Liveness probe: `/actuator/health/liveness` for Spring Boot Actuator
+- Readiness probe: `/actuator/health/readiness` for Spring Boot Actuator
+- Proper timing configurations for JVM applications
+
 ## Files
 
 ### Development Environment
