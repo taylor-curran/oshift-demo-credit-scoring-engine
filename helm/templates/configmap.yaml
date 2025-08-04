@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}-models
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+data:
+  model-config.json: |
+    {
+      "fico_model_version": "{{ .Values.env.FICO_MODEL_VERSION }}",
+      "vantage_model_version": "{{ .Values.env.VANTAGE_MODEL_VERSION }}",
+      "custom_model_path": "{{ .Values.env.CUSTOM_MODEL_PATH }}",
+      "ml_feature_count": {{ .Values.env.ML_FEATURE_COUNT }},
+      "model_refresh_interval": "{{ .Values.env.MODEL_REFRESH_INTERVAL }}"
+    }
