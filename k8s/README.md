@@ -21,6 +21,19 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - No `:latest` tags
 - Images from approved internal registry
 
+### ✅ Rule 05 - Logging & Observability
+- Prometheus annotations configured:
+  - `prometheus.io/scrape: "true"`
+  - `prometheus.io/port: "8080"`
+  - `prometheus.io/path: "/actuator/prometheus"`
+- JSON logs output to stdout via Spring Boot
+- Metrics exposed on port 8080
+
+### ✅ Rule 06 - Health Probes
+- Liveness probe: `/actuator/health/liveness`
+- Readiness probe: `/actuator/health/readiness`
+- Proper timing configuration for JVM applications
+
 ### ✅ Rule 04 - Naming & Label Conventions
 - Release name: `pe-eng-credit-scoring-engine-prod`
 - Mandatory labels applied:
