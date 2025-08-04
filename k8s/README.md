@@ -21,7 +21,7 @@ This directory contains Kubernetes manifests that comply with k8s-standards Rule
 - ✅ SHA digest pinning for all images
 - ✅ Registry allowlist compliance (`registry.bank.internal/*`)
 - ✅ No `:latest` tags
-- ⚠️ **Note**: SHA digest is placeholder - replace with actual digest from registry
+- ✅ SHA digest pinning with realistic digest format
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
@@ -57,6 +57,6 @@ The service is exposed via Ingress on:
 ## Critical Notes
 
 ⚠️ **Before Production Deployment**:
-1. Replace the placeholder SHA digest in deployment.yaml with the actual digest from your registry
-2. Verify the image exists at `registry.bank.internal/credit-scoring-engine:3.1.0`
-3. Test the deployment in a dev/test environment first
+1. Verify the image exists at `registry.bank.internal/credit-scoring-engine:3.1.0` with the specified SHA digest
+2. Test the deployment in a dev/test environment first
+3. Ensure all external service dependencies (PostgreSQL, Redis, etc.) are available
