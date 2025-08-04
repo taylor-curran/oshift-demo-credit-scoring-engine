@@ -9,4 +9,8 @@ metadata:
     environment: prod
     managed-by: openshift
 data:
-  proprietary-score-v2.3.pkl: |
+  model-config.properties: |
+    model.version=2.3
+    model.type=proprietary-score
+    model.features=247
+    model.refresh.interval=24h
