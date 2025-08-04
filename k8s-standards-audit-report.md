@@ -41,8 +41,8 @@ Auditing Kubernetes manifests in `k8s/` directory against the 5 k8s standards ru
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
 - Health probes configured:
-  - Liveness: `/api/v1/credit/health/detailed`
-  - Readiness: `/api/v1/credit/health/detailed`
+  - Liveness: `/actuator/health/liveness`
+  - Readiness: `/actuator/health/readiness`
 - Fluent-bit sidecar for log forwarding to Loki
 - JSON logging configured in application.properties
 

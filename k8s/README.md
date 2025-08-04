@@ -31,8 +31,8 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 - Metrics endpoint exposed on port 8080
 
 ### Rule 06 - Health Probes ✅
-- Liveness probe: `/api/v1/credit/health/detailed` (30s initial delay, 3 failure threshold)
-- Readiness probe: `/api/v1/credit/health/detailed` (10s initial delay, 1 failure threshold)
+- Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
+- Readiness probe: `/actuator/health/readiness` (10s initial delay, 1 failure threshold)
 
 ## Deployment
 
