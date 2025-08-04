@@ -49,8 +49,6 @@ data:
         Label_keys $kubernetes['labels']
         Remove_keys kubernetes, stream
         Line_format json
-        Http_User admin
-        Http_Passwd admin
 
   parsers.conf: |
     [PARSER]
