@@ -129,4 +129,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: banking-eng-ml-models-config-prod
