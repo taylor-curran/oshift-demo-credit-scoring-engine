@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-engine-prod
+  name: banking-eng-credit-scoring-engine-prod
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
@@ -107,7 +107,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -115,10 +115,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp

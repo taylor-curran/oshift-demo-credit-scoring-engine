@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: banking-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -25,6 +26,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -55,12 +57,16 @@ spec:
             path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 1
         env:
         - name: SPRING_PROFILES_ACTIVE
