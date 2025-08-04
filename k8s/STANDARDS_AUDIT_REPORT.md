@@ -82,7 +82,7 @@ All Kubernetes manifests are now fully compliant with k8s standards Rules 01-06 
 1. **JVM Memory Allocation**: Reduced from 2560Mi to 1536Mi to prevent container OOMKilled errors
 2. **Image References**: Removed fake SHA digest placeholders and implemented proper tag pinning for deployable images
 3. **Architecture Fix**: Consolidated duplicate deployments - integrated fluent-bit as sidecar container in main deployment to eliminate conflicts
-4. **Final SHA Digest Fix**: Removed remaining fake SHA digest placeholder from main application image
+4. **Final SHA Digest Fix**: Removed ALL remaining fake SHA digest placeholders from both application and fluent-bit images
 
 ## Next Steps
 1. Deploy to staging environment for validation
@@ -92,5 +92,6 @@ All Kubernetes manifests are now fully compliant with k8s standards Rules 01-06 
 
 ## Deployment Notes
 - The JVM memory fix is critical - the previous configuration would cause containers to crash due to memory allocation exceeding limits
-- **CRITICAL**: Removed fake SHA digests that would prevent successful image pulls in any real deployment
+- **CRITICAL**: Removed ALL fake SHA digests that would prevent successful image pulls in any real deployment
 - All images now use proper tag pinning without fake digests, making them actually deployable
+- Both credit-scoring-engine:3.1.0 and fluent-bit:2.1.0 images are now properly referenced for real deployment
