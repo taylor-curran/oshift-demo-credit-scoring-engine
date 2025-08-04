@@ -31,31 +31,31 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466166c17d2bd9775de4e2e7b9d267c7e2b3e5c8b1f2a3d4e5f6a
         ports:
         - containerPort: 8080
           name: http
-        resources:
-          requests:
-            cpu: "600m"
-            memory: "1843Mi"
-          limits:
-            cpu: "1000m"
-            memory: "3072Mi"
         securityContext:
           runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "1200m"
+            memory: "1228Mi"
+          limits:
+            cpu: "2000m"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -109,8 +109,10 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
-        emptyDir: {}
+        configMap:
+          name: pe-eng-credit-scoring-engine-models-prod
