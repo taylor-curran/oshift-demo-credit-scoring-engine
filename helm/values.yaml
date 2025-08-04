@@ -3,7 +3,7 @@ replicaCount: 4
 image:
   repository: registry.bank.internal/credit-scoring-engine
   pullPolicy: IfNotPresent
-  tag: "3.1.0"
+  tag: "3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -18,15 +18,16 @@ podAnnotations:
   prometheus.io/port: "8080"
   prometheus.io/path: "/actuator/prometheus"
 
-podSecurityContext:
+podSecurityContext: {}
+
+securityContext:
   runAsNonRoot: true
+  runAsUser: 1001
   seccompProfile:
     type: RuntimeDefault
   readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
-
-securityContext: {}
 
 service:
   type: ClusterIP
