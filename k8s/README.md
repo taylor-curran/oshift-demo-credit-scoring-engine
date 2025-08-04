@@ -7,6 +7,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - `deployment.yaml` - Main application deployment with security contexts and resource limits
 - `service.yaml` - ClusterIP service exposing the application
 - `configmap.yaml` - Configuration for ML models
+- `fluent-bit-configmap.yaml` - Configuration for fluent-bit logging sidecar
 - `ingress.yaml` - Ingress configuration for external access
 - `kustomization.yaml` - Kustomize configuration for managing all resources
 

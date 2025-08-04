@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This report provides a comprehensive audit of the credit-scoring-engine Kubernetes manifests against the k8s standards library Rules 01-04. The audit found that **all configurations are fully compliant** with the established standards.
+This report provides a comprehensive audit of the credit-scoring-engine Kubernetes manifests against the k8s standards library Rules 01-04. The audit found that **all configurations are now fully compliant** with the established standards after adding the missing fluent-bit sidecar container.
 
 ## Audit Results by Rule
 
