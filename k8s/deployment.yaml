@@ -26,6 +26,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -50,7 +51,7 @@ spec:
         resources:
           requests:
             cpu: "200m"
-            memory: "1229Mi"
+            memory: "1228Mi"
           limits:
             cpu: "1000m"
             memory: "2048Mi"
@@ -67,19 +68,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
-            port: 8081
-          initialDelaySeconds: 30
+            port: 8080
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
-            port: 8081
-          initialDelaySeconds: 10
+            port: 8080
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
