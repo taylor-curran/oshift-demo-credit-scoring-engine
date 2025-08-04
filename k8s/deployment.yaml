@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: dev
-    managed-by: kubernetes
+    managed-by: kustomize
 spec:
   replicas: 4
   selector:
@@ -21,7 +21,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: banking-platform
         environment: dev
-        managed-by: kubernetes
+        managed-by: kustomize
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -110,8 +110,32 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config-dev

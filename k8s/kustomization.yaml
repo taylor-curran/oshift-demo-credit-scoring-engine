@@ -8,21 +8,20 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: dev
-    managed-by: kubernetes
+    managed-by: kustomize
 
 resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
+- fluent-bit-configmap.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
+  app.kubernetes.io/version: "3.1.0"
   app.kubernetes.io/part-of: banking-platform
   environment: dev
-  managed-by: kubernetes
-
-namePrefix: banking-
-nameSuffix: -dev
+  managed-by: kustomize
 
 images:
 - name: registry.bank.internal/credit-scoring-engine

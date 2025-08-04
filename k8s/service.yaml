@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: dev
-    managed-by: kubernetes
+    managed-by: kustomize
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
