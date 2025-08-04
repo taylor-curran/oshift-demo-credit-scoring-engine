@@ -160,4 +160,4 @@ spec:
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: pe-eng-fluent-bit-config-prod
