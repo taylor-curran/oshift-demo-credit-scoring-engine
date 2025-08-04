@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
         - containerPort: 8080
           name: http
@@ -51,15 +51,14 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-            drop:
-            - ALL
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "500m"
-            memory: "2Gi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -125,9 +124,14 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: logs-volume
+          mountPath: /app/logs
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: ml-models-config
+      - name: logs-volume
+        emptyDir: {}
+      restartPolicy: Always
