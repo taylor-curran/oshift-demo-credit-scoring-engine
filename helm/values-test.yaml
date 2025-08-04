@@ -1,0 +1,52 @@
+replicaCount: 2
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  tag: "3.1.0-test"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "768Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1536Mi"
+
+environment: test
+
+ingress:
+  hosts:
+    - host: credit-scoring-test.internal.banking.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: credit-scoring-test-tls
+      hosts:
+        - credit-scoring-test.internal.banking.com
+
+env:
+  SPRING_PROFILES_ACTIVE: "test,scoring"
+  JVM_OPTS: "-Xmx768m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  A_B_TEST_ENABLED: "true"
+  MIN_INCOME_VERIFICATION: "true"
+
+configMap:
+  applicationProperties: |
+    spring.datasource.url=jdbc:postgresql://credit-postgres-test:5432/creditdb_test
+    spring.datasource.username=${DB_USERNAME}
+    spring.datasource.password=${DB_PASSWORD}
+    spring.jpa.hibernate.ddl-auto=validate
+    spring.jpa.show-sql=false
+    
+    spring.redis.host=credit-redis-test
+    spring.redis.port=6379
+    spring.redis.password=${REDIS_PASSWORD}
+    
+    management.endpoints.web.exposure.include=health,info,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    logging.level.com.banking.credit=INFO
+    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
