@@ -23,6 +23,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -44,10 +45,10 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "2Gi"
           limits:
             cpu: "1000m"
-            memory: "2Gi"
+            memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           valueFrom:
