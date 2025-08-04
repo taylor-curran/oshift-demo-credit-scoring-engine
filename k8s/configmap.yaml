@@ -10,4 +10,7 @@ metadata:
     environment: prod
     managed-by: helm
 data:
-  proprietary-score-v2.3.pkl: |
+  model-config.properties: |
+    model.version=2.3
+    model.type=proprietary-score
+    model.path=/models/proprietary-score-v2.3.pkl
