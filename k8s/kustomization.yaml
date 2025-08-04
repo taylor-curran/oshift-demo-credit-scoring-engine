@@ -16,6 +16,7 @@ resources:
 - ml-models-configmap.yaml
 - deployment.yaml
 - service.yaml
+- ingress.yaml
 - networkpolicy.yaml
 
 commonLabels:
