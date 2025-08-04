@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: fluent-bit-credit-scoring
+  name: pe-eng-fluent-bit-credit-scoring-prod
   labels:
     app.kubernetes.io/name: fluent-bit
     app.kubernetes.io/version: "2.1.0"
@@ -64,6 +64,6 @@ spec:
           path: /var/log
       - name: config
         configMap:
-          name: fluent-bit-config
+          name: pe-eng-fluent-bit-config-prod
       - name: tmp-volume
         emptyDir: {}
