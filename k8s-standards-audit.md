@@ -9,6 +9,7 @@
 - `securityContext.capabilities.drop: ["ALL"]` ✅
 
 ### Rule 03 - Image Provenance ✅ COMPLIANT
+- **FIXED**: Removed fake SHA digest, using pinned tag instead
 - Uses approved registry: `registry.bank.internal` ✅
 - No `:latest` tag usage ✅
 - Pinned to specific version tag: `3.1.0` ✅
