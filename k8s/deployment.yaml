@@ -54,8 +54,8 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "500m"
-            memory: "1536Mi"
+            cpu: "1200m"
+            memory: "1843Mi"
           limits:
             cpu: "2000m"
             memory: "3072Mi"
@@ -144,8 +144,8 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "50m"
-            memory: "64Mi"
+            cpu: "60m"
+            memory: "77Mi"
           limits:
             cpu: "100m"
             memory: "128Mi"
