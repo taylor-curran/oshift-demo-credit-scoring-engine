@@ -5,9 +5,9 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 ## Standards Compliance
 
 ### ✅ Rule 01 - Resource Requests & Limits
-- CPU requests: 500m (0.5 vCPU)
+- CPU requests: 1200m (1.2 vCPU)
 - CPU limits: 2000m (2 vCPU) 
-- Memory requests: 1536Mi (~60% of limits)
+- Memory requests: 1800Mi (~90% of limits)
 - Memory limits: 2Gi (compliant with Rule 01 baseline ≤2Gi)
 
 ### ✅ Rule 02 - Pod Security Baseline
@@ -41,12 +41,12 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
   - `app.kubernetes.io/version: "3.1.0"`
   - `app.kubernetes.io/part-of: retail-banking`
   - `environment: prod`
-  - `managed-by: helm`
+  - `managed-by: kubectl`
 
 ## Deployment Files
 
 - `deployment.yaml` - Main application deployment with 4 replicas
-- `service.yaml` - ClusterIP service exposing port 80
+- `service.yaml` - ClusterIP service exposing port 8080
 - `configmap.yaml` - ML models configuration
 - `ingress.yaml` - External access via nginx ingress
 - `README.md` - This documentation
@@ -64,7 +64,7 @@ kubectl get pods -l app.kubernetes.io/name=credit-scoring-engine
 kubectl logs -l app.kubernetes.io/name=credit-scoring-engine
 
 # Access health endpoint
-kubectl port-forward svc/pe-eng-credit-scoring-engine-prod 8080:80
+kubectl port-forward svc/pe-eng-credit-scoring-engine-prod 8080:8080
 curl http://localhost:8080/actuator/health/detailed
 ```
 
