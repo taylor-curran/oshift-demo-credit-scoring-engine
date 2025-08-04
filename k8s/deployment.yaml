@@ -28,6 +28,7 @@ spec:
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
     spec:
+      serviceAccountName: pe-eng-credit-scoring-prod
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -37,7 +38,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         ports:
         - containerPort: 8080
           name: http
@@ -55,7 +56,7 @@ spec:
             - ALL
         resources:
           requests:
-            cpu: "500m"
+            cpu: "1200m"
             memory: "2Gi"
           limits:
             cpu: "2000m"
@@ -99,9 +100,38 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:8b5c9d2e1a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-credit-scoring-prod-models
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-credit-scoring-fluent-bit-prod
