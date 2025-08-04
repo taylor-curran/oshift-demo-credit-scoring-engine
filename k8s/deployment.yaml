@@ -125,9 +125,49 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: app-logs
+          mountPath: /var/log/app
+        env:
+        - name: LOGGING_LEVEL_ROOT
+          value: "INFO"
+        - name: LOGGING_PATTERN_CONSOLE
+          value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg","mdc":%X}%n'
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+        - name: app-logs
+          mountPath: /var/log/app
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
+        emptyDir: {}
+      - name: app-logs
         emptyDir: {}
       - name: models-volume
         configMap:
           name: ml-models-config
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
