@@ -5,7 +5,7 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 ## Standards Compliance
 
 ### ✅ Rule 01 - Resource Limits
-- CPU requests: 200m (dev), 500m (prod)
+- CPU requests: 200m (dev), 1200m (prod)
 - Memory requests: 512Mi (dev), 1Gi (prod)
 - CPU limits: 1000m (dev), 2000m (prod)
 - Memory limits: 1Gi (dev), 2Gi (prod) - **FIXED**: Reduced from 3Gi to comply with ≤2Gi standard
