@@ -60,6 +60,22 @@ public class CreditScoringController {
         return ResponseEntity.ok(health);
     }
     
+    @GetMapping("/health/liveness")
+    public ResponseEntity<Map<String, String>> livenessCheck() {
+        Map<String, String> status = new HashMap<>();
+        status.put("status", "UP");
+        status.put("service", "credit-scoring-engine");
+        return ResponseEntity.ok(status);
+    }
+    
+    @GetMapping("/health/readiness")
+    public ResponseEntity<Map<String, String>> readinessCheck() {
+        Map<String, String> status = new HashMap<>();
+        status.put("status", "UP");
+        status.put("service", "credit-scoring-engine");
+        return ResponseEntity.ok(status);
+    }
+    
     private int calculateFicoScore(CreditRequest request) {
         // Simplified FICO calculation based on key factors
         int baseScore = 600;
