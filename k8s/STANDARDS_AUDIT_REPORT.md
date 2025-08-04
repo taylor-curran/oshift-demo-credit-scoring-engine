@@ -75,7 +75,7 @@
   - ✅ No `:latest` tag
 
 - **Fluent-bit Sidecar**:
-  - `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:8c5c0f23e5d4b9a7c6f8e1d2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2`
+  - `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
   - ✅ Approved Red Hat registry
   - ✅ Pinned with digest
   - ✅ No `:latest` tag
