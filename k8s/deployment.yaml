@@ -104,18 +104,20 @@ spec:
           readOnly: true
         livenessProbe:
           httpGet:
-            path: /actuator/health/detailed
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          timeoutSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 20
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 20
+          failureThreshold: 1
       volumes:
       - name: tmp-volume
         emptyDir: {}
