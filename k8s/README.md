@@ -24,7 +24,7 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 04 - Naming & Labels
 - Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- Consistent naming pattern: `credit-scoring-engine-{env}`
+- Consistent naming pattern: `banking-eng-credit-scoring-engine-{env}` (follows `<team>-<app>-<env>` format)
 
 ### ✅ Rule 05 - Logging & Observability
 - Prometheus scrape annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
