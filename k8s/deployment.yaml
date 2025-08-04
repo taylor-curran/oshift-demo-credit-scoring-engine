@@ -31,6 +31,31 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.2.0@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        ports:
+        - containerPort: 2020
+          name: http-metrics
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
         ports:
@@ -53,6 +78,10 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
+        - name: LOGGING_LEVEL_ROOT
+          value: "INFO"
+        - name: LOGGING_PATTERN_CONSOLE
+          value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg","mdc":%X}%n'
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
@@ -95,18 +124,20 @@ spec:
           value: "true"
         livenessProbe:
           httpGet:
-            path: /actuator/health/detailed
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          timeoutSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 20
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 20
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -119,3 +150,6 @@ spec:
       - name: models-volume
         configMap:
           name: credit-scoring-models
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
