@@ -42,9 +42,9 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - Automatic Grafana dashboard discovery
 
 ### ✅ Rule 06 - Health Probes
-- Liveness probe: `/actuator/health/liveness` (60s initial delay, 30s period, 10s timeout)
-- Readiness probe: `/actuator/health/readiness` (30s initial delay, 10s period, 5s timeout)
-- Proper failure thresholds configured (3 failures for liveness, 3 for readiness)
+- Liveness probe: `/actuator/health/liveness` (30s initial delay, 30s period, 10s timeout)
+- Readiness probe: `/actuator/health/readiness` (10s initial delay, 10s period, 5s timeout)
+- Proper failure thresholds configured (3 failures for liveness, 1 for readiness)
 
 ## Deployment Files
 
