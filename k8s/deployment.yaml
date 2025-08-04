@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: pe-eng-credit-scoring-engine-dev
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
-    environment: prod
+    app.kubernetes.io/part-of: retail-banking
+    environment: dev
     managed-by: helm
 spec:
   replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      environment: prod
+      environment: dev
   template:
     metadata:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
-        environment: prod
+        app.kubernetes.io/part-of: retail-banking
+        environment: dev
         managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
@@ -35,17 +35,17 @@ spec:
           drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
         resources:
           requests:
-            cpu: "1800m"
-            memory: "1843Mi"
+            cpu: "500m"
+            memory: "1536Mi"
           limits:
-            cpu: "3000m"
-            memory: "3072Mi"
+            cpu: "2000m"
+            memory: "2560Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -95,19 +95,25 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           failureThreshold: 3
+          periodSeconds: 30
+          timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
           failureThreshold: 1
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
-        emptyDir: {}
+        configMap:
+          name: credit-scoring-models
