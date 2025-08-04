@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: pe-eng-fluent-bit-prod
-  namespace: credit-scoring
+  namespace: pe-eng-credit-scoring-prod
   labels:
     app.kubernetes.io/name: fluent-bit
     app.kubernetes.io/version: "2.1.0"
