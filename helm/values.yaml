@@ -3,7 +3,8 @@ replicaCount: 4
 image:
   repository: registry.bank.internal/credit-scoring-engine
   pullPolicy: IfNotPresent
-  tag: "3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+  tag: "3.1.0"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -51,7 +52,7 @@ ingress:
 resources:
   limits:
     cpu: 2000m
-    memory: 3Gi
+    memory: 2Gi
   requests:
     cpu: 500m
     memory: 1536Mi
