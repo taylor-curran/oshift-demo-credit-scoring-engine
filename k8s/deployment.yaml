@@ -34,6 +34,7 @@ spec:
         fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
