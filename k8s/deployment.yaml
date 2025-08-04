@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: banking-team-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -24,7 +24,7 @@ spec:
         managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "9090"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -35,11 +35,11 @@ spec:
           drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0
         ports:
         - containerPort: 8080
           name: http
-        - containerPort: 8080
+        - containerPort: 9090
           name: metrics
         resources:
           requests:
@@ -76,7 +76,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
