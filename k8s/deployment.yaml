@@ -1,13 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubernetes
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -19,12 +20,13 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
+        app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: kubernetes
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -121,3 +123,4 @@ spec:
       - name: models-volume
         configMap:
           name: credit-scoring-models
+      serviceAccountName: credit-scoring-engine
