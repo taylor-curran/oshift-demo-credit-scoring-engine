@@ -35,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466166c17b0f56f5a2fccd3c5e18e617d2d6b9b5b8c4a1e2f3d4e
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
@@ -105,17 +105,17 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 5
+          timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
+          timeoutSeconds: 10
           failureThreshold: 3
         volumeMounts:
         - name: tmp-volume

@@ -18,7 +18,7 @@ data:
 
     [INPUT]
         Name              tail
-        Path              /var/log/containers/credit-scoring-engine*.log
+        Path              /var/log/containers/pe-eng-credit-scoring-engine-prod*.log
         Parser            json
         Tag               credit-scoring.*
         Refresh_Interval  5
@@ -28,7 +28,7 @@ data:
         Match credit-scoring.*
         Host  loki.monitoring.svc.cluster.local
         Port  3100
-        Labels job=credit-scoring-engine, environment=prod
+        Labels job=pe-eng-credit-scoring-engine-prod, environment=prod
 
   parsers.conf: |
     [PARSER]
