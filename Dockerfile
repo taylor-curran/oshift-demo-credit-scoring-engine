@@ -1,4 +1,4 @@
-FROM registry.bank.internal/openjdk:17-jre-slim@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+FROM registry.bank.internal/openjdk:17-jre-slim@sha256:4f53227f4f272720d5b1a75598a4ab096af27191435d3a9c5ac89f21fdc22d38
 
 RUN groupadd -r creditapp && useradd -r -g creditapp creditapp
 
