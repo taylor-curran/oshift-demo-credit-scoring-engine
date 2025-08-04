@@ -22,4 +22,5 @@ spec:
     name: http
   selector:
     app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
