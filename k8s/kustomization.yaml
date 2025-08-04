@@ -11,9 +11,10 @@ metadata:
     managed-by: openshift
 
 resources:
+- secret-template.yaml
+- configmap.yaml
 - deployment.yaml
 - service.yaml
-- configmap.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
