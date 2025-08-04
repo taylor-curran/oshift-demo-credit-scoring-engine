@@ -1,0 +1,40 @@
+# Cloud Foundry to OpenShift Migration Todo List
+
+## Phase 2: Scaffold Conversion
+- [x] Create Dockerfile to replace CF buildpacks with container build (Java + Python support)
+- [x] Generate Kubernetes Deployment manifest with resource limits and security context
+- [x] Generate Kubernetes Service manifest (ClusterIP type)
+- [x] Generate Kubernetes ConfigMap for environment variables
+- [x] Generate Kubernetes Secret for sensitive credentials
+- [x] Generate OpenShift Route for external access
+
+## Phase 3: Standards Compliance
+- [x] Apply Resource Limits (Rule 01) - requests ≥ 50m CPU, 128Mi memory; limits ≤ 4 vCPU, 2Gi memory
+- [x] Apply Security Context (Rule 02) - runAsNonRoot, seccompProfile, readOnlyRootFilesystem, drop ALL capabilities
+- [x] Apply Image Provenance (Rule 03) - pinned tags, approved registry, no :latest
+- [x] Apply Naming & Labels (Rule 04) - proper app.kubernetes.io labels and naming conventions
+
+## Phase 4: Build & Load Image Locally
+- [x] Build Docker image locally using Dockerfile
+- [x] Load image into local OpenShift/Kind cluster
+- [x] Verify image builds successfully
+
+## Phase 5: Deploy to Local OpenShift
+- [ ] Create demo project/namespace
+- [ ] Apply ConfigMap manifest
+- [ ] Apply Secret manifest
+- [ ] Apply Deployment manifest
+- [ ] Apply Service manifest
+- [ ] Apply Route manifest
+- [ ] Monitor rollout status
+
+## Phase 6: Assess Work Quality
+- [ ] Verify all pods reach Running state
+- [ ] Test health endpoint (/actuator/health/detailed)
+- [ ] Check logs for startup errors
+- [ ] Verify basic functionality matches CF deployment
+
+## Phase 7: Finalize
+- [ ] Create PR with all migration artifacts
+- [ ] Wait for CI checks to complete
+- [ ] Report results to user
