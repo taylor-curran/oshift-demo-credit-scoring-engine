@@ -13,8 +13,8 @@ This directory contains Kubernetes manifests that are compliant with the banking
 These manifests comply with all required k8s standards:
 
 ### Rule 01 - Resource Limits & Requests
-- CPU requests: 500m, limits: 2000m
-- Memory requests: 1536Mi, limits: 3072Mi
+- CPU requests: 600m, limits: 1000m
+- Memory requests: 1843Mi, limits: 3072Mi
 - Follows 60% rule of thumb for requests vs limits
 
 ### Rule 02 - Security Context
