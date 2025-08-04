@@ -15,5 +15,5 @@ spec:
       app.kubernetes.io/name: credit-scoring-engine
   endpoints:
   - port: http
-    path: /actuator/metrics
+    path: /actuator/prometheus
     interval: 30s
