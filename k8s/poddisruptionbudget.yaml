@@ -1,0 +1,16 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: banking-team-credit-scoring-engine-prod
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: credit-scoring-engine
+      environment: prod
