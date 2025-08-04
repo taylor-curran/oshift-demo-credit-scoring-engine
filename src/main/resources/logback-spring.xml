@@ -16,8 +16,8 @@
         </encoder>
     </appender>
     
-    <!-- File appender for fluent-bit to collect (only in production) -->
-    <springProfile name="production,scoring">
+    <!-- File appender for fluent-bit to collect - only in production -->
+    <springProfile name="!test">
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/app/logs/credit-scoring-engine.log</file>
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -36,17 +36,12 @@
                 <maxHistory>7</maxHistory>
             </rollingPolicy>
         </appender>
-        
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </root>
     </springProfile>
     
-    <!-- Console-only logging for development and test environments -->
-    <springProfile name="!production">
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <springProfile name="!test">
+            <appender-ref ref="FILE"/>
+        </springProfile>
+    </root>
 </configuration>
