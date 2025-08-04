@@ -6,7 +6,7 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ### Rule 01 - Resource Limits ✅
 - CPU requests: 500m, limits: 2000m
-- Memory requests: 1536Mi, limits: 3072Mi
+- Memory requests: 1536Mi, limits: 2048Mi (2Gi)
 - Follows 60% rule of thumb for requests vs limits
 
 ### Rule 02 - Security Context ✅
