@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: dev
+    managed-by: helm
+data:
+  spring.datasource.url: "jdbc:h2:mem:creditdb"
+  spring.datasource.driverClassName: "org.h2.Driver"
+  spring.datasource.username: "sa"
+  spring.datasource.password: ""
+  spring.jpa.database-platform: "org.hibernate.dialect.H2Dialect"
+  spring.jpa.hibernate.ddl-auto: "create-drop"
+  
+  management.endpoints.web.exposure.include: "health,info,metrics"
+  management.endpoint.health.show-details: "always"
+  management.health.livenessstate.enabled: "true"
+  management.health.readinessstate.enabled: "true"
+  
+  spring.autoconfigure.exclude: "org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration"
