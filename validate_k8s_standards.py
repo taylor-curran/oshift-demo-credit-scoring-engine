@@ -131,6 +131,69 @@ def validate_rule_04_labels(manifests):
     
     return issues
 
+def validate_rule_05_observability(manifests):
+    """Rule 05: Logging & Observability Hooks"""
+    issues = []
+    
+    for filename, docs in manifests.items():
+        for doc in docs:
+            if doc and doc.get('kind') == 'Deployment':
+                pod_annotations = doc.get('spec', {}).get('template', {}).get('metadata', {}).get('annotations', {})
+                
+                if pod_annotations.get('prometheus.io/scrape') != 'true':
+                    issues.append(f"{filename}: Missing prometheus.io/scrape: 'true' annotation")
+                
+                if pod_annotations.get('prometheus.io/port') != '8080':
+                    issues.append(f"{filename}: Missing or incorrect prometheus.io/port: '8080' annotation")
+                
+                if not pod_annotations.get('prometheus.io/path'):
+                    issues.append(f"{filename}: Missing prometheus.io/path annotation")
+            
+            elif doc and doc.get('kind') == 'Service':
+                service_annotations = doc.get('metadata', {}).get('annotations', {})
+                
+                if service_annotations.get('prometheus.io/scrape') != 'true':
+                    issues.append(f"{filename}: Service missing prometheus.io/scrape: 'true' annotation")
+                
+                if service_annotations.get('prometheus.io/port') != '8080':
+                    issues.append(f"{filename}: Service missing or incorrect prometheus.io/port: '8080' annotation")
+    
+    return issues
+
+def validate_rule_06_health_probes(manifests):
+    """Rule 06: Liveness & Readiness Probes"""
+    issues = []
+    
+    for filename, docs in manifests.items():
+        for doc in docs:
+            if doc and doc.get('kind') == 'Deployment':
+                containers = doc.get('spec', {}).get('template', {}).get('spec', {}).get('containers', [])
+                for i, container in enumerate(containers):
+                    liveness_probe = container.get('livenessProbe', {})
+                    readiness_probe = container.get('readinessProbe', {})
+                    
+                    if not liveness_probe:
+                        issues.append(f"{filename}: Container {i} missing livenessProbe")
+                    else:
+                        liveness_path = liveness_probe.get('httpGet', {}).get('path', '')
+                        if '/actuator/health/liveness' not in liveness_path:
+                            issues.append(f"{filename}: Container {i} liveness probe should use /actuator/health/liveness")
+                        
+                        if liveness_probe.get('initialDelaySeconds', 0) < 30:
+                            issues.append(f"{filename}: Container {i} liveness probe initialDelaySeconds should be >= 30s")
+                    
+                    if not readiness_probe:
+                        issues.append(f"{filename}: Container {i} missing readinessProbe")
+                    else:
+                        readiness_path = readiness_probe.get('httpGet', {}).get('path', '')
+                        if '/actuator/health/readiness' not in readiness_path:
+                            issues.append(f"{filename}: Container {i} readiness probe should use /actuator/health/readiness")
+                        
+                        if readiness_probe.get('initialDelaySeconds', 0) < 10:
+                            issues.append(f"{filename}: Container {i} readiness probe initialDelaySeconds should be >= 10s")
+    
+    return issues
+
 def main():
     k8s_dir = "k8s"
     if not os.path.exists(k8s_dir):
@@ -181,6 +244,24 @@ def main():
             print(f"  ❌ {issue}")
     else:
         print("  ✅ All resources follow naming and labeling conventions")
+    
+    print("\n📊 Rule 05: Logging & Observability Hooks")
+    rule_05_issues = validate_rule_05_observability(manifests)
+    all_issues.extend(rule_05_issues)
+    if rule_05_issues:
+        for issue in rule_05_issues:
+            print(f"  ❌ {issue}")
+    else:
+        print("  ✅ All services have proper Prometheus annotations for observability")
+    
+    print("\n🩺 Rule 06: Liveness & Readiness Probes")
+    rule_06_issues = validate_rule_06_health_probes(manifests)
+    all_issues.extend(rule_06_issues)
+    if rule_06_issues:
+        for issue in rule_06_issues:
+            print(f"  ❌ {issue}")
+    else:
+        print("  ✅ All containers have proper health probes configured")
     
     print(f"\n📊 Summary: {len(all_issues)} issues found")
     
