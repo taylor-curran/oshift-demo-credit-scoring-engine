@@ -10,12 +10,20 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 - ✅ `readOnlyRootFilesystem: true`
 - ✅ `capabilities.drop: ["ALL"]`
 
+### Rule 01 - Resource Requests & Limits
+- ✅ CPU requests: `500m` (0.5 vCPU)
+- ✅ CPU limits: `2000m` (2 vCPU) 
+- ✅ Memory requests: `1536Mi` (1.5 GB)
+- ✅ Memory limits: `3072Mi` (3 GB)
+- ✅ Requests ≈ 50% of limits for HPA headroom
+
 ### Rule 03 - Image Provenance
-- ✅ Pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- ✅ Pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 - ✅ Approved registry: `registry.bank.internal/*`
 - ✅ Cosign signature verification (handled by OpenShift Image Policies)
 
 ### Rule 04 - Naming & Label Conventions
+- ✅ Release-name prefix: `pe-eng-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
 - ✅ Mandatory labels:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
@@ -51,13 +59,13 @@ kubectl apply -k k8s/
 
 ```bash
 # Check deployment status
-kubectl get deployment credit-scoring-engine-prod
+kubectl get deployment pe-eng-credit-scoring-engine-prod
 
 # Check pod security context
 kubectl describe pod -l app.kubernetes.io/name=credit-scoring-engine
 
 # Verify health endpoints
-kubectl port-forward svc/credit-scoring-engine-service 8080:8080
+kubectl port-forward svc/pe-eng-credit-scoring-engine-service 8080:8080
 curl http://localhost:8080/actuator/health/liveness
 curl http://localhost:8080/actuator/health/readiness
 ```
