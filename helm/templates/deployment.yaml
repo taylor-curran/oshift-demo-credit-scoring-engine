@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "credit-scoring-engine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "credit-scoring-engine.selectorLabels" . | nindent 8 }}
+        {{- include "credit-scoring-engine.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "credit-scoring-engine.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}@{{ .Values.image.digest }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.healthProbes.liveness | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.healthProbes.readiness | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.app.springProfiles }}
+            - name: JBP_CONFIG_OPEN_JDK_JRE
+              value: '[jre: {version: 17.+}]'
+            - name: JVM_OPTS
+              value: {{ .Values.app.jvmOpts }}
+            - name: EXPERIAN_API_URL
+              value: {{ .Values.app.creditBureaus.experian.url }}
+            - name: EQUIFAX_API_URL
+              value: {{ .Values.app.creditBureaus.equifax.url }}
+            - name: TRANSUNION_API_URL
+              value: {{ .Values.app.creditBureaus.transunion.url }}
+            - name: CREDIT_API_TIMEOUT
+              value: {{ .Values.app.creditBureaus.timeout }}
+            - name: FICO_MODEL_VERSION
+              value: {{ .Values.app.models.fico.version }}
+            - name: VANTAGE_MODEL_VERSION
+              value: {{ .Values.app.models.vantage.version }}
+            - name: CUSTOM_MODEL_PATH
+              value: {{ .Values.app.models.custom.path }}
+            - name: MIN_CREDIT_SCORE
+              value: {{ .Values.app.risk.minCreditScore }}
+            - name: MAX_DTI_RATIO
+              value: {{ .Values.app.risk.maxDtiRatio }}
+            - name: MIN_INCOME_VERIFICATION
+              value: {{ .Values.app.risk.minIncomeVerification }}
+            - name: FCRA_COMPLIANCE_MODE
+              value: {{ .Values.app.compliance.fcra }}
+            - name: ECOA_COMPLIANCE_MODE
+              value: {{ .Values.app.compliance.ecoa }}
+            - name: ADVERSE_ACTION_NOTIFICATIONS
+              value: {{ .Values.app.compliance.adverseActionNotifications }}
+            - name: ML_FEATURE_COUNT
+              value: {{ .Values.app.ml.featureCount }}
+            - name: MODEL_REFRESH_INTERVAL
+              value: {{ .Values.app.ml.modelRefreshInterval }}
+            - name: A_B_TEST_ENABLED
+              value: {{ .Values.app.ml.abTestEnabled }}
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: models-volume
+              mountPath: /models
+              readOnly: true
+        - name: fluent-bit
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.fluentBit.image.repository }}:{{ .Values.fluentBit.image.tag }}@{{ .Values.fluentBit.image.digest }}"
+          imagePullPolicy: {{ .Values.fluentBit.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.fluentBit.resources | nindent 12 }}
+          volumeMounts:
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+        - name: models-volume
+          configMap:
+            name: {{ include "credit-scoring-engine.fullname" . }}-models
+        - name: fluent-bit-config
+          configMap:
+            name: {{ include "credit-scoring-engine.fullname" . }}-fluent-bit
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
