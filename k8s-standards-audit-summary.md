@@ -9,11 +9,11 @@ I have completed a comprehensive audit of the Kubernetes configurations in PR #1
 ### ✅ Rule 01 - Resource Requests & Limits
 - **Status**: COMPLIANT
 - **Details**: 
-  - CPU requests: 500m (0.5 vCPU)
+  - CPU requests: 1200m (1.2 vCPU)
   - CPU limits: 2000m (2 vCPU)
-  - Memory requests: 1536Mi (1.5 GB)
+  - Memory requests: 1843Mi (~1.8 GB)
   - Memory limits: 3072Mi (3 GB)
-  - Requests ≈ 50% of limits (good for HPA headroom)
+  - Requests ≈ 60% of limits (good for HPA headroom)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - **Status**: COMPLIANT
@@ -54,6 +54,7 @@ I have completed a comprehensive audit of the Kubernetes configurations in PR #1
 - **Details**:
   - Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
   - Readiness probe: `/actuator/health/readiness` (10s initial delay, 1 failure threshold)
+  - Startup probe: `/actuator/health/readiness` (15s initial delay, 30 failure threshold)
 
 ## Improvements Made During Audit
 
