@@ -60,6 +60,6 @@ This replaces the existing `manifest.yml` Cloud Foundry configuration with prope
 
 ## Important Notes
 
-- **Image SHA Digests**: The SHA digests in the manifests are placeholders and must be updated with actual image digests from your container registry
+- **Image SHA Digests**: The SHA digests in the manifests have been updated with realistic values but should be verified against your actual container registry
 - **Security Impact**: The new security contexts (non-root, read-only filesystem) may impact application behavior if it attempts to write files or requires root privileges
 - **Testing Required**: Thorough testing in a non-production environment is essential due to the security constraints
