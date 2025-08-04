@@ -15,10 +15,10 @@ This PR implements comprehensive Kubernetes manifests that are fully compliant w
 **Status**: FULLY COMPLIANT
 
 **Configuration**:
-- CPU Requests: 100m ✅ (exceeds 50m minimum)
-- CPU Limits: 500m ✅ (within 4 vCPU limit)
-- Memory Requests: 256Mi ✅ (exceeds 128Mi minimum)  
-- Memory Limits: 512Mi ✅ (within 2Gi limit)
+- CPU Requests: 200m ✅ (exceeds 50m minimum, optimized for ML workload)
+- CPU Limits: 1000m ✅ (within 4 vCPU limit, suitable for credit scoring)
+- Memory Requests: 512Mi ✅ (exceeds 128Mi minimum, ML model requirements)  
+- Memory Limits: 1Gi ✅ (within 2Gi limit, adequate for 247 ML features)
 - Request/Limit Ratio: 50% ✅ (optimal for HPA headroom)
 
 ### ✅ Rule 02 - Pod Security Baseline
@@ -35,6 +35,8 @@ This PR implements comprehensive Kubernetes manifests that are fully compliant w
 **Additional Security Features**:
 - Writable `/tmp` volume mounted for application needs
 - Read-only `/models` volume for ML model files
+- AppArmor runtime/default profile enforcement
+- Additional seccomp annotations for enhanced security
 
 ### ✅ Rule 03 - Immutable, Trusted Images  
 **Status**: FULLY COMPLIANT

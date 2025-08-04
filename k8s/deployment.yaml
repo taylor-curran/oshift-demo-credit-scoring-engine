@@ -27,6 +27,8 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
+        container.apparmor.security.beta.kubernetes.io/credit-scoring-engine: runtime/default
+        seccomp.security.alpha.kubernetes.io/pod: runtime/default
     spec:
       securityContext:
         runAsNonRoot: true
@@ -55,11 +57,11 @@ spec:
             - ALL
         resources:
           requests:
-            cpu: "100m"
-            memory: "256Mi"
-          limits:
-            cpu: "500m"
+            cpu: "200m"
             memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
