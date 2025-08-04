@@ -7,10 +7,10 @@ This report audits the Kubernetes manifests in the `k8s/` directory against the 
 
 ### ✅ Rule 01 - Resource Requests & Limits
 **Status: COMPLIANT**
-- Main container: CPU requests 1800m (60% of 3000m limit), Memory requests 1843Mi (60% of 3072Mi limit)
+- Main container: CPU requests 1200m (60% of 2000m limit), Memory requests 1228Mi (60% of 2048Mi limit)
 - Fluent-bit sidecar: CPU requests 50m, Memory requests 64Mi
 - All containers have both requests and limits defined
-- **Note**: Main container memory limit (3072Mi) exceeds typical 2Gi baseline but is justified for ML workload
+- Memory limit now complies with 2Gi baseline requirement
 
 ### ✅ Rule 02 - Pod Security Baseline  
 **Status: COMPLIANT**
@@ -60,9 +60,9 @@ This report audits the Kubernetes manifests in the `k8s/` directory against the 
 **Recommendation**: Consider using projected volumes instead of hostPath for log access
 **Priority**: Low (current implementation acceptable for demo)
 
-### 3. Resource Limits Documentation
-**Recommendation**: Document justification for 3072Mi memory limit exceeding typical 2Gi baseline
-**Priority**: Low (already documented in README.md)
+### 3. JVM Heap Size Optimization
+**Recommendation**: Monitor application performance with reduced heap size (1638Mi) to ensure ML model operations remain stable
+**Priority**: Low (heap size adjusted proportionally to container memory limit)
 
 ## Overall Compliance Score: 100%
 
