@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-engine-dev
+  name: banking-eng-credit-scoring-engine-dev
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
