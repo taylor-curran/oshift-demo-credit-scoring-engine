@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: pe-eng-credit-scoring-engine-prod
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+- fluent-bit-config.yaml
+- ingress.yaml
+- network-policy.yaml
+
+commonLabels:
+  app.kubernetes.io/name: credit-scoring-engine
+  app.kubernetes.io/version: "3.1.0"
+  app.kubernetes.io/part-of: retail-banking
+  environment: prod
+  managed-by: helm
+
+images:
+- name: registry.bank.internal/credit-scoring-engine
+  newTag: "3.1.0"
+  digest: sha256:7d865e959b2466f8a5fc08551cd05ae6b7e0c29075b9d435d1a4dacb50c1c786
+- name: registry.bank.internal/fluent-bit
+  newTag: "2.1.0"
+  digest: sha256:8f4c8c8e9b2a1d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e
