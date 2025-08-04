@@ -1,6 +1,6 @@
 # Kubernetes Manifests for Credit Scoring Engine
 
-This directory contains Kubernetes manifests that are compliant with internal k8s standards (Rules 01-04).
+This directory contains Kubernetes manifests that are compliant with internal k8s standards (Rules 01-06).
 
 ## Standards Compliance
 
@@ -29,6 +29,17 @@ This directory contains Kubernetes manifests that are compliant with internal k8
   - `app.kubernetes.io/part-of: retail-banking`
   - `environment: prod`
   - `managed-by: helm`
+
+### Rule 05 - Logging & Observability ✅
+- Prometheus annotations for metrics scraping: `prometheus.io/scrape: "true"`
+- Metrics exposed on port 8080 via Spring Boot Actuator
+- Fluent-bit sidecar for structured JSON log collection and forwarding to Loki
+- Centralized logging with proper log parsing and timestamp handling
+
+### Rule 06 - Health Probes ✅
+- Liveness probe configured with Spring Boot Actuator endpoint `/actuator/health/detailed`
+- Readiness probe configured with proper timing and failure thresholds
+- Health checks aligned with JVM application startup patterns
 
 ## Deployment
 
