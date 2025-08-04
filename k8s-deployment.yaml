@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -26,9 +26,9 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: kubectl
+        managed-by: helm
     spec:
-      serviceAccountName: credit-scoring-engine
+      serviceAccountName: pe-eng-credit-scoring-engine-prod
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -38,7 +38,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         imagePullPolicy: IfNotPresent
         securityContext:
           allowPrivilegeEscalation: false
@@ -67,12 +67,12 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
         resources:
-          limits:
-            cpu: 2000m
-            memory: 3Gi
           requests:
-            cpu: 1200m
-            memory: 2Gi
+            cpu: "500m"
+            memory: "1536Mi"
+          limits:
+            cpu: "2000m"
+            memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -91,18 +91,18 @@ spec:
         emptyDir: {}
       - name: models
         configMap:
-          name: credit-scoring-engine-models
+          name: pe-eng-credit-scoring-engine-prod-models
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
@@ -121,24 +121,24 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: credit-scoring-engine-models
+  name: pe-eng-credit-scoring-engine-prod-models
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubectl
+    managed-by: helm
 data:
   model-config.json: |
     {
