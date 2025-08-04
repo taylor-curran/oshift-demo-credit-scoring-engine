@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pe-eng-credit-scoring-engine-dev
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: dev
+    managed-by: openshift
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: credit-scoring-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/version: "3.1.0"
+        app.kubernetes.io/part-of: retail-banking
+        environment: dev
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: credit-scoring-engine
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "1200m"
+            memory: "1200Mi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-dev-config
+              key: SPRING_PROFILES_ACTIVE
+        - name: JVM_OPTS
+          valueFrom:
+            configMapKeyRef:
+              name: pe-eng-credit-scoring-engine-dev-config
+              key: JVM_OPTS
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-engine-dev-creds
+              key: DATABASE_URL
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        - name: models-volume
+          mountPath: /models
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          failureThreshold: 1
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
+      - name: models-volume
+        emptyDir: {}
