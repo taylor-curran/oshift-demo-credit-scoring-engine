@@ -11,10 +11,10 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - Memory limits: 3072Mi
 
 ### ✅ Rule 02 - Pod Security Baseline
-- `runAsNonRoot: true`
-- `seccompProfile.type: RuntimeDefault`
-- `readOnlyRootFilesystem: true`
-- `capabilities.drop: ["ALL"]`
+- `runAsNonRoot: true` (container level)
+- `seccompProfile.type: RuntimeDefault` (container level)
+- `readOnlyRootFilesystem: true` (container level)
+- `capabilities.drop: ["ALL"]` (container level)
 
 ### ✅ Rule 03 - Image Provenance
 - Uses pinned image tag: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789`
@@ -35,6 +35,7 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
 - Metrics endpoint exposed on port 8080
+- JSON structured logging format for stdout logs
 
 ### ✅ Rule 06 - Health Probes
 - Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)

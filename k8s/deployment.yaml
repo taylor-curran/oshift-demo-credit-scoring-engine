@@ -26,19 +26,19 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
-      securityContext:
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
         ports:
         - containerPort: 8080
           name: http
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "1800m"
