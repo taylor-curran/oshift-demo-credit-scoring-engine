@@ -1,13 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: banking-credit-scoring-prod
+  namespace: banking-credit-scoring-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
-    environment: production
-    managed-by: kubernetes
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -18,9 +19,9 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
-        environment: production
-        managed-by: kubernetes
+        app.kubernetes.io/part-of: retail-banking
+        environment: prod
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -35,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8a5fc08551cd05ae6b7e0c29075b9d435d1a4dacb50c1c786
         ports:
         - containerPort: 8080
           name: http
@@ -126,7 +127,7 @@ spec:
         - name: logs-volume
           mountPath: /var/log/app
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456abc789123
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8f4c8c8e9b2a1d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
@@ -157,9 +158,9 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: banking-ml-models-config-prod
       - name: logs-volume
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: banking-fluent-bit-config-prod
