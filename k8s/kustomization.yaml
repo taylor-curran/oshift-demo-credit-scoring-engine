@@ -15,6 +15,7 @@ resources:
 - service.yaml
 - configmap.yaml
 - fluent-bit-configmap.yaml
+- ml-models-configmap.yaml
 - networkpolicy.yaml
 
 commonLabels:

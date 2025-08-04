@@ -70,10 +70,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
