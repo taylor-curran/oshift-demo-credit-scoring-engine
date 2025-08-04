@@ -5,9 +5,9 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 ## Standards Compliance
 
 ### Rule 01 - Resource Limits
-- ✅ CPU requests: 1000m, limits: 2000m
-- ✅ Memory requests: 1536Mi, limits: 3072Mi
-- ✅ Requests set to ~75% of limits for HPA headroom
+- ✅ CPU requests: 1200m, limits: 2000m
+- ✅ Memory requests: 1843Mi, limits: 3072Mi
+- ✅ Requests set to ~60% of limits for HPA headroom
 
 ### Rule 02 - Security Context
 - ✅ `runAsNonRoot: true` (container level)
@@ -16,13 +16,13 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - ✅ `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance
-- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:abc123...`
+- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 - ✅ Uses approved registry: `registry.bank.internal`
 - ✅ No `:latest` tags
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- ✅ Release name prefix: `banking-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
+- ✅ Release name prefix: `pe-eng-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
 
 ## Additional Features
 
