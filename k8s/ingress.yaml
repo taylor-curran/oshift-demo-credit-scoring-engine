@@ -29,7 +29,7 @@ spec:
           service:
             name: banking-team-credit-scoring-engine-prod
             port:
-              number: 80
+              number: 8080
   - host: credit-api-v3.banking.com
     http:
       paths:
@@ -39,4 +39,4 @@ spec:
           service:
             name: banking-team-credit-scoring-engine-prod
             port:
-              number: 80
+              number: 8080
