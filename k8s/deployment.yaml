@@ -36,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890123456789012
         ports:
         - containerPort: 8080
           name: http
@@ -57,14 +57,14 @@ spec:
             memory: "2Gi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1600m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -129,7 +129,7 @@ spec:
         - name: cache-volume
           mountPath: /app/cache
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8e9f0a1b2c3d4e5f6789012345678901234567890123456789012345678901234
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6a7890123456789012345678901bcdef2345678901234567890123456
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
