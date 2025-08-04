@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  EXPERIAN_API_URL: "https://api.experian.com/credit"
+  EQUIFAX_API_URL: "https://api.equifax.com/ews"
+  TRANSUNION_API_URL: "https://api.transunion.com/credit"
+  
+  INCOME_VERIFICATION_API: "https://api.theworknumber.com"
+  BANK_STATEMENT_ANALYZER: "https://api.plaid.com/v2"
+  
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://credit-postgres-primary:5432/creditdb"
+  SPRING_REDIS_HOST: "credit-redis-cluster"
+  SPRING_REDIS_PORT: "6379"
+  
+  LOGGING_LEVEL_ROOT: "INFO"
+  LOGGING_PATTERN_CONSOLE: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","logger":"%logger{36}","message":"%msg"}%n'
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,prometheus"
+  MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "always"
