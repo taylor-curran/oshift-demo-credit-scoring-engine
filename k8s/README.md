@@ -38,6 +38,7 @@ These manifests comply with all required k8s standards:
 ### Rule 06 - Health Probes
 - Liveness probe: `/actuator/health/liveness` (30s initial delay)
 - Readiness probe: `/actuator/health/readiness` (10s initial delay)
+- Startup probe: `/actuator/health` (30s initial delay, 30 failure threshold)
 
 ## Deployment
 
