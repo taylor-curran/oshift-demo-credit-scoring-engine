@@ -29,17 +29,23 @@ spec:
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
     spec:
+      serviceAccountName: pe-eng-credit-scoring-engine-prod
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
         securityContext:
-          runAsNonRoot: true
-          runAsUser: 1001
-          seccompProfile:
-            type: RuntimeDefault
+          allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
@@ -96,7 +102,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
-            port: 8080
+            port: http
           initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
@@ -104,7 +110,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
-            port: 8080
+            port: http
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
@@ -120,4 +126,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-engine-models
+          name: pe-eng-credit-scoring-engine-prod-models
