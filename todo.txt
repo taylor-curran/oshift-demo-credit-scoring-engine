@@ -1,0 +1,8 @@
+- [x] Dockerfile (multi-runtime Java 17 + Python support)
+- [x] deployment.yaml (4 replicas, 3Gi memory, security context, resource limits)
+- [x] service.yaml (ClusterIP, port 8080 mapping)
+- [x] configmap.yaml (environment variables from manifest.yml)
+- [x] secret.yaml (database URLs, API keys, credentials)
+- [x] Build and load image locally
+- [x] Deploy to local OpenShift
+- [x] Test deployment quality
