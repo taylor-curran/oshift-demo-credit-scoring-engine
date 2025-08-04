@@ -7,15 +7,18 @@ This report documents the audit of the Credit Scoring Engine Kubernetes manifest
 
 ### ✅ Rule 01 - Resource Requests & Limits
 **Status: COMPLIANT (Fixed)**
-- **Issue Found**: Memory limits exceeded 2Gi standard (was 3072Mi/3Gi) and JVM heap size exceeded container memory limit
+- **Issue Found**: Memory limits exceeded 2Gi standard (was 3072Mi/3Gi), JVM heap size exceeded container memory limit, and fluent-bit sidecar memory below minimum baseline
 - **Fix Applied**: 
-  - Reduced memory limits to 2Gi in both deployment.yaml and fluent-bit-sidecar.yaml
+  - Reduced memory limits to 2Gi in deployment.yaml
   - Fixed JVM_OPTS from -Xmx2560m to -Xmx1536m to stay within container memory limit (2Gi = ~2048Mi)
+  - Increased fluent-bit sidecar memory from 128Mi to 256Mi to meet minimum baseline requirements
 - **Current State**: 
-  - CPU requests: 500m, limits: 2000m ✅
-  - Memory requests: 1536Mi, limits: 2Gi ✅
+  - Main container CPU requests: 500m, limits: 2000m ✅
+  - Main container Memory requests: 1536Mi, limits: 2Gi ✅
+  - Fluent-bit sidecar CPU requests: 50m, limits: 100m ✅
+  - Fluent-bit sidecar Memory requests: 128Mi, limits: 256Mi ✅
   - JVM heap size: 1536m (within container limit) ✅
-  - All containers have proper resource constraints
+  - All containers have proper resource constraints meeting minimum baselines
 
 ### ✅ Rule 02 - Pod Security Baseline  
 **Status: COMPLIANT**
@@ -66,8 +69,10 @@ This report documents the audit of the Credit Scoring Engine Kubernetes manifest
 
 ## Files Modified
 1. `k8s/deployment.yaml` - Fixed memory limits and added SHA digest pinning
-2. `k8s/fluent-bit-sidecar.yaml` - Fixed memory limits and added SHA digest pinning  
-3. `k8s/README.md` - Updated documentation to reflect compliance fixes
+2. `k8s/fluent-bit-sidecar.yaml` - Fixed memory limits, increased sidecar memory to meet baseline, and added SHA digest pinning
+3. `k8s/networkpolicy.yaml` - Added missing YAML document separator
+4. `k8s/README.md` - Updated documentation to reflect compliance fixes
+5. `k8s/STANDARDS_AUDIT_REPORT.md` - Updated audit report with final compliance status
 
 ## Additional Security Features
 - NetworkPolicy implemented for ingress/egress traffic control
