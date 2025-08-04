@@ -22,7 +22,7 @@ This directory contains Kubernetes manifests that comply with all k8s standards 
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: app.kubernetes.io/name, app.kubernetes.io/version, app.kubernetes.io/part-of, environment, managed-by
-- ✅ Release-name prefix: banking-credit-scoring-prod (team-app-env format)
+- ✅ Release-name prefix: pe-eng-credit-scoring-engine-prod (team-app-env format)
 
 ### Rule 05 - Logging & Observability
 - ✅ Prometheus annotations: prometheus.io/scrape: "true", prometheus.io/port: "8080"
