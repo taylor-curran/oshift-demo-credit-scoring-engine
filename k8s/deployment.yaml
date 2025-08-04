@@ -104,6 +104,8 @@ spec:
         envFrom:
         - configMapRef:
             name: pe-eng-credit-scoring-engine-config-prod
+        - secretRef:
+            name: pe-eng-credit-scoring-engine-secrets-prod
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
