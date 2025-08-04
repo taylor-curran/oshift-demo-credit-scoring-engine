@@ -34,6 +34,7 @@ These manifests comply with all required k8s standards:
 ### Rule 05 - Observability
 - Prometheus scraping annotations
 - JSON logging to stdout (handled by application)
+- Fluent-bit sidecar for log collection to OpenShift Loki stack
 
 ### Rule 06 - Health Probes
 - Liveness probe: `/actuator/health/liveness` (30s initial delay)
