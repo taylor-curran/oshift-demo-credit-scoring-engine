@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-models
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/instance: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  model-config.json: |
+    {
+      "fico_model_version": "9.0",
+      "vantage_model_version": "4.0",
+      "custom_model_path": "/models/proprietary-score-v2.3.pkl",
+      "ml_feature_count": 247,
+      "model_refresh_interval": "24h"
+    }
