@@ -31,7 +31,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b
         ports:
         - containerPort: 8080
           name: http
@@ -106,8 +106,13 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+        - name: config-volume
+          mountPath: /config
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-config
