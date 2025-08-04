@@ -29,6 +29,7 @@ These manifests comply with the following k8s standards:
 ### Rule 05 - Logging & Observability
 - ✅ Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
 - ✅ Metrics exposed on port 8080
+- ✅ JSON structured logging to stdout
 
 ### Rule 06 - Health Probes
 - ✅ Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
