@@ -91,15 +91,9 @@ spec:
         - name: A_B_TEST_ENABLED
           value: "true"
         - name: DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: pe-eng-credit-scoring-engine-secrets-prod
-              key: DB_USERNAME
+          value: "${DB_USERNAME}"
         - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: pe-eng-credit-scoring-engine-secrets-prod
-              key: DB_PASSWORD
+          value: "${DB_PASSWORD}"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
