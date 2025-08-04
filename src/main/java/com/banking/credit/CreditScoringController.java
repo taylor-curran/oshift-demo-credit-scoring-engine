@@ -2,6 +2,8 @@ package com.banking.credit;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.HashMap;
@@ -10,8 +12,11 @@ import java.util.HashMap;
 @RequestMapping("/api/v1/credit")
 public class CreditScoringController {
     
+    private static final Logger logger = LoggerFactory.getLogger(CreditScoringController.class);
+    
     @PostMapping("/score")
     public ResponseEntity<Map<String, Object>> calculateCreditScore(@RequestBody CreditRequest request) {
+        logger.info("Processing credit score request for applicant: {}", request.getApplicantId());
         Map<String, Object> response = new HashMap<>();
         
         // Complex business logic: credit scoring algorithm
@@ -21,6 +26,7 @@ public class CreditScoringController {
         
         // Compliance checks
         if (!fcraCompliantCheck(request)) {
+            logger.warn("FCRA compliance validation failed for applicant: {}", request.getApplicantId());
             response.put("error", "FCRA compliance validation failed");
             return ResponseEntity.badRequest().body(response);
         }
@@ -40,11 +46,15 @@ public class CreditScoringController {
         boolean approved = finalScore >= 580 && request.getDebtToIncomeRatio().compareTo(new BigDecimal("0.43")) <= 0;
         response.put("decision", approved ? "APPROVED" : "DECLINED");
         
+        logger.info("Credit score calculated for applicant: {}, final_score: {}, decision: {}", 
+                   request.getApplicantId(), finalScore, approved ? "APPROVED" : "DECLINED");
+        
         return ResponseEntity.ok(response);
     }
     
     @GetMapping("/health/detailed")
     public ResponseEntity<Map<String, Object>> detailedHealthCheck() {
+        logger.debug("Detailed health check requested");
         Map<String, Object> health = new HashMap<>();
         
         health.put("status", "UP");
