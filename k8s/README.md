@@ -1,6 +1,6 @@
 # Kubernetes Manifests - Credit Scoring Engine
 
-This directory contains Kubernetes manifests that are fully compliant with the k8s-standards-library Rules 02-06.
+This directory contains Kubernetes manifests that are fully compliant with the k8s-standards-library Rules 01-06.
 
 ## Standards Compliance
 
@@ -12,10 +12,10 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 - Fluent-bit sidecar: 50m CPU request, 100m limit
 
 ### ✅ Rule 02 - Security Context
-- `runAsNonRoot: true` for all containers
-- `seccompProfile.type: RuntimeDefault`
-- `readOnlyRootFilesystem: true`
-- `capabilities.drop: ["ALL"]`
+- `runAsNonRoot: true` for all containers - Container runs as non-root user (UID 1001)
+- `seccompProfile.type: RuntimeDefault` - Uses runtime default seccomp profile
+- `readOnlyRootFilesystem: true` - Root filesystem is read-only
+- `capabilities.drop: ["ALL"]` - All Linux capabilities are dropped
 
 ### ✅ Rule 03 - Image Provenance
 - Images from approved registry: `registry.bank.internal/*`
@@ -28,12 +28,14 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 05 - Logging & Observability
 - Prometheus scrape annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
+- Metrics path specified: `prometheus.io/path: "/actuator/prometheus"`
 - Fluent-bit sidecar for centralized logging to Loki
-- JSON structured logging to stdout
+- ServiceMonitor configured for Prometheus Operator
 
 ### ✅ Rule 06 - Health Probes
 - Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
 - Readiness probe: `/actuator/health/readiness` (10s initial delay, 1 failure threshold)
+- Appropriate timeouts and failure thresholds configured
 
 ## Files
 
@@ -42,6 +44,9 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 - `service.yaml` - Production service
 - `service-dev.yaml` - Development service
 - `service-prod.yaml` - Production service
+- `configmap.yaml` - Configuration for ML models
+- `ingress.yaml` - External access configuration
+- `servicemonitor.yaml` - Prometheus monitoring configuration
 - `fluent-bit-configmap-dev.yaml` - Dev logging configuration
 - `fluent-bit-configmap-prod.yaml` - Production logging configuration
 
@@ -58,6 +63,13 @@ kubectl apply -f k8s/fluent-bit-configmap-prod.yaml
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 ```
+
+## Security Features
+
+- Non-root execution (UID/GID 1001)
+- Read-only root filesystem with writable `/tmp` volume
+- All capabilities dropped for minimal attack surface
+- Runtime default seccomp profile applied
 
 ## Notes
 
