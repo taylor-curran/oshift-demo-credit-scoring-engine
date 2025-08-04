@@ -26,6 +26,28 @@ spec:
         prometheus.io/port: "8080"
     spec:
       containers:
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e8f9e
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       - name: credit-scoring-engine
         securityContext:
           runAsNonRoot: true
@@ -34,17 +56,17 @@ spec:
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba1c2c8b9b8c8e8f8e8f8e8f8e8f8e8f8e8f8e8f8e8
         ports:
         - containerPort: 8080
           name: http
         resources:
           requests:
             cpu: "500m"
-            memory: "2Gi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -112,3 +134,6 @@ spec:
       - name: models-volume
         configMap:
           name: banking-team-ml-models-config-prod
+      - name: fluent-bit-config
+        configMap:
+          name: banking-team-fluent-bit-config-prod
