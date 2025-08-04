@@ -58,10 +58,10 @@ spec:
         resources:
           requests:
             cpu: "1200m"
-            memory: "1843Mi"
+            memory: "1228Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
