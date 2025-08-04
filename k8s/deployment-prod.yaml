@@ -36,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8a5fc08551a3a0a14e9f2f4b6c8d7e3f1a9b5c2d4e6f8a0b2
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456
         ports:
         - containerPort: 8080
           name: http
@@ -57,7 +57,7 @@ spec:
             memory: "2Gi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -124,7 +124,7 @@ spec:
           mountPath: /models
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:9c4f2e8a1b3d5f7e9a2c4b6d8f0e2a4c6e8f0a2b4d6f8e0c2a4b6d8f0e2a4c6
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef12345678
         resources:
           requests:
             cpu: "50m"
