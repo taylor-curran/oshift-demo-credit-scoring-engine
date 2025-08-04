@@ -104,7 +104,10 @@ spec:
         image: registry.bank.internal/fluent-bit:2.1.0@sha256:9f8e7d6c5b4a3928374650192837465019283746501928374650192837465019
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault
           capabilities:
@@ -129,4 +132,4 @@ spec:
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: banking-eng-fluent-bit-config-prod
+          name: pe-eng-fluent-bit-config-prod
