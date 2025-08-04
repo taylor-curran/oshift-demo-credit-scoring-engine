@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: banking-credit-scoring-netpol
+  name: banking-credit-scoring-engine-netpol
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine

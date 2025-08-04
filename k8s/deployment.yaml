@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: banking-credit-scoring-prod
+  name: banking-credit-scoring-engine-prod
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
@@ -129,4 +129,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: banking-credit-scoring-models
+          name: banking-credit-scoring-engine-models

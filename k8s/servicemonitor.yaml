@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: banking-credit-scoring-metrics
+  name: banking-credit-scoring-engine-metrics
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
