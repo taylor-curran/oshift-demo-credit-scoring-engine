@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: credit-scoring-engine-config
+  name: pe-eng-credit-scoring-engine-config-dev
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: dev
+    managed-by: helm
 data:
   SPRING_PROFILES_ACTIVE: "production,scoring"
   JVM_OPTS: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
