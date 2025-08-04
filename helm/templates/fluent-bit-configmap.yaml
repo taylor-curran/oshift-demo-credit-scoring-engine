@@ -1,7 +1,8 @@
+{{- if .Values.fluentBit.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "credit-scoring-engine.fullname" . }}-fluent-bit
+  name: {{ include "credit-scoring-engine.fullname" . }}-fluent-bit-config
   labels:
     {{- include "credit-scoring-engine.labels" . | nindent 4 }}
 data:
@@ -52,3 +53,4 @@ data:
         Format json
         Time_Key timestamp
         Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+{{- end }}
