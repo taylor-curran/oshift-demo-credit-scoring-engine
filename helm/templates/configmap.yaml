@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}-config
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+data:
+  application.properties: |
+{{ .Values.configMap.applicationProperties | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}-ml-models
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+data:
+  proprietary-score-v2.3.pkl: |
+    model_version: "2.3"
+    features: 247
+    algorithm: "gradient_boosting"
