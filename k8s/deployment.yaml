@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-engine-prod
+  name: banking-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -26,25 +26,25 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
-      securityContext:
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
         resources:
           requests:
-            cpu: "600m"
-            memory: "1843Mi"
-          limits:
             cpu: "1000m"
+            memory: "1536Mi"
+          limits:
+            cpu: "2000m"
             memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
@@ -89,6 +89,8 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: SPRING_CONFIG_LOCATION
+          value: "classpath:/application.properties,file:/config/application.properties"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -106,10 +108,14 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+        - name: config-volume
+          mountPath: /config
           readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
+        emptyDir: {}
+      - name: config-volume
         configMap:
-          name: credit-scoring-models
+          name: banking-credit-scoring-engine-config-prod

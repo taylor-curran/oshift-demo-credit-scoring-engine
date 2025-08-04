@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pe-eng-credit-scoring-engine-prod
+  name: banking-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -25,7 +25,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: pe-eng-credit-scoring-engine-prod
+            name: banking-credit-scoring-engine-prod
             port:
               number: 8080
   - host: credit-api-v3.banking.com
@@ -35,6 +35,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: pe-eng-credit-scoring-engine-prod
+            name: banking-credit-scoring-engine-prod
             port:
               number: 8080
