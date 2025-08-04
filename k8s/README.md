@@ -33,6 +33,17 @@ This directory contains Kubernetes manifests that comply with enterprise k8s sta
   - `environment`: `prod`
   - `managed-by`: `helm`
 
+### Rule 05 - Logging & Observability ✅
+- **Prometheus Scraping**: `prometheus.io/scrape: "true"`
+- **Metrics Port**: `prometheus.io/port: "8080"`
+- **JSON Logging**: Application configured for structured stdout logging
+- **Auto-discovery**: Service automatically appears in Grafana dashboards
+
+### Rule 06 - Health Probes ✅
+- **Liveness Probe**: `/actuator/health/detailed` endpoint
+- **Readiness Probe**: `/actuator/health/detailed` endpoint
+- **Spring Boot Actuator**: JVM application health monitoring
+
 ## Files
 
 - `namespace.yaml` - Dedicated namespace with proper labels
