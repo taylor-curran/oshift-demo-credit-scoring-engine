@@ -54,9 +54,9 @@ kubectl apply -f k8s/service.yaml
 kubectl get pods -l app.kubernetes.io/name=credit-scoring-engine
 
 # Check service
-kubectl get svc banking-credit-scoring-engine-service
+kubectl get svc pe-eng-credit-scoring-engine-prod
 
 # Check health endpoints
-kubectl port-forward svc/banking-credit-scoring-engine-service 8080:8080
+kubectl port-forward svc/pe-eng-credit-scoring-engine-prod 8080:8080
 curl http://localhost:8080/actuator/health
 ```

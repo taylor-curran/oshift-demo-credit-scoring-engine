@@ -1,41 +1,37 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: credit-scoring-config
+  name: pe-eng-credit-scoring-engine-config-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: kubernetes
+    managed-by: openshift
 data:
+  SPRING_PROFILES_ACTIVE: "production,scoring"
+  JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
+  JVM_OPTS: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  EXPERIAN_API_URL: "https://api.experian.com/credit"
+  EQUIFAX_API_URL: "https://api.equifax.com/ews"
+  TRANSUNION_API_URL: "https://api.transunion.com/credit"
+  CREDIT_API_TIMEOUT: "15000"
+  FICO_MODEL_VERSION: "9.0"
+  VANTAGE_MODEL_VERSION: "4.0"
+  CUSTOM_MODEL_PATH: "/models/proprietary-score-v2.3.pkl"
+  INCOME_VERIFICATION_API: "https://api.theworknumber.com"
+  BANK_STATEMENT_ANALYZER: "https://api.plaid.com/v2"
+  MIN_CREDIT_SCORE: "580"
+  MAX_DTI_RATIO: "0.43"
+  MIN_INCOME_VERIFICATION: "true"
+  FCRA_COMPLIANCE_MODE: "true"
+  ECOA_COMPLIANCE_MODE: "true"
+  ADVERSE_ACTION_NOTIFICATIONS: "true"
+  ML_FEATURE_COUNT: "247"
+  MODEL_REFRESH_INTERVAL: "24h"
+  A_B_TEST_ENABLED: "true"
   application.properties: |
-    spring.profiles.active=production,scoring
-    server.port=8080
-    
-    java.opts=-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication
-    
-    credit.api.experian.url=https://api.experian.com/credit
-    credit.api.equifax.url=https://api.equifax.com/ews
-    credit.api.transunion.url=https://api.transunion.com/credit
-    credit.api.timeout=15000
-    
-    scoring.fico.model.version=9.0
-    scoring.vantage.model.version=4.0
-    scoring.custom.model.path=/models/proprietary-score-v2.3.pkl
-    
-    risk.min.credit.score=580
-    risk.max.dti.ratio=0.43
-    risk.min.income.verification=true
-    
-    compliance.fcra.enabled=true
-    compliance.ecoa.enabled=true
-    compliance.adverse.action.notifications=true
-    
-    ml.feature.count=247
-    ml.model.refresh.interval=24h
-    ml.ab.test.enabled=true
-    
     management.endpoints.web.exposure.include=health,info,metrics,prometheus
     management.endpoint.health.show-details=always
     management.health.probes.enabled=true
