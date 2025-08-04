@@ -1,0 +1,17 @@
+apiVersion: v2
+name: credit-scoring-engine
+description: Advanced credit risk assessment system for retail banking
+type: application
+version: 3.1.0
+appVersion: "3.1.0"
+keywords:
+  - credit-scoring
+  - banking
+  - fintech
+  - ml
+home: https://github.com/taylor-curran/oshift-demo-credit-scoring-engine
+sources:
+  - https://github.com/taylor-curran/oshift-demo-credit-scoring-engine
+maintainers:
+  - name: Platform Engineering
+    email: pe@banking.com
