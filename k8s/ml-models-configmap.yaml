@@ -10,9 +10,13 @@ metadata:
     managed-by: helm
 data:
   proprietary-score-v2.3.pkl: |
-    MODEL_VERSION: "2.3"
-    MODEL_TYPE: "proprietary-scoring"
-    FEATURE_COUNT: "247"
-    TRAINING_DATE: "2024-12-15"
-    ACCURACY_SCORE: "0.94"
-    MODEL_STATUS: "ACTIVE"
+    MODEL_PLACEHOLDER_DATA
+  model-metadata.json: |
+    {
+      "model_name": "proprietary-score-v2.3",
+      "version": "2.3",
+      "features": 247,
+      "training_date": "2024-12-15",
+      "accuracy": 0.94,
+      "description": "Proprietary credit scoring model with 247 features"
+    }
