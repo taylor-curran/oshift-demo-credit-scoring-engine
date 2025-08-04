@@ -15,11 +15,12 @@ resources:
 - service.yaml
 - configmap.yaml
 
-commonLabels:
-  app.kubernetes.io/name: credit-scoring-engine
-  app.kubernetes.io/part-of: retail-banking
-  environment: prod
-  managed-by: helm
+labels:
+- pairs:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
 
 images:
 - name: registry.bank.internal/credit-scoring-engine

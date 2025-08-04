@@ -31,7 +31,7 @@ All required security context settings are properly configured:
 ### ✅ Rule 03 - Immutable, Trusted Images
 **Status: COMPLIANT**
 
-- **Image reference**: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123...`
+- **Image reference**: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 - **Registry**: Uses approved `registry.bank.internal` ✅
 - **Tag pinning**: Specific version `3.1.0` with SHA digest ✅
 - **No :latest tags**: Confirmed ✅
@@ -48,7 +48,7 @@ All mandatory labels are present across all resources:
 - **environment**: `prod` ✅
 - **managed-by**: `helm` ✅
 
-**Release name pattern**: Now uses `banking-credit-scoring-engine-prod` following the `<team>-<app>-<env>` convention properly.
+**Release name pattern**: Uses `banking-credit-scoring-engine-prod` following the `<team>-<app>-<env>` convention properly.
 
 **Evidence**: All manifest files contain consistent labeling and proper naming conventions
 
@@ -79,6 +79,15 @@ kubectl describe deployment banking-credit-scoring-engine-prod
 ```
 
 ## Fixes Applied
+
+### Kustomization Improvements
+- Updated `kustomization.yaml` to use new `labels` syntax instead of deprecated `commonLabels`
+- Fixed SHA digest references in documentation to match actual deployment image
+
+### Health Probe Enhancements
+- Added explicit `timeoutSeconds` and `periodSeconds` to liveness and readiness probes
+- Liveness probe: 5s timeout, 10s period
+- Readiness probe: 3s timeout, 5s period
 
 ### Naming Convention Improvements
 - Updated resource names from `pe-eng-credit-scoring-*` to `banking-credit-scoring-engine-*` to better follow the `<team>-<app>-<env>` pattern and be more specific about the application

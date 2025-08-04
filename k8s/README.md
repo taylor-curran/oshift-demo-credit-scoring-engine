@@ -16,13 +16,13 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - ✅ `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance
-- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:abc123...`
+- ✅ Pinned image tag with SHA digest: `3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
 - ✅ Uses approved registry: `registry.bank.internal`
 - ✅ No `:latest` tags
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- ✅ Release name prefix: `retail-banking-credit-scoring-prod` (follows `<team>-<app>-<env>` pattern)
+- ✅ Release name prefix: `banking-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
 
 ### Rule 05 - Logging & Observability
 - ✅ Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
