@@ -86,11 +86,19 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8081
-          initialDelaySeconds: 60
+          initialDelaySeconds: 0
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 3
@@ -98,7 +106,7 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8081
-          initialDelaySeconds: 30
+          initialDelaySeconds: 0
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3

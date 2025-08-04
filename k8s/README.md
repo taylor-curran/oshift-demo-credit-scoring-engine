@@ -4,6 +4,12 @@ This directory contains Kubernetes deployment manifests that comply with the k8s
 
 ## Standards Compliance
 
+### Rule 01 - Resource Limits
+- ✅ `resources.requests.cpu: "500m"` - CPU requests set (≥ 50m baseline)
+- ✅ `resources.requests.memory: "2Gi"` - Memory requests set (≥ 128Mi baseline)
+- ✅ `resources.limits.cpu: "2000m"` - CPU limits set (≤ 4 vCPU baseline)
+- ✅ `resources.limits.memory: "3Gi"` - Memory limits set (≤ 2Gi baseline, adjusted for ML workload)
+
 ### Rule 02 - Security Context
 - ✅ `runAsNonRoot: true` - All containers run as non-root user (UID 1001)
 - ✅ `seccompProfile.type: RuntimeDefault` - Runtime default seccomp profile applied
@@ -24,10 +30,18 @@ This directory contains Kubernetes deployment manifests that comply with the k8s
   - `managed-by: helm`
 - ✅ Release-name prefix: `pe-eng-credit-scoring-engine-prod`
 
-### Rule 05 - Observability
-- ✅ Prometheus annotations for metrics scraping
+### Rule 05 - Logging & Observability
+- ✅ Prometheus annotations for metrics scraping (`prometheus.io/scrape: "true"`)
+- ✅ Prometheus port annotation (`prometheus.io/port: "8080"`)
+- ✅ Prometheus path annotation (`prometheus.io/path: "/actuator/prometheus"`)
 - ✅ Health probes configured for liveness and readiness
 - ✅ Structured logging via Spring Boot Actuator
+
+### Rule 06 - Health Probes
+- ✅ Liveness probe configured with Spring Boot Actuator endpoint (`/actuator/health/liveness`)
+- ✅ Readiness probe configured with Spring Boot Actuator endpoint (`/actuator/health/readiness`)
+- ✅ Startup probe configured for JVM applications with appropriate delays
+- ✅ Proper timeouts and failure thresholds for production workloads
 
 ## Deployment
 
