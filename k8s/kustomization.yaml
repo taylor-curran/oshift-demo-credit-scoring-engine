@@ -3,6 +3,7 @@ kind: Kustomization
 
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"

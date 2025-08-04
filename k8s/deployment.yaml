@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -22,6 +23,9 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -32,11 +36,21 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "500m"
@@ -44,30 +58,6 @@ spec:
           limits:
             cpu: "2000m"
             memory: "3Gi"
-        securityContext:
-          runAsNonRoot: true
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop: ["ALL"]
-        livenessProbe:
-          httpGet:
-            path: /actuator/health/liveness
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/readiness
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -111,6 +101,25 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-config-prod
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -119,11 +128,38 @@ spec:
           readOnly: true
         - name: cache-volume
           mountPath: /app/cache
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8e9f0a1b2c3d4e5f6789012345678901234567890123456789012345678901234
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: pe-eng-credit-scoring-engine-config-prod
       - name: cache-volume
         emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
