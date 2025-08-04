@@ -54,13 +54,13 @@ cf push
 
 ## Kubernetes Standards Compliance
 
-This application follows the k8s standards (Rules 01-06):
+This application follows the k8s standards (Rules 01-04):
 
-- **Rule 01**: Resource requests/limits properly configured
-- **Rule 02**: Pod security baseline with non-root user, seccomp, read-only filesystem
-- **Rule 03**: Pinned image tags from approved registry
-- **Rule 04**: Proper naming conventions and mandatory labels
-- **Rule 05**: JSON logging and Prometheus metrics on port 8080
-- **Rule 06**: Liveness and readiness probes configured
+- **Rule 01**: Resource requests/limits properly configured ✅
+- **Rule 02**: Pod security baseline with non-root user, seccomp, read-only filesystem ✅
+- **Rule 03**: Pinned image tags from approved registry ✅
+- **Rule 04**: Proper naming conventions and mandatory labels ✅
 
-See [k8s/README.md](k8s/README.md) for detailed compliance information.
+**Audit Status**: FULLY COMPLIANT - See [K8S_STANDARDS_AUDIT.md](K8S_STANDARDS_AUDIT.md) for detailed audit report.
+
+See [k8s/README.md](k8s/README.md) for deployment instructions.
