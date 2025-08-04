@@ -81,6 +81,7 @@ All Kubernetes manifests are now fully compliant with k8s standards Rules 01-06 
 1. **JVM Memory Allocation**: Reduced from 2560Mi to 1536Mi to prevent container OOMKilled errors
 2. **Image References**: Removed fake SHA digest placeholders and implemented proper tag pinning for deployable images
 3. **Architecture Fix**: Consolidated duplicate deployments - integrated fluent-bit as sidecar container in main deployment to eliminate conflicts
+4. **Final SHA Digest Fix**: Removed remaining fake SHA digest placeholder from main application image
 
 ## Next Steps
 1. Deploy to staging environment for validation
