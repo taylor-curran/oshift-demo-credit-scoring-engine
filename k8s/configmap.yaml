@@ -26,12 +26,16 @@ data:
         Parser            json
         Tag               credit-scoring.*
         Refresh_Interval  5
+        Mem_Buf_Limit     50MB
+        Skip_Long_Lines   On
 
     [OUTPUT]
-        Name  forward
+        Name  loki
         Match *
-        Host  loki-gateway.observability.svc.cluster.local
+        Host  loki.openshift-logging.svc.cluster.local
         Port  3100
+        Labels job=fluent-bit
+        auto_kubernetes_labels on
   
   parsers.conf: |
     [PARSER]

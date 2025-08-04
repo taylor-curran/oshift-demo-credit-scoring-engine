@@ -14,7 +14,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      environment: prod
+      app.kubernetes.io/version: "3.1.0"
   template:
     metadata:
       labels:
@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         ports:
         - containerPort: 8080
           name: http
@@ -128,7 +128,7 @@ spec:
         - name: logs-volume
           mountPath: /app/logs
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:4f53cda18c2baa5c09004317244b84e833a06a2043c78754481e6c6794302084
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
@@ -143,10 +143,10 @@ spec:
         resources:
           requests:
             cpu: "50m"
-            memory: "64Mi"
-          limits:
-            cpu: "100m"
             memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
         volumeMounts:
         - name: logs-volume
           mountPath: /app/logs
@@ -154,6 +154,8 @@ spec:
         - name: fluent-bit-config
           mountPath: /fluent-bit/etc
           readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
