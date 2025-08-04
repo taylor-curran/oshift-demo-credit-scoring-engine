@@ -16,12 +16,12 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - `capabilities.drop: ["ALL"]` (container level)
 
 ### Rule 03 - Image Provenance ✅
-- Uses pinned tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Uses pinned tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4`
 - Registry from approved allow-list: `registry.bank.internal/*`
 - No `:latest` tags used
 
 ### Rule 04 - Naming & Labels ✅
-- Release name follows pattern: `credit-scoring-engine-prod`
+- Release name follows pattern: `pe-eng-credit-scoring-engine-prod` (team-app-env format)
 - Mandatory labels present:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`

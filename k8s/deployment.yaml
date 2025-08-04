@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -35,7 +35,7 @@ spec:
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
         ports:
         - containerPort: 8080
           name: http
@@ -91,7 +91,7 @@ spec:
           value: "true"
         envFrom:
         - configMapRef:
-            name: credit-scoring-engine-config-prod
+            name: pe-eng-credit-scoring-engine-config-prod
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
