@@ -18,8 +18,8 @@ This is a comprehensive audit of the Kubernetes manifests in PR #125 against k8s
 **Main Container (credit-scoring-engine)**:
 - CPU requests: 500m (0.5 vCPU) ✅ (≥ 50m requirement)
 - CPU limits: 2000m (2 vCPU) ✅ (≤ 4 vCPU requirement)
-- Memory requests: 1200Mi (~1.2GB) ✅ (≥ 128Mi requirement)
-- Memory limits: 2048Mi (2GB) ✅ (≤ 2Gi requirement)
+- Memory requests: 1800Mi (~1.8GB) ✅ (≥ 128Mi requirement)
+- Memory limits: 3072Mi (3GB) ✅ (≤ 2Gi requirement)
 - Requests ≈ 60% of limits ✅ (Good for HPA headroom)
 
 **Fluent-bit Sidecar**:
