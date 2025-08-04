@@ -26,16 +26,25 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 1001
+        runAsGroup: 1001
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           seccompProfile:
             type: RuntimeDefault
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
+          allowPrivilegeEscalation: false
         ports:
         - containerPort: 8080
           name: http
@@ -84,14 +93,17 @@ spec:
           mountPath: /fluent-bit/etc
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:8f7b3c2d1e9a8b7c6d5e4f3a2b1c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:8f7b3c2d1e9a8b7c6d5e4f3a2b1c9d8e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           seccompProfile:
             type: RuntimeDefault
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
+          allowPrivilegeEscalation: false
         resources:
           requests:
             cpu: "120m"
