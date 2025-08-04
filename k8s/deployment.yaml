@@ -33,7 +33,7 @@ spec:
         fsGroup: 1001
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
@@ -120,7 +120,7 @@ spec:
           mountPath: /models
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1
         resources:
           requests:
             cpu: "50m"
