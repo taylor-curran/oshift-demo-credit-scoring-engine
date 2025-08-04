@@ -55,55 +55,55 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           resources:
-          requests:
-            cpu: "500m"
-            memory: "1200Mi"
-          limits:
-            cpu: "2000m"
-            memory: "2048Mi"
-        env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: "production,scoring"
-          - name: JBP_CONFIG_OPEN_JDK_JRE
-            value: '[jre: {version: 17.+}]'
-          - name: JVM_OPTS
-            value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
-          - name: EXPERIAN_API_URL
-            value: "https://api.experian.com/credit"
-          - name: EQUIFAX_API_URL
-            value: "https://api.equifax.com/ews"
-          - name: TRANSUNION_API_URL
-            value: "https://api.transunion.com/credit"
-          - name: CREDIT_API_TIMEOUT
-            value: "15000"
-          - name: FICO_MODEL_VERSION
-            value: "9.0"
-          - name: VANTAGE_MODEL_VERSION
-            value: "4.0"
-          - name: CUSTOM_MODEL_PATH
-            value: "/models/proprietary-score-v2.3.pkl"
-          - name: INCOME_VERIFICATION_API
-            value: "https://api.theworknumber.com"
-          - name: BANK_STATEMENT_ANALYZER
-            value: "https://api.plaid.com/v2"
-          - name: MIN_CREDIT_SCORE
-            value: "580"
-          - name: MAX_DTI_RATIO
-            value: "0.43"
-          - name: MIN_INCOME_VERIFICATION
-            value: "true"
-          - name: FCRA_COMPLIANCE_MODE
-            value: "true"
-          - name: ECOA_COMPLIANCE_MODE
-            value: "true"
-          - name: ADVERSE_ACTION_NOTIFICATIONS
-            value: "true"
-          - name: ML_FEATURE_COUNT
-            value: "247"
-          - name: MODEL_REFRESH_INTERVAL
-            value: "24h"
-          - name: A_B_TEST_ENABLED
-            value: "true"
+            requests:
+              cpu: "500m"
+              memory: "1200Mi"
+            limits:
+              cpu: "2000m"
+              memory: "2048Mi"
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "production,scoring"
+            - name: JBP_CONFIG_OPEN_JDK_JRE
+              value: '[jre: {version: 17.+}]'
+            - name: JVM_OPTS
+              value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+            - name: EXPERIAN_API_URL
+              value: "https://api.experian.com/credit"
+            - name: EQUIFAX_API_URL
+              value: "https://api.equifax.com/ews"
+            - name: TRANSUNION_API_URL
+              value: "https://api.transunion.com/credit"
+            - name: CREDIT_API_TIMEOUT
+              value: "15000"
+            - name: FICO_MODEL_VERSION
+              value: "9.0"
+            - name: VANTAGE_MODEL_VERSION
+              value: "4.0"
+            - name: CUSTOM_MODEL_PATH
+              value: "/models/proprietary-score-v2.3.pkl"
+            - name: INCOME_VERIFICATION_API
+              value: "https://api.theworknumber.com"
+            - name: BANK_STATEMENT_ANALYZER
+              value: "https://api.plaid.com/v2"
+            - name: MIN_CREDIT_SCORE
+              value: "580"
+            - name: MAX_DTI_RATIO
+              value: "0.43"
+            - name: MIN_INCOME_VERIFICATION
+              value: "true"
+            - name: FCRA_COMPLIANCE_MODE
+              value: "true"
+            - name: ECOA_COMPLIANCE_MODE
+              value: "true"
+            - name: ADVERSE_ACTION_NOTIFICATIONS
+              value: "true"
+            - name: ML_FEATURE_COUNT
+              value: "247"
+            - name: MODEL_REFRESH_INTERVAL
+              value: "24h"
+            - name: A_B_TEST_ENABLED
+              value: "true"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -120,12 +120,12 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 1
-        volumeMounts:
-          - name: tmp-volume
-            mountPath: /tmp
-          - name: models-volume
-            mountPath: /models
-            readOnly: true
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: models-volume
+              mountPath: /models
+              readOnly: true
         - name: fluent-bit
           image: registry.bank.internal/fluent-bit:2.1.0@sha256:8a45e65b0a5f15b4d2c6e69846f7cbc6e9f34267ccd8ecfb5c1fe3a4725b27c8
           securityContext:
