@@ -31,3 +31,7 @@ data:
   ML_FEATURE_COUNT: "247"
   MODEL_REFRESH_INTERVAL: "24h"
   A_B_TEST_ENABLED: "true"
+  application.properties: |
+    management.endpoints.web.exposure.include=health,info,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
