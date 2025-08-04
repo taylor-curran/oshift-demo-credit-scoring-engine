@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -13,6 +14,7 @@ spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
+      environment: prod
   policyTypes:
   - Ingress
   - Egress
@@ -24,10 +26,20 @@ spec:
     - namespaceSelector:
         matchLabels:
           name: monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: retail-banking
     ports:
     - protocol: TCP
       port: 8080
   egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+    ports:
+    - protocol: TCP
+      port: 3100
   - to: []
     ports:
     - protocol: TCP
