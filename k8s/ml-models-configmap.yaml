@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ml-models-metadata
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  model-config.yaml: |
+    MODEL_VERSION: "2.3"
+    MODEL_TYPE: "proprietary-scoring"
+    FEATURE_COUNT: "247"
+    TRAINING_DATE: "2024-12-15"
+    ACCURACY_SCORE: "0.94"
+    MODEL_STATUS: "ACTIVE"
