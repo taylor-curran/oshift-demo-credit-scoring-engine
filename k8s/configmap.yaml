@@ -2,12 +2,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pe-eng-credit-scoring-config-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: helm
+    managed-by: kubernetes
 data:
   experian-api-url: "https://api.experian.com/credit"
   equifax-api-url: "https://api.equifax.com/ews"
@@ -32,11 +33,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pe-eng-ml-models-config-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: helm
+    managed-by: kubernetes
 data:
   proprietary-score-v2.3.pkl: |
