@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "credit-scoring-engine.selectorLabels" . | nindent 8 }}
+        {{- include "credit-scoring-engine.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
