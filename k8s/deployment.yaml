@@ -92,6 +92,31 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: credit-scoring-db-secret
+              key: database-url
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: credit-scoring-db-secret
+              key: database-username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credit-scoring-db-secret
+              key: database-password
+        - name: SPRING_REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: credit-scoring-redis-secret
+              key: redis-host
+        - name: SPRING_REDIS_PORT
+          valueFrom:
+            secretKeyRef:
+              name: credit-scoring-redis-secret
+              key: redis-port
         livenessProbe:
           httpGet:
             path: /api/v1/credit/health/detailed
