@@ -57,15 +57,15 @@ spec:
             cpu: "500m"
             memory: "1536Mi"
           limits:
-            cpu: "2000m"
-            memory: "3072Mi"
+            cpu: "1500m"
+            memory: "2560Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx2048m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
