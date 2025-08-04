@@ -31,6 +31,8 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
@@ -47,8 +49,8 @@ spec:
           name: http
         resources:
           requests:
-            cpu: "500m"
-            memory: "1536Mi"
+            cpu: "1200m"
+            memory: "1843Mi"
           limits:
             cpu: "2000m"
             memory: "3072Mi"
@@ -65,6 +67,21 @@ spec:
           value: "https://api.equifax.com/ews"
         - name: TRANSUNION_API_URL
           value: "https://api.transunion.com/credit"
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-secrets
+              key: database-password
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-secrets
+              key: redis-password
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pe-eng-credit-scoring-secrets
+              key: api-key
         - name: CREDIT_API_TIMEOUT
           value: "15000"
         - name: FICO_MODEL_VERSION
@@ -99,14 +116,32 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
+            scheme: HTTP
           initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
+          successThreshold: 1
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
+            scheme: HTTP
           initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 1
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 30
+          successThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
