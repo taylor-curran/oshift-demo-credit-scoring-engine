@@ -49,6 +49,6 @@ kubectl apply -f k8s/ingress.yaml
 
 ## Resource Limits
 
-- CPU: 500m request, 2000m limit
-- Memory: 1Gi request, 3Gi limit
+- CPU: 500m request, 1000m limit
+- Memory: 1228Mi request, 2048Mi limit
 - Replicas: 4 (matching Cloud Foundry configuration)
