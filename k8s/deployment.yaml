@@ -55,18 +55,18 @@ spec:
             - ALL
         resources:
           requests:
-            cpu: "500m"
-            memory: "1800Mi"
+            cpu: "1200m"
+            memory: "1200Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2048m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -107,7 +107,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -115,10 +115,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
