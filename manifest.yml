@@ -10,6 +10,15 @@ applications:
     - python_buildpack
   path: ./target/credit-scoring-engine-3.1.0.jar
   
+  # K8s Standards Compliance Annotations for Hybrid Deployments
+  metadata:
+    labels:
+      app.kubernetes.io/name: credit-scoring-engine
+      app.kubernetes.io/version: "3.1.0"
+      app.kubernetes.io/part-of: retail-banking
+      environment: prod
+      managed-by: cf-push
+  
   env:
     SPRING_PROFILES_ACTIVE: production,scoring
     JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
