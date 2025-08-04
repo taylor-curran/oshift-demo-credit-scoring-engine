@@ -89,6 +89,8 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: SPRING_CONFIG_LOCATION
+          value: "classpath:/application.properties,file:/config/application.properties"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -106,8 +108,14 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: banking-credit-scoring-engine-config-prod
