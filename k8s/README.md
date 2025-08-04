@@ -28,16 +28,18 @@ This directory contains Kubernetes deployment manifests that comply with the ban
 ### ✅ Rule 05 - Logging & Observability
 - Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
 - JSON logging configured in ConfigMap
+- Fluent-bit sidecar for log shipping to OpenShift Loki
 
 ### ✅ Rule 06 - Health Probes
-- Liveness probe: `/actuator/health/liveness` (30s delay, 3 failures)
-- Readiness probe: `/actuator/health/readiness` (10s delay, 1 failure)
+- Liveness probe: `/actuator/health/liveness` (30s delay, 10s period, 5s timeout, 3 failures)
+- Readiness probe: `/actuator/health/readiness` (10s delay, 5s period, 3s timeout, 1 failure)
 
 ## Files
 
-- `deployment.yaml` - Main application deployment with 4 replicas
+- `deployment.yaml` - Main application deployment with 4 replicas and fluent-bit sidecar
 - `service.yaml` - ClusterIP service exposing port 8080
 - `configmap.yaml` - Application configuration properties
+- `fluent-bit-configmap.yaml` - Fluent-bit configuration for log shipping
 
 ## Deployment
 
