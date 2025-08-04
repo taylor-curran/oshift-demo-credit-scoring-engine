@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
 spec:
@@ -18,7 +18,7 @@ spec:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: banking-platform
+        app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
       annotations:
@@ -35,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
           name: http
@@ -175,9 +175,42 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: logs-volume
+          mountPath: /app/logs
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456789012345678901234567890123456789012345678901234567890123456
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
       volumes:
       - name: tmp-volume
+        emptyDir: {}
+      - name: logs-volume
         emptyDir: {}
       - name: models-volume
         configMap:
           name: ml-models-config
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config

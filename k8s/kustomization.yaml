@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: banking-platform
+    app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
 
@@ -14,15 +14,17 @@ resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
+- fluent-bit-configmap.yaml
 - networkpolicy.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/version: "3.1.0"
-  app.kubernetes.io/part-of: banking-platform
+  app.kubernetes.io/part-of: retail-banking
   environment: prod
   managed-by: helm
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
   newTag: "3.1.0"
+  digest: "sha256:abc123def456789012345678901234567890123456789012345678901234567890"
