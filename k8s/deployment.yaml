@@ -20,6 +20,9 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: dev
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
