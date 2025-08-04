@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name              tail
+        Path              /app/logs/*.log
+        Parser            json
+        Tag               credit-scoring.*
+        Refresh_Interval  5
+        Mem_Buf_Limit     50MB
+        Skip_Long_Lines   On
+
+    [OUTPUT]
+        Name  loki
+        Match *
+        Host  loki.openshift-logging.svc.cluster.local
+        Port  3100
+        Labels job=fluent-bit
+        auto_kubernetes_labels on
+  
+  parsers.conf: |
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-models
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  proprietary-score-v2.3.pkl: |
