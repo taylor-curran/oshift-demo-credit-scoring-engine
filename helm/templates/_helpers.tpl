@@ -40,7 +40,7 @@ helm.sh/chart: {{ include "credit-scoring-engine.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/part-of: retail-banking
+app.kubernetes.io/part-of: banking-platform
 environment: {{ .Values.app.environment }}
 {{- end }}
 
