@@ -1,0 +1,93 @@
+replicaCount: 4
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  pullPolicy: IfNotPresent
+  tag: "3.1.0"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: credit-scoring.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 3Gi
+  requests:
+    cpu: 500m
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 4
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+app:
+  environment: prod
+  partOf: retail-banking
+  managedBy: helm
+  
+mlModels:
+  ficoVersion: "9.0"
+  vantageVersion: "4.0"
+  customModelPath: "/models/proprietary-score-v2.3.pkl"
+  featureCount: "247"
+  refreshInterval: "24h"
+  abTestEnabled: "true"
+
+externalApis:
+  experian: "https://api.experian.com/credit"
+  equifax: "https://api.equifax.com/ews"
+  transunion: "https://api.transunion.com/credit"
+  timeout: "15000"
+  incomeVerification: "https://api.theworknumber.com"
+  bankStatementAnalyzer: "https://api.plaid.com/v2"
+
+riskConfig:
+  minCreditScore: "580"
+  maxDtiRatio: "0.43"
+  minIncomeVerification: "true"
+  fcraCompliance: "true"
+  ecoaCompliance: "true"
+  adverseActionNotifications: "true"
