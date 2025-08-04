@@ -8,7 +8,7 @@ This directory contains Kubernetes deployment manifests that comply with the k8s
 - ✅ `resources.requests.cpu: "500m"` - CPU requests set (≥ 50m baseline)
 - ✅ `resources.requests.memory: "2Gi"` - Memory requests set (≥ 128Mi baseline)
 - ✅ `resources.limits.cpu: "2000m"` - CPU limits set (≤ 4 vCPU baseline)
-- ✅ `resources.limits.memory: "3Gi"` - Memory limits set (≤ 2Gi baseline, adjusted for ML workload)
+- ✅ `resources.limits.memory: "3Gi"` - Memory limits set (exceeds ≤2Gi baseline but justified for ML workload)
 
 ### Rule 02 - Security Context
 - ✅ `runAsNonRoot: true` - All containers run as non-root user (UID 1001)

@@ -86,6 +86,8 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:+ExitOnOutOfMemoryError -XX:+CrashOnOutOfMemoryError"
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
