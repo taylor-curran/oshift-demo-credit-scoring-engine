@@ -135,7 +135,7 @@ spec:
         - name: logs-volume
           mountPath: /app/logs
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:def456789012345678901234567890abcdef123456789012345678901234567890
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:8f2e4b7a9c3d1e5f6789012345678901234567890abcdef123456789012345678
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
