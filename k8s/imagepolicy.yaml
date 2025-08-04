@@ -1,0 +1,27 @@
+apiVersion: config.openshift.io/v1
+kind: ImagePolicy
+metadata:
+  name: credit-scoring-engine-policy
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+spec:
+  scopes:
+  - registry.bank.internal/credit-scoring-engine
+  - registry.bank.internal/fluent-bit
+  - registry.bank.internal/openjdk
+  policy:
+    rootOfTrust:
+      policyType: PublicKey
+      publicKey:
+        keyData: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEyKAVzKWnl4eiRQnBi2tbjuERxfYr
+          7S2dIoQUWwXyKmA9F2sKJZKQlRjKQlRjKQlRjKQlRjKQlRjKQlRjKQlRjKQlRj
+          -----END PUBLIC KEY-----
+    signedIdentity:
+      type: matchRepository
