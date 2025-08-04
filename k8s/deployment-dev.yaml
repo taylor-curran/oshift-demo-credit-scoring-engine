@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: dev
-    managed-by: kubernetes
+    managed-by: helm
 spec:
   replicas: 2
   selector:
@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: dev
-        managed-by: kubernetes
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
