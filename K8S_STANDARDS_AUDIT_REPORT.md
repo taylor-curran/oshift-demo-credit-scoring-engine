@@ -50,8 +50,12 @@ Completed comprehensive audit of Kubernetes manifests in PR #170 against k8s-sta
 ## Changes Made
 
 **Files Modified:**
-- `k8s/deployment.yaml`: Fixed prometheus.io/port from "9090" to "8080"
+- `k8s/deployment.yaml`: Fixed prometheus.io/port from "9090" to "8080" + removed container-specific settings from pod securityContext
 - `k8s/service.yaml`: Fixed prometheus.io/port from "9090" to "8080"
+
+**Final Security Context Fix:**
+- Removed `readOnlyRootFilesystem: true` and `capabilities.drop: ["ALL"]` from pod-level securityContext
+- These settings should only be at container level per Rule 02 standards
 
 ## Verification
 
@@ -64,7 +68,7 @@ Completed comprehensive audit of Kubernetes manifests in PR #170 against k8s-sta
 - **Branch**: `devin/1754316978-k8s-standards-compliance`
 - **Base**: `master`
 - **Status**: Ready for PR creation
-- **Commit**: `93569ae` - Fix k8s standards compliance - correct prometheus.io/port annotation
+- **Commit**: `f0f7270` - Fix k8s standards compliance - remove container-specific settings from pod securityContext
 
 ## Next Steps
 
