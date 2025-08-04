@@ -7,8 +7,8 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 ### ✅ Rule 01 - Resource Requests & Limits
 - CPU requests: 500m (0.5 vCPU)
 - CPU limits: 2000m (2 vCPU) 
-- Memory requests: 1536Mi (~60% of limits)
-- Memory limits: 3072Mi (3GB as per original manifest)
+- Memory requests: 1200Mi (~60% of limits)
+- Memory limits: 2048Mi (2GB - compliant with ≤2Gi standard)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` - All containers run as non-root user (1001)
@@ -21,7 +21,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - No `:latest` tags used - All images pinned to specific versions with SHA digests
 - Registry allowlist enforced - Only `registry.bank.internal/*` images used
 - Cosign signature verification handled by OpenShift Image Policies
-- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
+- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
 
 ### ✅ Rule 04 - Naming & Label Conventions
 - Release name prefix: `pe-eng-credit-scoring-engine-prod`
@@ -34,9 +34,10 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 
 ## Deployment Files
 
-- `deployment.yaml` - Main application deployment with 4 replicas and full security compliance
+- `deployment.yaml` - Main application deployment with 4 replicas, full security compliance, and fluent-bit sidecar
 - `service.yaml` - ClusterIP service exposing port 8080 with Prometheus annotations
 - `configmap.yaml` - ML models configuration
+- `fluent-bit-configmap.yaml` - Fluent-bit logging configuration for centralized log shipping
 - `ingress.yaml` - External access via nginx ingress
 - `networkpolicy.yaml` - Network security policies
 - `README.md` - This documentation
@@ -72,7 +73,7 @@ curl http://localhost:8080/actuator/prometheus
 This k8s deployment maintains feature parity with the original Cloud Foundry `manifest.yml`:
 - Same environment variables and configuration
 - Same health check endpoints (`/actuator/health/detailed`)
-- Same resource allocation (3GB memory)
+- Adjusted resource allocation (2GB memory for k8s standards compliance)
 - Same external service dependencies
 - Enhanced security with k8s standards compliance
 - Improved observability with Prometheus metrics

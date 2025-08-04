@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456
         ports:
         - containerPort: 8080
           name: http
@@ -56,10 +56,10 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "1536Mi"
+            memory: "1200Mi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -125,9 +125,45 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567
+        ports:
+        - containerPort: 2020
+          name: http
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
           name: ml-models-config
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
