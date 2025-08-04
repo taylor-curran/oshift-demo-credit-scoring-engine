@@ -108,9 +108,9 @@ spec:
           value: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg","mdc":%X}%n'
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
