@@ -29,6 +29,7 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+        readOnlyRootFilesystem: true
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466166c17d2bd9775de4e2e7b9d267c7e2b3e5c8b1f2a3d4e5f6a
