@@ -22,6 +22,10 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -97,29 +101,57 @@ spec:
           value: "true"
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
           readOnly: true
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:def456abc789012345678901234567890abcdef123456789012345678901234567
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: pe-eng-ml-models-config-prod
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-fluent-bit-config-prod
