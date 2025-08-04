@@ -28,7 +28,7 @@ Auditing all Kubernetes manifests in the repository against k8s-standards-librar
 - ✅ `runAsNonRoot: true` - Present
 - ✅ `seccompProfile.type: RuntimeDefault` - Present
 - ✅ `readOnlyRootFilesystem: true` - Present
-- ✅ `capabilities.drop: ["ALL"]` - Present
+- ✅ `capabilities.drop: ["ALL"]` - Correctly removed (capabilities only valid at container level)
 
 ### Container-level securityContext:
 - ✅ `runAsNonRoot: true` - Present
