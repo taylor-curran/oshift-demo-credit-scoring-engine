@@ -12,7 +12,7 @@ All containers have appropriate resource requests and limits defined:
 
 - **Main container**:
   - CPU requests: 500m (0.5 vCPU), limits: 2000m (2 vCPU)
-  - Memory requests: 1200Mi, limits: 2048Mi
+  - Memory requests: 1200Mi, limits: 2048Mi (2Gi)
   - Requests ≈ 60% of limits for HPA headroom
 
 - **Fluent-bit sidecar**:
