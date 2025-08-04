@@ -13,6 +13,7 @@ metadata:
 resources:
 - namespace.yaml
 - configmap.yaml
+- fluent-bit-configmap.yaml
 - secrets.yaml
 - deployment.yaml
 - service.yaml

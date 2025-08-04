@@ -29,6 +29,18 @@ This directory contains Kubernetes manifests that comply with enterprise k8s sta
   - `environment: prod`
   - `managed-by: helm`
 
+### ✅ Rule 05 - Logging & Observability
+- JSON structured logging to stdout with custom pattern
+- Prometheus metrics annotations on pods and services
+- Fluent-bit sidecar for log shipping to Loki stack
+- Metrics endpoint exposed on port 8080 with `/metrics` path
+
+### ✅ Rule 06 - Health Probes
+- Liveness probe: `/actuator/health/liveness` on port 8081
+- Readiness probe: `/actuator/health/readiness` on port 8081
+- Startup probe: `/actuator/health/readiness` on port 8081
+- Proper timing configuration for JVM applications
+
 ## Deployment Files
 
 - `namespace.yaml` - Dedicated namespace with proper labels
@@ -85,6 +97,18 @@ The application exposes health endpoints on port 8081:
 - Liveness: `/actuator/health/liveness`
 - Readiness: `/actuator/health/readiness`
 - Detailed: `/actuator/health/detailed`
+
+## Logging & Observability
+
+### Structured Logging
+- Application outputs JSON logs to stdout using custom logback pattern
+- Fluent-bit sidecar collects logs and forwards to Loki stack
+- Log format includes timestamp, level, thread, logger, message, and MDC context
+
+### Metrics
+- Prometheus metrics exposed on port 8080 at `/metrics` endpoint
+- Pod and service annotations enable automatic scraping
+- Fluent-bit metrics available on port 2020
 
 ## Migration from Cloud Foundry
 

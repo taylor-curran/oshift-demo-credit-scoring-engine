@@ -36,6 +36,10 @@ data:
   ML_FEATURE_COUNT: "247"
   MODEL_REFRESH_INTERVAL: "24h"
   A_B_TEST_ENABLED: "true"
+  
+  LOGGING_LEVEL_ROOT: "INFO"
+  LOGGING_PATTERN_CONSOLE: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%msg","mdc":%X}%n'
+  SPRING_OUTPUT_ANSI_ENABLED: "never"
 ---
 apiVersion: v1
 kind: ConfigMap

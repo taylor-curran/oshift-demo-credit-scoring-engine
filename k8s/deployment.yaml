@@ -82,7 +82,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
-            port: 8080
+            port: 8081
           initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
@@ -90,7 +90,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
-            port: 8080
+            port: 8081
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
@@ -98,11 +98,43 @@ spec:
         startupProbe:
           httpGet:
             path: /actuator/health/readiness
-            port: 8080
+            port: 8081
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        ports:
+        - containerPort: 2020
+          name: metrics
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
@@ -111,5 +143,8 @@ spec:
           name: pe-eng-ml-models-config-prod
       - name: logs-volume
         emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-fluent-bit-config-prod
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
