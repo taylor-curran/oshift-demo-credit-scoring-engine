@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pe-eng-credit-scoring-engine-prod
+  namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -29,96 +30,96 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-        - containerPort: 8080
-          name: metrics
+        - containerPort: 8081
+          name: actuator
           protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-prod
+        - secretRef:
+            name: pe-eng-credit-scoring-engine-prod-secrets
         resources:
           requests:
-            cpu: "500m"
-            memory: "2Gi"
+            cpu: "600m"
+            memory: "1228Mi"
           limits:
-            cpu: "2000m"
-            memory: "3Gi"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
-        - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
-        - name: EXPERIAN_API_URL
-          value: "https://api.experian.com/credit"
-        - name: EQUIFAX_API_URL
-          value: "https://api.equifax.com/ews"
-        - name: TRANSUNION_API_URL
-          value: "https://api.transunion.com/credit"
-        - name: CREDIT_API_TIMEOUT
-          value: "15000"
-        - name: FICO_MODEL_VERSION
-          value: "9.0"
-        - name: VANTAGE_MODEL_VERSION
-          value: "4.0"
-        - name: CUSTOM_MODEL_PATH
-          value: "/models/proprietary-score-v2.3.pkl"
-        - name: INCOME_VERIFICATION_API
-          value: "https://api.theworknumber.com"
-        - name: BANK_STATEMENT_ANALYZER
-          value: "https://api.plaid.com/v2"
-        - name: MIN_CREDIT_SCORE
-          value: "580"
-        - name: MAX_DTI_RATIO
-          value: "0.43"
-        - name: MIN_INCOME_VERIFICATION
-          value: "true"
-        - name: FCRA_COMPLIANCE_MODE
-          value: "true"
-        - name: ECOA_COMPLIANCE_MODE
-          value: "true"
-        - name: ADVERSE_ACTION_NOTIFICATIONS
-          value: "true"
-        - name: ML_FEATURE_COUNT
-          value: "247"
-        - name: MODEL_REFRESH_INTERVAL
-          value: "24h"
-        - name: A_B_TEST_ENABLED
-          value: "true"
+            cpu: "1000m"
+            memory: "2048Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
-          timeoutSeconds: 5
+          timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
           readOnly: true
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:f8c9d2e1a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-credit-scoring-engine-prod
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-credit-scoring-engine-fluent-bit-prod
