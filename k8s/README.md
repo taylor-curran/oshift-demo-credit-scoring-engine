@@ -61,8 +61,8 @@ kubectl apply -f k8s/service-dev.yaml
 
 # Deploy production environment
 kubectl apply -f k8s/fluent-bit-configmap-prod.yaml
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/deployment-prod.yaml
+kubectl apply -f k8s/service-prod.yaml
 ```
 
 ## Notes
