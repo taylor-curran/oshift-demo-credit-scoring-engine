@@ -123,7 +123,7 @@ spec:
           mountPath: /models
           readOnly: true
       - name: fluent-bit
-        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:7d865e959b2466f8239fcba23c8966c8776ade8fdc4f242b01c17aa5fb988b59
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:7f9c8e5d4b3a2f1e8c6d9a5b7e3f1c8d4a6b9e2f5c8a1d7b4e9f2c5a8d1b6e3f
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
