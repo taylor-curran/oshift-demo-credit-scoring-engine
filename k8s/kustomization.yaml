@@ -23,4 +23,4 @@ commonLabels:
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
-  newTag: "3.1.0"
+  newTag: "3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890"
