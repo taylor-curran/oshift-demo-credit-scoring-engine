@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b6c2c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba1a2b1e5c8b8e8f8c8d8e8f8c8d8e8f8c8d8e8f8c8
         securityContext:
           runAsNonRoot: true
           seccompProfile:
@@ -42,8 +42,8 @@ spec:
           name: http
         resources:
           requests:
-            cpu: "500m"
-            memory: "1200Mi"
+            cpu: "1200m"
+            memory: "1228Mi"
           limits:
             cpu: "2000m"
             memory: "2048Mi"
@@ -53,7 +53,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -108,7 +108,7 @@ spec:
         - name: models-volume
           mountPath: /models
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:9f2c7b8a3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a
         securityContext:
           runAsNonRoot: true
           seccompProfile:
