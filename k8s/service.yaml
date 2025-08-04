@@ -11,7 +11,7 @@ metadata:
     managed-by: helm
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    prometheus.io/port: "8081"
 spec:
   type: ClusterIP
   ports:
