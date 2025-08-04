@@ -84,10 +84,10 @@ spec:
         resources:
           requests:
             cpu: "1200m"
-            memory: "1228Mi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "2048Mi"
+            memory: "3072Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -139,7 +139,7 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 45
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -147,10 +147,10 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
