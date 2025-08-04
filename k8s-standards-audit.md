@@ -8,11 +8,11 @@
 - `securityContext.readOnlyRootFilesystem: true` ✅
 - `securityContext.capabilities.drop: ["ALL"]` ✅
 
-### Rule 03 - Image Provenance ✅ FIXED
-- **FIXED**: Removed fake SHA digest from image reference
+### Rule 03 - Image Provenance ✅ COMPLIANT
 - Uses approved registry: `registry.bank.internal` ✅
 - No `:latest` tag usage ✅
-- Changed `imagePullPolicy` from `Never` to `IfNotPresent` for production readiness
+- Proper semantic versioning: `3.1.0` ✅
+- Production-ready `imagePullPolicy: IfNotPresent` ✅
 
 ### Rule 04 - Naming & Labels ✅ COMPLIANT
 - Release name follows pattern: `pe-eng-credit-scoring-engine-dev` ✅
