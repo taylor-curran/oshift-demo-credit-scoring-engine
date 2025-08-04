@@ -31,6 +31,7 @@ spec:
         fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
+        supplementalGroups: []
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890abcdef123456789012345678901234
@@ -44,6 +45,7 @@ spec:
           runAsGroup: 1001
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
+          privileged: false
           capabilities:
             drop: ["ALL"]
           seccompProfile:
