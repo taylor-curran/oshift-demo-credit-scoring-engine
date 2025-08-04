@@ -37,8 +37,9 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ## Files
 
+- `deployment.yaml` - Production deployment (4 replicas)
 - `deployment-dev.yaml` - Development deployment (2 replicas)
-- `deployment-prod.yaml` - Production deployment (4 replicas)
+- `service.yaml` - Production service
 - `service-dev.yaml` - Development service
 - `service-prod.yaml` - Production service
 - `fluent-bit-configmap-dev.yaml` - Dev logging configuration
@@ -54,8 +55,8 @@ kubectl apply -f k8s/service-dev.yaml
 
 # Deploy production environment
 kubectl apply -f k8s/fluent-bit-configmap-prod.yaml
-kubectl apply -f k8s/deployment-prod.yaml
-kubectl apply -f k8s/service-prod.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
 ```
 
 ## Notes
