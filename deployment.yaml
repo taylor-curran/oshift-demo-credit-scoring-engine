@@ -31,7 +31,7 @@ spec:
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         securityContext:
@@ -42,10 +42,10 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "2Gi"
           limits:
             cpu: "1000m"
-            memory: "2Gi"
+            memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           valueFrom:
