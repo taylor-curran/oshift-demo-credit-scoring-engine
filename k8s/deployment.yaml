@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: banking-credit-scoring-engine-production
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -157,9 +157,9 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: banking-credit-scoring-engine-production-models
       - name: logs-volume
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: banking-credit-scoring-engine-production-fluent-bit
