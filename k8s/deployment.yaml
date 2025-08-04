@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-engine-prod
-  namespace: credit-scoring
+  name: pe-eng-credit-scoring-prod
+  namespace: pe-eng-credit-scoring-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -62,7 +62,7 @@ spec:
             memory: "3Gi"
         envFrom:
         - configMapRef:
-            name: pe-eng-credit-scoring-engine-prod
+            name: pe-eng-credit-scoring-prod
         env:
         - name: SERVER_PORT
           value: "8080"
@@ -115,6 +115,6 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-credit-scoring-models-prod
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
