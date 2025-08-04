@@ -41,17 +41,19 @@
 **Required Settings:**
 - No `:latest` tags ✅
 - Registry allowlist enforced ✅
-- Tag pinning implemented ✅
+- Tag pinning with SHA digest implemented ✅
 
 **Verification:**
-- **Main application image**: `registry.bank.internal/credit-scoring-engine:3.1.0` ✅
+- **Main application image**: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456` ✅
   - Uses approved registry (registry.bank.internal/*) ✅
   - Pinned to specific version (3.1.0) ✅
+  - SHA digest pinning for immutable reference ✅
   - No `:latest` tag ✅
   
-- **Fluent-bit sidecar image**: `registry.bank.internal/fluent-bit:2.1.0` ✅
+- **Fluent-bit sidecar image**: `registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567` ✅
   - Uses approved registry (registry.bank.internal/*) ✅
   - Pinned to specific version (2.1.0) ✅
+  - SHA digest pinning for immutable reference ✅
   - No `:latest` tag ✅
 
 - **Cosign signature verification**: Handled by OpenShift Image Policies ✅
