@@ -25,9 +25,13 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -36,20 +40,24 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
         securityContext:
           runAsNonRoot: true
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
+          runAsUser: 1001
+          runAsGroup: 1001
           seccompProfile:
             type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "500m"
-            memory: "1024Mi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "2048Mi"
+            memory: "2Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
@@ -95,20 +103,20 @@ spec:
           value: "true"
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 20
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 20
-          failureThreshold: 1
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
