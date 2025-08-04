@@ -127,6 +127,9 @@ spec:
           mountPath: /tmp
         - name: cache-volume
           mountPath: /app/cache
+        - name: models-volume
+          mountPath: /models
+          readOnly: true
         - name: logs-volume
           mountPath: /app/logs
       - name: fluent-bit
@@ -161,6 +164,9 @@ spec:
         emptyDir: {}
       - name: cache-volume
         emptyDir: {}
+      - name: models-volume
+        configMap:
+          name: ml-models-config
       - name: logs-volume
         emptyDir: {}
       - name: fluent-bit-config
