@@ -162,9 +162,9 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: pe-eng-credit-scoring-engine-prod-models
       - name: logs-volume
         emptyDir: {}
       - name: fluent-bit-config
         configMap:
-          name: fluent-bit-config
+          name: pe-eng-credit-scoring-engine-prod-fluent-bit-config
