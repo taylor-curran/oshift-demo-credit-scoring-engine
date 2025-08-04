@@ -32,11 +32,22 @@ This directory contains Kubernetes manifests that comply with the k8s standards:
   - `environment: prod`
   - `managed-by: helm`
 
+### Rule 05 - Logging & Observability ✅
+- JSON stdout logs with fluent-bit sidecar for log shipping to Loki
+- Prometheus metrics on port 8080 with `prometheus.io/scrape: "true"` annotations
+- Structured logging forwarded to OpenShift Loki stack
+
+### Rule 06 - Health Probes ✅
+- Liveness probe: `/actuator/health/liveness` with optimized timings
+- Readiness probe: `/actuator/health/readiness` for traffic routing
+- Spring Boot Actuator endpoints for JVM application monitoring
+
 ## Files
 
-- `deployment.yaml` - Main application deployment with 4 replicas
-- `service.yaml` - ClusterIP service exposing port 8080
-- `configmap.yaml` - Configuration for ML models
+- `deployment-dev.yaml` / `deployment-prod.yaml` - Main application deployment with 4 replicas
+- `service-dev.yaml` / `service-prod.yaml` - ClusterIP service exposing port 8080
+- `configmap-dev.yaml` / `configmap-prod.yaml` - Configuration for ML models
+- `fluent-bit-configmap.yaml` / `fluent-bit-configmap-dev.yaml` - Log shipping configuration
 
 ## Migration from Cloud Foundry
 
