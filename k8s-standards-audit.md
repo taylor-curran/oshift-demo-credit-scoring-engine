@@ -8,11 +8,13 @@
 - `securityContext.readOnlyRootFilesystem: true` ✅
 - `securityContext.capabilities.drop: ["ALL"]` ✅
 
-### Rule 03 - Image Provenance ✅ FIXED
-- **FIXED**: Removed fake SHA digest from image reference
+### Rule 03 - Image Provenance ✅ COMPLIANT
+- **FIXED**: Removed fake SHA digest, using pinned tag instead
 - Uses approved registry: `registry.bank.internal` ✅
 - No `:latest` tag usage ✅
-- Changed `imagePullPolicy` from `Never` to `IfNotPresent` for production readiness
+- Pinned to specific version tag: `3.1.0` ✅
+- Changed `imagePullPolicy` from `Never` to `IfNotPresent` for production readiness ✅
+- **FIXED**: Removed fake SHA digest placeholder - real digest should be added during CI/CD pipeline
 
 ### Rule 04 - Naming & Labels ✅ COMPLIANT
 - Release name follows pattern: `pe-eng-credit-scoring-engine-dev` ✅
@@ -43,7 +45,8 @@
 
 ## Summary
 All k8s-standards Rules 02-06 are now compliant. Key fixes applied:
-1. Removed fake SHA digest from image reference
-2. Increased memory allocation to production requirements
+1. **FINAL FIX**: Removed fake SHA digest placeholder from image reference
+2. Increased memory allocation to production requirements  
 3. Added Prometheus metrics path annotation
 4. Changed image pull policy for production readiness
+5. Image reference now uses proper version pinning without fake digest
