@@ -45,21 +45,21 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "1800m"
-            memory: "1843Mi"
+            cpu: "1200m"
+            memory: "1228Mi"
           limits:
-            cpu: "3000m"
-            memory: "3072Mi"
+            cpu: "2000m"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         envFrom:
         - configMapRef:
-            name: credit-scoring-engine-config
+            name: pe-eng-credit-scoring-engine-prod-config
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
