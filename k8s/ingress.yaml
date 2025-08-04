@@ -11,7 +11,14 @@ metadata:
     managed-by: helm
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+  - hosts:
+    - credit-scoring.internal.banking.com
+    - credit-api-v3.banking.com
+    secretName: credit-scoring-tls
   rules:
   - host: credit-scoring.internal.banking.com
     http:
