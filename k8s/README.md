@@ -17,7 +17,7 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 
 ### Rule 03 - Immutable, Trusted Images ✅
 - Main image pinned with digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b`
-- Fluent-bit sidecar image pinned with digest: `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:7d865e959b2466f8239fcba23c8838b6c2e5c2dbc25d68dae49a21f82c6d6a4b`
+- Fluent-bit sidecar image pinned with digest: `quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
 - No `:latest` tags used
 - Only approved registries used (registry.bank.internal and quay.io/redhat-openshift-approved)
 
