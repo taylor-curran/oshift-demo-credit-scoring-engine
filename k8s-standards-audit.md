@@ -18,8 +18,8 @@ The Credit Scoring Engine Kubernetes manifests have been audited against k8s-sta
 - Uses approved registry: `registry.bank.internal` ✅
 - SHA256 digests present (no :latest tags) ✅
 - Images: 
-  - `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466802dc815e21d0e7a1240d0d540e874b9b6b4b8e8c5a8f9e2d3`
-  - `registry.bank.internal/fluent-bit:2.1.10@sha256:4c8b96d3e1f2a5b7c9d0e3f4a6b8c1d2e5f7a9b0c3d6e8f1a4b7c0d3e6f9a2b5`
+  - `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730`
+  - `registry.bank.internal/fluent-bit:2.1.10@sha256:2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae`
 
 ### ✅ Rule 04 - Naming & Label Conventions  
 **Status: COMPLIANT**
