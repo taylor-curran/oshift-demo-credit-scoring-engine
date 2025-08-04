@@ -60,5 +60,5 @@ In production environments, use external secret management solutions like:
 - `deployment.yaml` - Main application deployment with 4 replicas
 - `service.yaml` - ClusterIP service exposing port 8080
 - `configmap.yaml` - Application configuration
-- Database credentials are configured as environment variables (use external secret management in production)
+- Database configured to use H2 in-memory for demo (use external secret management for production databases)
 - `kustomization.yaml` - Kustomize configuration for environment-specific deployments

@@ -51,10 +51,6 @@ spec:
             cpu: "2000m"
             memory: "3072Mi"
         env:
-        - name: DB_USERNAME
-          value: "credit_user"
-        - name: DB_PASSWORD
-          value: "credit_pass"
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
