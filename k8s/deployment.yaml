@@ -36,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d4e6f8a9b2c1d3e5f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e
         ports:
         - containerPort: 8080
           name: http
@@ -57,7 +57,7 @@ spec:
             memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "2048Mi"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
