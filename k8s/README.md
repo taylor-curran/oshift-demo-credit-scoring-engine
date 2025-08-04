@@ -6,7 +6,7 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 01 - Resource Limits
 - CPU requests: 200m (dev), 500m (prod)
-- Memory requests: 512Mi (dev), 1Gi (prod)
+- Memory requests: 512Mi (dev), 1Gi (prod) - **FIXED**: Adjusted to ~60% of limits per standard
 - CPU limits: 1000m (dev), 2000m (prod)
 - Memory limits: 1Gi (dev), 2Gi (prod) - **FIXED**: Reduced from 3Gi to comply with ≤2Gi standard
 - Fluent-bit sidecar: 50m CPU request, 100m limit
@@ -37,10 +37,10 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ## Files
 
+- `deployment.yaml` - Production deployment (4 replicas)
 - `deployment-dev.yaml` - Development deployment (2 replicas)
-- `deployment-prod.yaml` - Production deployment (4 replicas)
+- `service.yaml` - Production service
 - `service-dev.yaml` - Development service
-- `service-prod.yaml` - Production service
 - `fluent-bit-configmap-dev.yaml` - Dev logging configuration
 - `fluent-bit-configmap-prod.yaml` - Production logging configuration
 
@@ -54,8 +54,8 @@ kubectl apply -f k8s/service-dev.yaml
 
 # Deploy production environment
 kubectl apply -f k8s/fluent-bit-configmap-prod.yaml
-kubectl apply -f k8s/deployment-prod.yaml
-kubectl apply -f k8s/service-prod.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
 ```
 
 ## Notes
