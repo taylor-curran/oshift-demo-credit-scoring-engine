@@ -22,7 +22,7 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 
 ### Rule 04 - Naming & Labels
 - ✅ Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- ✅ Release name prefix: `banking-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` pattern)
+- ✅ Release name prefix: `retail-banking-credit-scoring-prod` (follows `<team>-<app>-<env>` pattern)
 
 ### Rule 05 - Logging & Observability
 - ✅ Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
