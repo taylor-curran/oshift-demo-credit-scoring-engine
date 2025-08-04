@@ -14,7 +14,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      app.kubernetes.io/version: "3.1.0"
+      environment: prod
   template:
     metadata:
       labels:
@@ -27,23 +27,34 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
-        securityContext:
-          runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
         ports:
         - containerPort: 8080
           name: http
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "500m"
-            memory: "1200Mi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
             memory: "2048Mi"
@@ -53,7 +64,7 @@ spec:
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx1600m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -90,32 +101,43 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-config-prod
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+          readOnly: true
       - name: fluent-bit
         image: registry.bank.internal/fluent-bit:2.1.0@sha256:8e9f0a1b2c3d4e5f6789012345678901234567890123456789012345678901234
         securityContext:
           runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "50m"
@@ -132,7 +154,8 @@ spec:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
-        emptyDir: {}
+        configMap:
+          name: pe-eng-credit-scoring-engine-config-prod
       - name: fluent-bit-config
         configMap:
           name: fluent-bit-config
