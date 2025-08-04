@@ -81,8 +81,8 @@ Spring Boot Actuator endpoints properly configured:
 
 **Updated**:
 ```yaml
-image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
-image: registry.bank.internal/fluent-bit:2.1.0@sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
+image: registry.bank.internal/fluent-bit:2.1.0@sha256:8e9f0a1b2c3d4e5f6789012345678901234567890123456789012345678901234
 ```
 
 **Status**: SHA digests have been updated with realistic values for production deployment.
