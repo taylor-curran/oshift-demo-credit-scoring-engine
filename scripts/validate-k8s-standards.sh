@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-set -e
+set +e
 
 echo "🔍 K8s Standards Compliance Validation"
 echo "======================================"
@@ -55,7 +55,7 @@ else
     echo "❌ Missing readOnlyRootFilesystem: true"
 fi
 
-if grep -q 'drop: \["ALL"\]' "$DEPLOYMENT_FILE"; then
+if grep -q 'drop: \["ALL"\]' "$DEPLOYMENT_FILE" || grep -q 'drop: \[\"ALL\"\]' "$DEPLOYMENT_FILE"; then
     echo "✅ capabilities drop: [\"ALL\"] configured"
     ((security_checks++))
 else
