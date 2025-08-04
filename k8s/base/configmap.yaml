@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
+    environment: prod
     managed-by: kustomize
 data:
   EXPERIAN_API_URL: "https://api.experian.com/credit"
