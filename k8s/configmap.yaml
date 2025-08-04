@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
+    app.kubernetes.io/component: configuration
 data:
   EXPERIAN_API_URL: "https://api.experian.com/credit"
   EQUIFAX_API_URL: "https://api.equifax.com/ews"

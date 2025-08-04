@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
+    app.kubernetes.io/component: ml-models
 data:
   proprietary-score-v2.3.pkl: |
     MODEL_PLACEHOLDER_DATA
