@@ -16,28 +16,37 @@
         </encoder>
     </appender>
     
-    <!-- File appender for fluent-bit to collect -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/app/logs/credit-scoring-engine.log</file>
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <providers>
-                <timestamp/>
-                <logLevel/>
-                <loggerName/>
-                <message/>
-                <mdc/>
-                <arguments/>
-                <stackTrace/>
-            </providers>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/app/logs/credit-scoring-engine.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>7</maxHistory>
-        </rollingPolicy>
-    </appender>
+    <!-- File appender for fluent-bit to collect (only in production) -->
+    <springProfile name="production,scoring">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/app/logs/credit-scoring-engine.log</file>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp/>
+                    <logLevel/>
+                    <loggerName/>
+                    <message/>
+                    <mdc/>
+                    <arguments/>
+                    <stackTrace/>
+                </providers>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/app/logs/credit-scoring-engine.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+        </appender>
+        
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
     
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </root>
+    <!-- Console-only logging for development and test environments -->
+    <springProfile name="!production">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 </configuration>
