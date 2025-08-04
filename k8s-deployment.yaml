@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-scoring-engine
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: kubectl
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: credit-scoring-engine
+      app.kubernetes.io/instance: credit-scoring-engine
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+      labels:
+        app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/instance: credit-scoring-engine
+        app.kubernetes.io/version: "3.1.0"
+        app.kubernetes.io/part-of: retail-banking
+        environment: prod
+        managed-by: kubectl
+    spec:
+      serviceAccountName: credit-scoring-engine
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: credit-scoring-engine
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 1536Mi
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "production,scoring"
+        - name: JBP_CONFIG_OPEN_JDK_JRE
+          value: '[jre: {version: 17.+}]'
+        - name: JVM_OPTS
+          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: models
+          mountPath: /models
+          readOnly: true
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: models
+        configMap:
+          name: credit-scoring-engine-models
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-scoring-engine
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: kubectl
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/actuator/prometheus"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/instance: credit-scoring-engine
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: credit-scoring-engine
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: kubectl
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-engine-models
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: kubectl
+data:
+  model-config.json: |
+    {
+      "fico_model_version": "9.0",
+      "vantage_model_version": "4.0",
+      "custom_model_path": "/models/proprietary-score-v2.3.pkl",
+      "ml_feature_count": 247,
+      "model_refresh_interval": "24h"
+    }
