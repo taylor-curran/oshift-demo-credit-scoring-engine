@@ -27,8 +27,9 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 - Prometheus annotations for metrics scraping:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-- JSON logging configured in ConfigMap
-- Metrics endpoint exposed on port 8080
+- JSON logging configured to stdout for fluent-bit collection
+- Fluent-bit sidecar forwards logs to OpenShift Loki stack
+- Metrics endpoint exposed on port 8080 via Spring Boot Actuator
 
 ### Rule 06 - Health Probes ✅
 - Liveness probe: `/api/v1/credit/health/detailed` (30s initial delay, 3 failure threshold)

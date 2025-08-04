@@ -21,10 +21,11 @@ data:
 
     [INPUT]
         Name              tail
-        Path              /tmp/*.log
+        Path              /proc/1/fd/1
         Parser            json
-        Tag               credit-scoring-engine
+        Tag               credit-scoring-engine.stdout
         Refresh_Interval  5
+        Read_from_Head    true
 
     [OUTPUT]
         Name  forward
