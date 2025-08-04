@@ -65,7 +65,8 @@ This report documents the comprehensive audit of the Credit Scoring Engine Kuber
 ## Files Modified
 1. `k8s/deployment.yaml` - Fixed JVM memory allocation, integrated fluent-bit sidecar, and ensured proper k8s standards compliance
 2. `k8s/fluent-bit-sidecar.yaml` - Removed duplicate deployment (consolidated into main deployment.yaml)
-3. `k8s/STANDARDS_AUDIT_REPORT.md` - Updated audit report to reflect architectural fixes
+3. `k8s/fluent-bit-configmap.yaml` - Created separate ConfigMap for fluent-bit configuration
+4. `k8s/STANDARDS_AUDIT_REPORT.md` - Updated audit report to reflect architectural fixes
 
 ## Additional Security Features
 - NetworkPolicy implemented for ingress/egress traffic control
