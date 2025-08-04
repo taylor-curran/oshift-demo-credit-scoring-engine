@@ -11,9 +11,9 @@ RUN microdnf install -y python3 python3-pip && \
 
 COPY target/credit-scoring-engine-3.1.0.jar /deployments/app.jar
 
-RUN mkdir -p /models && \
-    chown -R 1001:0 /models && \
-    chmod -R g+rwX /models
+RUN mkdir -p /models /tmp && \
+    chown -R 1001:0 /models /tmp && \
+    chmod -R g+rwX /models /tmp
 
 USER 1001
 
