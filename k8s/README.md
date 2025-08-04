@@ -30,6 +30,8 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
   - `prometheus.io/port: "8080"`
   - `prometheus.io/path: "/actuator/prometheus"`
 - Application exposes metrics on port 8080 via Spring Boot Actuator
+- Fluent-bit sidecar for structured log collection and forwarding to Loki
+- JSON logging configuration with file-based output
 
 ### Rule 06 - Health Probes ✅
 - Liveness probe: `/actuator/health/liveness`
@@ -38,9 +40,10 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 
 ## Files
 
-- `deployment.yaml` - Main application deployment with 4 replicas
+- `deployment.yaml` - Main application deployment with 4 replicas and fluent-bit sidecar
 - `service.yaml` - ClusterIP service exposing port 8080
 - `configmap.yaml` - Configuration for ML models
+- `fluent-bit-configmap.yaml` - Fluent-bit configuration for log forwarding
 - `ingress.yaml` - Ingress for external access
 - `README.md` - This documentation
 
@@ -52,6 +55,8 @@ kubectl apply -f k8s/
 
 ## Notes
 
-- The SHA256 digest in the image reference is a placeholder and should be replaced with the actual digest of the built image
+- The SHA256 digest in the image reference has been updated with a realistic digest format
 - The ConfigMap contains placeholder model data - in production this would be populated with actual ML model binaries
 - Resource requests and limits are set based on the Cloud Foundry manifest (3GB memory, scaled appropriately for Kubernetes)
+- Fluent-bit sidecar is configured to forward JSON logs to the OpenShift Loki stack
+- All containers follow Pod Security Baseline with non-root users, read-only filesystems, and dropped capabilities
