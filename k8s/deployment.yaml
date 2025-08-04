@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
-    managed-by: helm
+    managed-by: openshift
 spec:
   replicas: 4
   selector:
@@ -21,7 +21,10 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: retail-banking
         environment: prod
-        managed-by: helm
+        managed-by: openshift
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -57,114 +60,9 @@ spec:
           limits:
             cpu: "1000m"
             memory: "3072Mi"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production,scoring"
-        - name: JBP_CONFIG_OPEN_JDK_JRE
-          value: '[jre: {version: 17.+}]'
-        - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
-        - name: EXPERIAN_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: experian-api-url
-        - name: EQUIFAX_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: equifax-api-url
-        - name: TRANSUNION_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: transunion-api-url
-        - name: CREDIT_API_TIMEOUT
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: credit-api-timeout
-        - name: FICO_MODEL_VERSION
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: fico-model-version
-        - name: VANTAGE_MODEL_VERSION
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: vantage-model-version
-        - name: CUSTOM_MODEL_PATH
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: custom-model-path
-        - name: INCOME_VERIFICATION_API
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: income-verification-api
-        - name: BANK_STATEMENT_ANALYZER
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: bank-statement-analyzer
-        - name: MIN_CREDIT_SCORE
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: min-credit-score
-        - name: MAX_DTI_RATIO
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: max-dti-ratio
-        - name: MIN_INCOME_VERIFICATION
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: min-income-verification
-        - name: FCRA_COMPLIANCE_MODE
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: fcra-compliance-mode
-        - name: ECOA_COMPLIANCE_MODE
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: ecoa-compliance-mode
-        - name: ADVERSE_ACTION_NOTIFICATIONS
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: adverse-action-notifications
-        - name: ML_FEATURE_COUNT
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: ml-feature-count
-        - name: MODEL_REFRESH_INTERVAL
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: model-refresh-interval
-        - name: A_B_TEST_ENABLED
-          valueFrom:
-            configMapKeyRef:
-              name: credit-scoring-config
-              key: a-b-test-enabled
-        volumeMounts:
-        - name: tmp-volume
-          mountPath: /tmp
-        - name: models-volume
-          mountPath: /models
-          readOnly: true
-        - name: logs-volume
-          mountPath: /app/logs
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8081
           initialDelaySeconds: 60
           periodSeconds: 30
@@ -186,6 +84,17 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
+        envFrom:
+        - configMapRef:
+            name: credit-scoring-engine-config
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        - name: models-volume
+          mountPath: /models
+          readOnly: true
+        - name: logs-volume
+          mountPath: /app/logs
       volumes:
       - name: tmp-volume
         emptyDir: {}
