@@ -132,6 +132,6 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-credit-scoring-engine-prod-config
       - name: logs-volume
         emptyDir: {}
