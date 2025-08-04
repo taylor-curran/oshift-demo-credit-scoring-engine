@@ -9,10 +9,10 @@ resources:
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/part-of: retail-banking
-  environment: dev
+  environment: prod
   managed-by: helm
 
-namePrefix: credit-scoring-engine-dev-
+namePrefix: credit-scoring-engine-prod-
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
