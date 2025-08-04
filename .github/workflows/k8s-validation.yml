@@ -19,10 +19,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'v1.28.0'
+    - name: Setup Python and dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install PyYAML
         
     - name: Validate YAML syntax
       run: |
@@ -30,7 +30,13 @@ jobs:
         for file in k8s/*.yaml k8s/*.yml; do
           if [ -f "$file" ]; then
             echo "Checking $file..."
-            kubectl --dry-run=client apply -f "$file" || exit 1
+            # Use yq to validate YAML syntax without requiring a cluster
+            if command -v yq >/dev/null 2>&1; then
+              yq eval '.' "$file" >/dev/null || exit 1
+            else
+              # Fallback to basic YAML validation with python
+              python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
+            fi
           fi
         done
         echo "✅ All YAML files are syntactically valid"
