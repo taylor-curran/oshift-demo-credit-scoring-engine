@@ -3,7 +3,7 @@ replicaCount: 4
 image:
   repository: registry.bank.internal/credit-scoring-engine
   tag: "3.1.0"
-  digest: "sha256:abc123def456"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -115,7 +115,7 @@ healthProbes:
     httpGet:
       path: /actuator/health/liveness
       port: 8080
-    initialDelaySeconds: 60
+    initialDelaySeconds: 30
     periodSeconds: 30
     timeoutSeconds: 5
     failureThreshold: 3
@@ -124,7 +124,7 @@ healthProbes:
     httpGet:
       path: /actuator/health/readiness
       port: 8080
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 3
+    failureThreshold: 1
