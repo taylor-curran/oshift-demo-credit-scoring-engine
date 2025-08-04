@@ -8,6 +8,9 @@ metadata:
     app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
 spec:
   replicas: 4
   selector:
@@ -40,7 +43,7 @@ spec:
           capabilities:
             drop: ["ALL"]
           allowPrivilegeEscalation: false
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168c42c50c6348b618f75f6
         ports:
         - containerPort: 8080
           name: http
@@ -111,8 +114,14 @@ spec:
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: pe-eng-credit-scoring-engine-prod-config
