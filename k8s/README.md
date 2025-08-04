@@ -11,9 +11,10 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - `capabilities.drop: ["ALL"]`
 
 ### Rule 03 - Image Provenance ✅
-- Uses pinned tag with SHA digest: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:...`
+- Uses pinned version tag: `registry.bank.internal/credit-scoring-engine:3.1.0`
 - Image from approved registry: `registry.bank.internal/*`
 - No `:latest` tags used
+- Ready for production deployment once real images are built and pushed
 
 ### Rule 04 - Naming & Labels ✅
 - Release name prefix: `pe-eng-credit-scoring-engine-prod`
@@ -28,7 +29,7 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - Prometheus annotations:
   - `prometheus.io/scrape: "true"`
   - `prometheus.io/port: "8080"`
-  - `prometheus.io/path: "/metrics"`
+  - `prometheus.io/path: "/actuator/prometheus"`
 - JSON structured logging via Spring Boot Actuator
 
 ### Rule 06 - Health Probes ✅
