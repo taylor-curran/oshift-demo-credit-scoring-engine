@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-engine-prod
+  name: banking-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: banking-platform
         environment: prod
-        managed-by: kubernetes
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -125,4 +125,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: pe-eng-ml-models-config-prod
+          name: banking-ml-models-config-prod
