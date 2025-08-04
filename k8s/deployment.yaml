@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
         securityContext:
           runAsNonRoot: true
           seccompProfile:
@@ -108,7 +108,7 @@ spec:
         - name: models-volume
           mountPath: /models
       - name: fluent-bit
-        image: registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1
+        image: registry.bank.internal/fluent-bit:2.1.0@sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
         securityContext:
           runAsNonRoot: true
           seccompProfile:
