@@ -12,8 +12,8 @@ metadata:
 
 resources:
 - namespace.yaml
-- deployment.yaml
-- service.yaml
+- deployment-prod.yaml
+- service-prod.yaml
 - configmap.yaml
 - ingress.yaml
 - servicemonitor.yaml
