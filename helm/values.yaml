@@ -1,0 +1,175 @@
+
+replicaCount: 4
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  tag: "3.1.0"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/actuator/prometheus"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: credit-scoring.internal.banking.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: credit-api-v3.banking.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: credit-scoring-tls
+      hosts:
+        - credit-scoring.internal.banking.com
+        - credit-api-v3.banking.com
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1536Mi"
+  limits:
+    cpu: "2000m"
+    memory: "2Gi"
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 4
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+environment: prod
+
+app:
+  name: credit-scoring-engine
+  version: "3.1.0"
+  partOf: retail-banking
+
+fluentBit:
+  image:
+    repository: registry.bank.internal/fluent-bit
+    tag: "2.1.0"
+    digest: "sha256:7f8c9d2e1a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d"
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
+
+env:
+  SPRING_PROFILES_ACTIVE: "production,scoring"
+  JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
+  JVM_OPTS: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  EXPERIAN_API_URL: "https://api.experian.com/credit"
+  EQUIFAX_API_URL: "https://api.equifax.com/ews"
+  TRANSUNION_API_URL: "https://api.transunion.com/credit"
+  CREDIT_API_TIMEOUT: "15000"
+  FICO_MODEL_VERSION: "9.0"
+  VANTAGE_MODEL_VERSION: "4.0"
+  CUSTOM_MODEL_PATH: "/models/proprietary-score-v2.3.pkl"
+  INCOME_VERIFICATION_API: "https://api.theworknumber.com"
+  BANK_STATEMENT_ANALYZER: "https://api.plaid.com/v2"
+  MIN_CREDIT_SCORE: "580"
+  MAX_DTI_RATIO: "0.43"
+  MIN_INCOME_VERIFICATION: "true"
+  FCRA_COMPLIANCE_MODE: "true"
+  ECOA_COMPLIANCE_MODE: "true"
+  ADVERSE_ACTION_NOTIFICATIONS: "true"
+  ML_FEATURE_COUNT: "247"
+  MODEL_REFRESH_INTERVAL: "24h"
+  A_B_TEST_ENABLED: "true"
+
+configMap:
+  applicationProperties: |
+    spring.datasource.url=jdbc:postgresql://credit-postgres-primary:5432/creditdb
+    spring.datasource.username=${DB_USERNAME}
+    spring.datasource.password=${DB_PASSWORD}
+    spring.jpa.hibernate.ddl-auto=validate
+    spring.jpa.show-sql=false
+    
+    spring.redis.host=credit-redis-cluster
+    spring.redis.port=6379
+    spring.redis.password=${REDIS_PASSWORD}
+    
+    management.endpoints.web.exposure.include=health,info,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    logging.level.com.banking.credit=INFO
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","thread":"%thread","message":"%msg"}%n
+    logging.pattern.file={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","thread":"%thread","message":"%msg"}%n

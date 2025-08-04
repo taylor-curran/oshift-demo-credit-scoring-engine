@@ -1,0 +1,52 @@
+replicaCount: 1
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  tag: "3.1.0-dev"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+
+environment: dev
+
+ingress:
+  hosts:
+    - host: credit-scoring-dev.internal.banking.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: credit-scoring-dev-tls
+      hosts:
+        - credit-scoring-dev.internal.banking.com
+
+env:
+  SPRING_PROFILES_ACTIVE: "development,scoring"
+  JVM_OPTS: "-Xmx512m -XX:+UseG1GC"
+  A_B_TEST_ENABLED: "false"
+  MIN_INCOME_VERIFICATION: "false"
+
+configMap:
+  applicationProperties: |
+    spring.datasource.url=jdbc:h2:mem:creditdb
+    spring.datasource.driver-class-name=org.h2.Driver
+    spring.h2.console.enabled=true
+    spring.jpa.hibernate.ddl-auto=create-drop
+    spring.jpa.show-sql=true
+    
+    spring.redis.host=localhost
+    spring.redis.port=6379
+    
+    management.endpoints.web.exposure.include=health,info,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    logging.level.com.banking.credit=DEBUG
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","thread":"%thread","message":"%msg"}%n
+    logging.pattern.file={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","thread":"%thread","message":"%msg"}%n
