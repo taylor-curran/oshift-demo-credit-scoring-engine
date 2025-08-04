@@ -1,0 +1,8 @@
+target/
+.git/
+.github/
+*.md
+.gitignore
+.windsurf/
+k8s/
+manifest.yml
