@@ -19,9 +19,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: credit-scoring-engine
+            name: pe-eng-credit-scoring-engine-prod
             port:
-              number: 8080
+              number: 80
   - host: credit-api-v3.banking.com
     http:
       paths:
@@ -29,6 +29,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: credit-scoring-engine
+            name: pe-eng-credit-scoring-engine-prod
             port:
-              number: 8080
+              number: 80
