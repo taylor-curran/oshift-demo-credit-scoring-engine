@@ -37,6 +37,9 @@ spec:
         - containerPort: 8080
           name: http
         securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
