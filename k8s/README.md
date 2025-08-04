@@ -5,10 +5,10 @@ This directory contains Kubernetes manifests that comply with k8s-standards Rule
 ## Standards Compliance
 
 ### Rule 01 - Resource Requests & Limits
-- ✅ CPU requests: 600m (≥ 50m baseline)
-- ✅ Memory requests: 1843Mi (≥ 128Mi baseline, 60% of 3072Mi limit)
+- ✅ CPU requests: 500m (≥ 50m baseline)
+- ✅ Memory requests: 1228Mi (≥ 128Mi baseline, 60% of 2048Mi limit)
 - ✅ CPU limits: 1000m (≤ 4 vCPU baseline)
-- ✅ Memory limits: 3072Mi (matches Cloud Foundry configuration)
+- ✅ Memory limits: 2048Mi (≤ 2Gi baseline compliance)
 - ✅ Request-to-limit ratio: 60% (optimal for HPA)
 
 ### Rule 02 - Security Context
@@ -30,12 +30,14 @@ This directory contains Kubernetes manifests that comply with k8s-standards Rule
 ## Additional Compliance Features
 
 ### Rule 05 - Logging & Observability
-- ✅ JSON stdout logging via application.properties
-- ✅ Prometheus scraping annotations
+- ✅ Structured JSON stdout logging with timestamp, MDC, and sanitized messages
+- ✅ Prometheus scraping annotations on service and pods
+- ✅ Prometheus metrics endpoint enabled at /actuator/prometheus
 
 ### Rule 06 - Health Probes
-- ✅ Liveness probe: `/actuator/health/liveness`
-- ✅ Readiness probe: `/actuator/health/readiness`
+- ✅ Liveness probe: `/actuator/health/liveness` (ping, diskSpace)
+- ✅ Readiness probe: `/actuator/health/readiness` (ping, db, redis)
+- ✅ Health probe groups properly configured in application.properties
 
 ## Deployment
 
@@ -45,8 +47,8 @@ kubectl apply -k k8s/
 
 ## Resource Allocation
 
-- **Main container**: 600m/1000m CPU, 1843Mi/3072Mi memory (60% request-to-limit ratio)
-- **Total memory**: 3072Mi (matches Cloud Foundry 3072M configuration)
+- **Main container**: 500m/1000m CPU, 1228Mi/2048Mi memory (60% request-to-limit ratio)
+- **Total memory**: 2048Mi (complies with Rule 01 ≤2Gi baseline)
 
 ## External Access
 
