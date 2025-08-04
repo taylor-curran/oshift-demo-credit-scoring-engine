@@ -5,6 +5,8 @@ resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
+- ingress.yaml
+- networkpolicy.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
@@ -12,7 +14,7 @@ commonLabels:
   environment: prod
   managed-by: helm
 
-namePrefix: credit-scoring-engine-prod-
+namePrefix: pe-eng-credit-scoring-engine-prod-
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
