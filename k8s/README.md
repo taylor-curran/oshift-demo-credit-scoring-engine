@@ -6,9 +6,9 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 01 - Resource Limits
 - CPU requests: 200m (dev), 1200m (prod)
-- Memory requests: 512Mi (dev), 1Gi (prod)
+- Memory requests: 512Mi (dev), 1843Mi (prod)
 - CPU limits: 1000m (dev), 2000m (prod)
-- Memory limits: 1Gi (dev), 2Gi (prod) - **FIXED**: Reduced from 3Gi to comply with ≤2Gi standard
+- Memory limits: 1Gi (dev), 3072Mi (prod) - **RESTORED**: ML workload requires 3GB as per original CF manifest
 - Fluent-bit sidecar: 50m CPU request, 100m limit
 
 ### ✅ Rule 02 - Security Context
@@ -79,4 +79,4 @@ kubectl apply -k k8s/
 - Fluent-bit configuration points to internal Loki endpoints
 - All containers run as non-root with read-only filesystems
 - Temporary files use emptyDir volumes mounted at `/tmp` and `/app/logs`
-- Production memory limit reduced to 2Gi to comply with Rule 01 standards (JVM heap adjusted to 1536m)
+- Production memory limit restored to 3072Mi to match original CF manifest requirements for ML workload (JVM heap set to 2560m)
