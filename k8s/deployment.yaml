@@ -1,12 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pe-eng-credit-scoring-prod
-  namespace: credit-scoring
+  name: banking-team-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
-    app.kubernetes.io/part-of: retail-banking
+    app.kubernetes.io/part-of: banking-platform
     environment: prod
     managed-by: helm
 spec:
@@ -14,13 +13,13 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      app.kubernetes.io/version: "3.1.0"
+      environment: prod
   template:
     metadata:
       labels:
         app.kubernetes.io/name: credit-scoring-engine
         app.kubernetes.io/version: "3.1.0"
-        app.kubernetes.io/part-of: retail-banking
+        app.kubernetes.io/part-of: banking-platform
         environment: prod
         managed-by: helm
       annotations:
@@ -37,11 +36,6 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456
-        ports:
-        - containerPort: 8080
-          name: http
-          protocol: TCP
         securityContext:
           runAsNonRoot: true
           runAsUser: 1001
@@ -52,20 +46,25 @@ spec:
             type: RuntimeDefault
           capabilities:
             drop: ["ALL"]
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
         resources:
           requests:
             cpu: "500m"
-            memory: "2Gi"
+            memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "3Gi"
+            memory: "2048Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
         - name: JBP_CONFIG_OPEN_JDK_JRE
           value: '[jre: {version: 17.+}]'
         - name: JVM_OPTS
-          value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+          value: "-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication"
         - name: EXPERIAN_API_URL
           value: "https://api.experian.com/credit"
         - name: EQUIFAX_API_URL
@@ -129,4 +128,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: banking-team-credit-scoring-engine-config-prod
