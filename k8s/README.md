@@ -30,7 +30,7 @@ This directory contains Kubernetes deployment manifests that comply with the ban
   - `app.kubernetes.io/version: "3.1.0"`
   - `app.kubernetes.io/part-of: retail-banking`
   - `environment: prod`
-  - `managed-by: openshift`
+  - `managed-by: helm`
 
 ### ✅ Rule 05 - Logging & Observability
 - Prometheus annotations: `prometheus.io/scrape: "true"`, `prometheus.io/port: "8080"`
