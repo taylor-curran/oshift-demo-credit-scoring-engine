@@ -122,7 +122,7 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
