@@ -25,7 +25,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/path: "/metrics"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -54,16 +54,16 @@ spec:
         resources:
           requests:
             cpu: "500m"
-            memory: "1536Mi"
+            memory: "1200Mi"
           limits:
             cpu: "2000m"
-            memory: "3072Mi"
+            memory: "2048Mi"
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
@@ -73,10 +73,10 @@ spec:
             path: /actuator/health/readiness
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
           successThreshold: 1
         env:
         - name: SPRING_PROFILES_ACTIVE
