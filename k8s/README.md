@@ -17,7 +17,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 
 ### Rule 04 - Naming & Labels ✅
 - Mandatory labels: `app.kubernetes.io/name`, `app.kubernetes.io/version`, `app.kubernetes.io/part-of`, `environment`, `managed-by`
-- Release-name prefix pattern: `credit-scoring-engine`
+- Release-name prefix pattern: `pe-eng-credit-scoring-engine-prod` (follows `<team>-<app>-<env>` format)
 
 ### Rule 05 - Logging & Observability ✅
 - Prometheus annotations for metrics scraping
@@ -31,8 +31,8 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 
 ## Resource Requirements
 
-- **CPU**: 500m requests, 2000m limits
-- **Memory**: 2Gi requests, 3Gi limits
+- **CPU**: 600m requests, 1000m limits
+- **Memory**: 1800Mi requests, 3Gi limits
 - **Replicas**: 4 (matching Cloud Foundry configuration)
 
 ## Deployment
