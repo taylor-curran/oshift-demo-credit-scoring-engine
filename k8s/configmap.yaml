@@ -9,4 +9,10 @@ metadata:
     environment: prod
     managed-by: helm
 data:
-  proprietary-score-v2.3.pkl: |
+  model-config.properties: |
+    fico.model.version=9.0
+    vantage.model.version=4.0
+    custom.model.path=/models/proprietary-score-v2.3.pkl
+    ml.feature.count=247
+    model.refresh.interval=24h
+    ab.test.enabled=true

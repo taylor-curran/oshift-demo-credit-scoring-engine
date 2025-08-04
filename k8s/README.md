@@ -43,8 +43,18 @@ This directory contains Kubernetes deployment manifests for the Credit Scoring E
 kubectl apply -f k8s/
 ```
 
+### Rule 05 - Logging & Observability ✅
+- Prometheus annotations on service for metrics scraping
+- JSON structured logging to stdout (Spring Boot default)
+- Metrics endpoint exposed at `/metrics` on port 8080
+
+### Rule 06 - Liveness & Readiness Probes ✅
+- Liveness probe: `/actuator/health/liveness` (30s initial delay, 30s period)
+- Readiness probe: `/actuator/health/readiness` (10s initial delay, 10s period)
+- Proper failure thresholds: liveness=3, readiness=1
+
 ## Health Checks
 
-The application exposes health checks at `/actuator/health/detailed` with:
-- Liveness probe: 60s initial delay, 30s period
-- Readiness probe: 30s initial delay, 10s period
+The application exposes separate health check endpoints:
+- Liveness probe: `/actuator/health/liveness` (30s initial delay, 30s period)
+- Readiness probe: `/actuator/health/readiness` (10s initial delay, 10s period)
