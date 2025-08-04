@@ -5,14 +5,16 @@ resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
+- ingress.yaml
+- networkpolicy.yaml
 
 commonLabels:
   app.kubernetes.io/name: credit-scoring-engine
   app.kubernetes.io/part-of: retail-banking
-  environment: dev
-  managed-by: helm
+  environment: prod
+  managed-by: openshift
 
-namePrefix: credit-scoring-engine-dev-
+namePrefix: pe-eng-credit-scoring-engine-prod-
 
 images:
 - name: registry.bank.internal/credit-scoring-engine
