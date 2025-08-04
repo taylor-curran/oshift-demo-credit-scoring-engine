@@ -42,7 +42,8 @@ data:
         Host            loki.openshift-logging.svc
         Port            3100
         Labels          job=fluentbit,app=credit-scoring-engine,environment=prod
-        Label_Keys      $kubernetes['namespace_name'],$kubernetes['pod_name'],$kubernetes['container_name']
+        Label_Keys      $kubernetes['namespace_name'],$kubernetes['pod_name'],\
+                 $kubernetes['container_name']
         Line_Format     json
         Auto_Kubernetes_Labels On
 
