@@ -13,9 +13,9 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ### Rule 01 - Resource Limits ✅
 - CPU requests: 500m (0.5 vCPU), limits: 2000m (2 vCPU)
-- Memory requests: 1536Mi (~1.5GB), limits: 3072Mi (3GB)
+- Memory requests: 1200Mi (~1.2GB), limits: 2048Mi (2GB)
 - Fluent-bit sidecar: CPU 50m-200m, Memory 128Mi-256Mi
-- Requests ≈ 50% of limits for HPA headroom
+- Requests ≈ 60% of limits for HPA headroom
 
 ### Rule 02 - Security Context ✅
 - `runAsNonRoot: true` - Prevents running as root user
