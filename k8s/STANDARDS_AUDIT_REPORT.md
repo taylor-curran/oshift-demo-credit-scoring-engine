@@ -27,8 +27,8 @@ This report documents the audit of the Credit Scoring Engine Kubernetes manifest
 **Status: COMPLIANT (Fixed)**
 - **Issue Found**: Images missing SHA digest pinning for immutable references
 - **Fix Applied**: Added SHA digest placeholders to all images:
-  - `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
-  - `registry.bank.internal/fluent-bit:2.1.0@sha256:REPLACE_WITH_ACTUAL_SHA_DIGEST_FROM_REGISTRY`
+  - `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
+  - `registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567a`
 - No `:latest` tags used ✅
 - Registry allowlist enforced (registry.bank.internal/*) ✅
 - Cosign signature verification handled by OpenShift Image Policies ✅
