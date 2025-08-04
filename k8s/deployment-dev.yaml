@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pe-eng-credit-scoring-engine-dev
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: dev
+    managed-by: helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: credit-scoring-engine
+      environment: dev
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/version: "3.1.0"
+        app.kubernetes.io/part-of: retail-banking
+        environment: dev
+        managed-by: helm
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: credit-scoring-engine
+        image: registry.bank.internal/credit-scoring-engine:3.1.0-dev@sha256:b2c3d4e5f6789012345678901234567890123456789012345678901234567890ab
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "development"
+        - name: JBP_CONFIG_OPEN_JDK_JRE
+          value: '[jre: {version: 17.+}]'
+        - name: JVM_OPTS
+          value: "-Xmx384m -XX:+UseG1GC"
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
