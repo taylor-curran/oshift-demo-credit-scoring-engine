@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pe-eng-credit-scoring-engine-prod-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  application.properties: |
+    spring.profiles.active=production,scoring
+    server.port=8080
+    
+    experian.api.url=https://api.experian.com/credit
+    equifax.api.url=https://api.equifax.com/ews
+    transunion.api.url=https://api.transunion.com/credit
+    credit.api.timeout=15000
+    
+    fico.model.version=9.0
+    vantage.model.version=4.0
+    custom.model.path=/models/proprietary-score-v2.3.pkl
+    
+    min.credit.score=580
+    max.dti.ratio=0.43
+    min.income.verification=true
+    
+    fcra.compliance.mode=true
+    ecoa.compliance.mode=true
+    adverse.action.notifications=true
+    
+    ml.feature.count=247
+    model.refresh.interval=24h
+    ab.test.enabled=true
