@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-models
+  namespace: credit-scoring
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: helm
+data:
+  model-info.txt: |
+    Proprietary ML models for credit scoring
+    Version: 2.3
+    Feature count: 247
+    Last updated: 2024-08-04
+    Model path: /models/proprietary-score-v2.3.pkl
