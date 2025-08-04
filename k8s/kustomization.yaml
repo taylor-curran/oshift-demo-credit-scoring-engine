@@ -7,10 +7,11 @@ resources:
 - configmap.yaml
 - ingress.yaml
 
-commonLabels:
-  app.kubernetes.io/name: credit-scoring-engine
-  app.kubernetes.io/part-of: retail-banking
-  environment: prod
+labels:
+- pairs:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
 
 namePrefix: pe-eng-
 nameSuffix: -prod
