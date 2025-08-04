@@ -32,10 +32,12 @@
   - `prometheus.io/port: "8080"` ✅
   - **ADDED**: `prometheus.io/path: "/actuator/prometheus"` for Spring Boot Actuator
 
-### Rule 06 - Health Probes ✅ COMPLIANT
-- Liveness probe configured with custom health endpoint ✅
-- Readiness probe configured with custom health endpoint ✅
-- Proper timeouts and delays set ✅
+### Rule 06 - Health Probes ✅ FIXED
+- **FIXED**: Updated to use Spring Boot Actuator standard endpoints:
+  - Liveness probe: `/actuator/health/liveness` ✅
+  - Readiness probe: `/actuator/health/readiness` ✅
+- Proper failure thresholds set per k8s standards ✅
+- Initial delays follow recommended values ✅
 
 ### Resource Allocation ✅ IMPROVED
 - **FIXED**: Increased memory allocation to match original CF requirements:
@@ -46,7 +48,11 @@
 ## Summary
 All k8s-standards Rules 02-06 are now compliant. Key fixes applied:
 1. **FINAL FIX**: Removed fake SHA digest placeholder from image reference
-2. Increased memory allocation to production requirements  
-3. Added Prometheus metrics path annotation
-4. Changed image pull policy for production readiness
-5. Image reference now uses proper version pinning without fake digest
+2. Updated health probes to use Spring Boot Actuator standard endpoints
+3. Set proper failure thresholds for health probes per k8s standards
+4. Increased memory allocation to production requirements  
+5. Added Prometheus metrics path annotation
+6. Changed image pull policy for production readiness
+7. Image reference now uses proper version pinning without fake digest
+
+**Note**: In production, the image should use a real SHA digest or be verified through OpenShift Image Policies with Cosign signatures.
