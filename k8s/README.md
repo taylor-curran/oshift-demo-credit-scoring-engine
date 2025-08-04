@@ -4,24 +4,27 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 
 ## Standards Compliance
 
-### Rule 01 - Resource Limits
-- ✅ CPU requests: 500m (main), 50m (sidecar)
-- ✅ Memory requests: 1536Mi (main), 64Mi (sidecar)
+### Rule 01 - Resource Requests & Limits
+- ✅ CPU requests: 1200m (main), 50m (sidecar)
+- ✅ Memory requests: 1843Mi (main), 64Mi (sidecar)
 - ✅ CPU limits: 2000m (main), 100m (sidecar)
 - ✅ Memory limits: 3072Mi (main), 128Mi (sidecar)
+- ✅ Requests are ~60% of limits for HPA headroom
 
-### Rule 02 - Security Context
+### Rule 02 - Pod Security Baseline
 - ✅ runAsNonRoot: true
+- ✅ runAsUser: 1001, runAsGroup: 1001, fsGroup: 1001
 - ✅ seccompProfile.type: RuntimeDefault
 - ✅ readOnlyRootFilesystem: true
 - ✅ capabilities.drop: ["ALL"]
+- ✅ allowPrivilegeEscalation: false
 
-### Rule 03 - Image Provenance
+### Rule 03 - Immutable, Trusted Images
 - ✅ Pinned image tags with SHA digests
 - ✅ registry.bank.internal allow-listed registry
 - ✅ No :latest tags used
 
-### Rule 04 - Naming & Labels
+### Rule 04 - Naming & Label Conventions
 - ✅ Mandatory labels: app.kubernetes.io/name, app.kubernetes.io/version, app.kubernetes.io/part-of, environment, managed-by
 - ✅ Release-name prefix: pe-eng-credit-scoring-engine-prod
 
@@ -29,11 +32,13 @@ This directory contains Kubernetes manifests that comply with the k8s-standards-
 - ✅ Prometheus annotations for metrics scraping
 - ✅ Fluent-bit sidecar for JSON log shipping to Loki
 - ✅ Structured logging configuration
+- ✅ Metrics endpoint at `/actuator/prometheus`
 
 ### Rule 06 - Health Probes
 - ✅ Liveness probe: /actuator/health/liveness
 - ✅ Readiness probe: /actuator/health/readiness
 - ✅ Startup probe configured for JVM applications
+- ✅ Proper timeouts and failure thresholds
 
 ## Deployment
 
@@ -50,6 +55,17 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 kubectl apply -f networkpolicy.yaml
 ```
+
+## Migration from Cloud Foundry
+
+These manifests replace the `manifest.yml` Cloud Foundry configuration with equivalent Kubernetes resources:
+
+- **Applications** → Deployment with 4 replicas
+- **Memory/Disk** → Resource requests/limits
+- **Environment variables** → ConfigMaps and container env vars
+- **Services** → Kubernetes Services and ConfigMaps
+- **Routes** → Ingress resources (see ingress.yaml)
+- **Health checks** → Liveness/Readiness probes
 
 ## Monitoring
 
