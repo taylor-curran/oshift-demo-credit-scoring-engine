@@ -84,15 +84,16 @@ Audit of Kubernetes manifests in `oshift-demo-credit-scoring-engine` against k8s
 **Status**: FULLY COMPLIANT
 
 ### Additional Rule 01 - Resource Limits ✅ COMPLIANT
-**Requirements**: CPU/Memory requests and limits
+**Requirements**: CPU/Memory requests and limits (≤2Gi memory limit)
 
 **Findings**:
 - ✅ Main container resources:
   - CPU: 600m request, 1000m limit (60% ratio for HPA headroom)
-  - Memory: 1843Mi request, 3072Mi limit (60% ratio)
+  - Memory: 1228Mi request, 2048Mi limit (60% ratio, compliant with ≤2Gi standard)
 - ✅ Fluent-bit sidecar resources:
   - CPU: 120m request, 200m limit (60% ratio)
   - Memory: 154Mi request, 256Mi limit (60% ratio)
+- ✅ JVM heap size adjusted to 1024m to fit within memory limits
 
 **Status**: FULLY COMPLIANT
 

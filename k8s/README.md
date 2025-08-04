@@ -6,9 +6,10 @@ This directory contains Kubernetes manifests that comply with the k8s standards 
 
 ### Rule 01 - Resource Requests & Limits ✅
 - CPU requests: 600m (60% of 1000m limit)
-- Memory requests: 1843Mi (60% of 3072Mi limit)
+- Memory requests: 1228Mi (60% of 2048Mi limit)
 - All containers have both requests and limits defined
 - Follows "requests ≈ 60% of limits" guideline for HPA headroom
+- Memory limit complies with k8s standard ≤2Gi
 
 ### Rule 02 - Pod Security Baseline ✅
 - `securityContext.runAsNonRoot: true`
@@ -56,6 +57,6 @@ kubectl apply -f k8s/ingress.yaml
 ## Resource Limits
 
 - CPU: 600m request, 1000m limit (60% ratio for HPA headroom)
-- Memory: 1843Mi request, 3072Mi limit (60% ratio, matching Cloud Foundry 3GB allocation)
+- Memory: 1228Mi request, 2048Mi limit (60% ratio, compliant with k8s standard ≤2Gi)
 - Replicas: 4 (matching Cloud Foundry configuration)
 - Fluent-bit sidecar: 120m CPU request, 200m limit; 154Mi memory request, 256Mi limit (60% ratio)
