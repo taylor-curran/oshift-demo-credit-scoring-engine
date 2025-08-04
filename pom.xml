@@ -62,6 +62,12 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- Rule 05 - JSON structured logging dependency for k8s standards compliance -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.3</version>
+        </dependency>
     </dependencies>
 
     <build>
