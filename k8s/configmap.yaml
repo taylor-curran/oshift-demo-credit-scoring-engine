@@ -10,3 +10,4 @@ metadata:
     managed-by: openshift
 data:
   proprietary-score-v2.3.pkl: |
+    MODEL_PLACEHOLDER_DATA

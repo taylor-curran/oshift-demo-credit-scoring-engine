@@ -28,6 +28,9 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -38,7 +41,10 @@ spec:
           name: http
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
           seccompProfile:
