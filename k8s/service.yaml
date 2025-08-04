@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-scoring-engine-dev
+  namespace: banking-platform-dev
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: banking-platform
+    environment: dev
+    managed-by: kubernetes
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+spec:
+  selector:
+    app.kubernetes.io/name: credit-scoring-engine
+    environment: dev
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credit-scoring-engine-config-dev
+  namespace: banking-platform-dev
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: banking-platform
+    environment: dev
+    managed-by: kubernetes
+data:
+  application.properties: |
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","message":"%msg"}%n
+    logging.level.com.banking.credit=INFO
+    logging.level.org.springframework=WARN
+    
+    management.endpoints.web.exposure.include=health,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    management.metrics.export.prometheus.enabled=true
+    management.endpoint.prometheus.enabled=true
