@@ -13,6 +13,8 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ### ✅ Rule 02 - Security Context
 - `runAsNonRoot: true` for all containers
+- `runAsUser: 1001` and `runAsGroup: 1001` explicitly set
+- `allowPrivilegeEscalation: false` for all containers
 - `seccompProfile.type: RuntimeDefault`
 - `readOnlyRootFilesystem: true`
 - `capabilities.drop: ["ALL"]`
