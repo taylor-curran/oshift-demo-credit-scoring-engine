@@ -10,3 +10,4 @@ metadata:
     managed-by: helm
 data:
   proprietary-score-v2.3.pkl: |
+    model_placeholder: "Replace with actual model data"
