@@ -14,7 +14,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: credit-scoring-engine
-      app.kubernetes.io/version: "3.1.0"
+      environment: prod
   template:
     metadata:
       labels:
@@ -41,9 +41,6 @@ spec:
         ports:
         - containerPort: 8080
           name: http
-          protocol: TCP
-        - containerPort: 8080
-          name: metrics
           protocol: TCP
         securityContext:
           runAsNonRoot: true
