@@ -22,6 +22,9 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -32,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8239fcba23c8e76b2b32d4c16e168e7f0d5e7e8c9d1a2b3c4
         ports:
         - containerPort: 8080
           name: http
@@ -97,22 +100,25 @@ spec:
           value: "24h"
         - name: A_B_TEST_ENABLED
           value: "true"
+        envFrom:
+        - configMapRef:
+            name: pe-eng-credit-scoring-engine-config-prod
         livenessProbe:
           httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 20
+          timeoutSeconds: 5
           failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -124,4 +130,4 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: credit-scoring-models
+          name: pe-eng-credit-scoring-engine-config-prod
