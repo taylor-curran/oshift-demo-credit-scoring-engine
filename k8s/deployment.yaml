@@ -33,6 +33,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
+        allowPrivilegeEscalation: false
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -156,6 +157,8 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+        - name: app-logs
+          mountPath: /var/log/app
       volumes:
       - name: tmp-volume
         emptyDir: {}

@@ -26,6 +26,7 @@ data:
         Parser            json
         Tag               app.credit-scoring-engine
         Refresh_Interval  5
+        Read_from_Head    On
 
     [OUTPUT]
         Name  forward
