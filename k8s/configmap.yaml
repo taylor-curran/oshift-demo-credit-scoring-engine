@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pe-eng-credit-scoring-engine-prod-config
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: prod
+    managed-by: openshift
+data:
+  application.properties: |
+    spring.profiles.active=production,scoring
+    server.port=8080
+    
+    spring.datasource.url=jdbc:postgresql://credit-postgres-primary:5432/creditdb
+    spring.datasource.username=${DB_USERNAME}
+    spring.datasource.password=${DB_PASSWORD}
+    spring.jpa.hibernate.ddl-auto=validate
+    spring.jpa.show-sql=false
+    
+    spring.redis.host=credit-redis-cluster
+    spring.redis.port=6379
+    spring.redis.password=${REDIS_PASSWORD}
+    
+    credit.api.experian.url=https://api.experian.com/credit
+    credit.api.equifax.url=https://api.equifax.com/ews
+    credit.api.transunion.url=https://api.transunion.com/credit
+    credit.api.timeout=15000
+    
+    credit.models.fico.version=9.0
+    credit.models.vantage.version=4.0
+    credit.models.custom.path=/models/proprietary-score-v2.3.pkl
+    
+    credit.verification.income.api=https://api.theworknumber.com
+    credit.analyzer.bankstatement.api=https://api.plaid.com/v2
+    
+    credit.scoring.min.score=580
+    credit.scoring.max.dti.ratio=0.43
+    credit.verification.income.required=true
+    
+    credit.compliance.fcra.enabled=true
+    credit.compliance.ecoa.enabled=true
+    credit.notifications.adverse.enabled=true
+    
+    credit.ml.feature.count=247
+    credit.ml.model.refresh.interval=24h
+    credit.testing.ab.enabled=true
+    
+    management.endpoints.web.exposure.include=health,metrics,prometheus
+    management.endpoint.health.show-details=always
+    management.health.probes.enabled=true
+    
+    logging.level.com.banking.credit=INFO
+    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+    logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
