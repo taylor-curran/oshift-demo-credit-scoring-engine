@@ -38,10 +38,11 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - Release name: `pe-eng-credit-scoring-engine-prod`
 - Mandatory labels applied:
   - `app.kubernetes.io/name: credit-scoring-engine`
+  - `app.kubernetes.io/instance: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
   - `app.kubernetes.io/part-of: retail-banking`
   - `environment: prod`
-  - `managed-by: kubectl`
+  - `managed-by: helm`
 
 ## Deployment Files
 

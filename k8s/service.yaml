@@ -23,4 +23,4 @@ spec:
     name: http
   selector:
     app.kubernetes.io/name: credit-scoring-engine
-    environment: prod
+    app.kubernetes.io/instance: credit-scoring-engine
