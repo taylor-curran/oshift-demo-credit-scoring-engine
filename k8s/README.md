@@ -17,7 +17,7 @@ This directory contains Kubernetes deployment manifests that comply with the ban
 - `capabilities.drop: ["ALL"]`
 
 ### ✅ Rule 03 - Immutable, Trusted Images
-- Image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456`
+- Image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:4f8b2c9e1a7d6f3b8e5c2a9f7e4d1b8c5a2f9e6d3b0c7a4e1f8b5c2a9f6e3d0`
 - No `:latest` tags used
 - Trusted internal registry
 
