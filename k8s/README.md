@@ -18,11 +18,11 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - `allowPrivilegeEscalation: false` - Prevents privilege escalation
 
 ### ✅ Rule 03 - Image Provenance
-- No `:latest` tags used - All images pinned to specific versions with SHA digests
+- No `:latest` tags used - All images pinned to specific versions
 - Registry allowlist enforced - Only `registry.bank.internal/*` images used
 - Cosign signature verification handled by OpenShift Image Policies
-- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890`
-- Fluent-bit sidecar: `registry.bank.internal/fluent-bit:2.1.0@sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567a`
+- Uses pinned image: `registry.bank.internal/credit-scoring-engine:3.1.0`
+- Fluent-bit sidecar: `registry.bank.internal/fluent-bit:2.1.0`
 
 ### ✅ Rule 04 - Naming & Label Conventions
 - Release name prefix: `pe-eng-credit-scoring-engine-prod`
