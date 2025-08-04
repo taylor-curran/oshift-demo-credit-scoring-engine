@@ -55,13 +55,13 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           resources:
-          requests:
-            cpu: "500m"
-            memory: "1200Mi"
-          limits:
-            cpu: "2000m"
-            memory: "2048Mi"
-        env:
+            requests:
+              cpu: "500m"
+              memory: "1200Mi"
+            limits:
+              cpu: "2000m"
+              memory: "2048Mi"
+          env:
           - name: SPRING_PROFILES_ACTIVE
             value: "production,scoring"
           - name: JBP_CONFIG_OPEN_JDK_JRE
