@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: banking-platform
     environment: prod
-    managed-by: kubernetes
+    managed-by: helm
 spec:
   replicas: 4
   selector:
@@ -21,7 +21,7 @@ spec:
         app.kubernetes.io/version: "3.1.0"
         app.kubernetes.io/part-of: banking-platform
         environment: prod
-        managed-by: kubernetes
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -29,11 +29,11 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789
@@ -44,12 +44,14 @@ spec:
           name: management
         securityContext:
           runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault
-          readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
-          allowPrivilegeEscalation: false
         resources:
           requests:
             cpu: "500m"
