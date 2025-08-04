@@ -10,4 +10,11 @@ metadata:
     environment: prod
     managed-by: helm
 data:
-  proprietary-score-v2.3.pkl: |
+  model-config.json: |
+    {
+      "fico_model_version": "9.0",
+      "vantage_model_version": "4.0",
+      "custom_model_path": "/models/proprietary-score-v2.3.pkl",
+      "ml_feature_count": 247,
+      "model_refresh_interval": "24h"
+    }
