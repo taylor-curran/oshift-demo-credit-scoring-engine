@@ -100,12 +100,16 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           failureThreshold: 3
+          timeoutSeconds: 5
+          periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
           failureThreshold: 1
+          timeoutSeconds: 5
+          periodSeconds: 5
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
