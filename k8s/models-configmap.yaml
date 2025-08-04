@@ -1,10 +1,13 @@
 apiVersion: v1
-kind: Namespace
+kind: ConfigMap
 metadata:
-  name: pe-eng-credit-scoring-prod
+  name: pe-eng-credit-scoring-models-prod
+  namespace: pe-eng-credit-scoring-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
     app.kubernetes.io/part-of: retail-banking
     environment: prod
     managed-by: helm
+data:
+  proprietary-score-v2.3.pkl: |
