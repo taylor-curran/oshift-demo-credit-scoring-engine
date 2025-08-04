@@ -33,7 +33,7 @@ spec:
       containers:
       - name: credit-scoring-engine
         image: registry.bank.internal/credit-scoring-engine:3.1.0
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         resources:
