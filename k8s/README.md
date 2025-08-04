@@ -38,9 +38,9 @@ This directory contains Kubernetes manifests that comply with the banking platfo
 - Metrics endpoint exposed on port 8080 at /metrics path
 
 ### Rule 06 - Health Probes ✅
-- Liveness probe: `/actuator/health/liveness` (30s initial delay, 3 failure threshold)
-- Readiness probe: `/actuator/health/readiness` (10s initial delay, 1 failure threshold)
-- Detailed health check: `/actuator/health/detailed`
+- Liveness probe: `/api/v1/credit/health/detailed` (30s initial delay, 3 failure threshold)
+- Readiness probe: `/api/v1/credit/health/detailed` (10s initial delay, 1 failure threshold)
+- Detailed health check: `/api/v1/credit/health/detailed`
 
 ## Deployment
 
