@@ -22,6 +22,9 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -90,18 +93,16 @@ spec:
           value: "true"
         livenessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 20
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health/detailed
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 20
+          failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
