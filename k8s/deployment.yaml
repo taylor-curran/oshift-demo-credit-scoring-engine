@@ -50,7 +50,7 @@ spec:
             memory: "1536Mi"
           limits:
             cpu: "2000m"
-            memory: "2048Mi"
+            memory: "2304Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "production,scoring"
