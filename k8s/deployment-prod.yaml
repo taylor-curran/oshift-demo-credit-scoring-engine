@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine-prod
+  name: pe-eng-credit-scoring-engine-prod
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -57,9 +57,9 @@ spec:
           value: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
         envFrom:
         - secretRef:
-            name: credit-scoring-engine-secrets-prod
+            name: pe-eng-credit-scoring-engine-secrets-prod
         - configMapRef:
-            name: credit-scoring-engine-config-prod
+            name: pe-eng-credit-scoring-engine-config-prod
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness

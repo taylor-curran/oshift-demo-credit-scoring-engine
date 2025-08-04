@@ -24,7 +24,7 @@ This directory contains Kubernetes manifests for deploying the Credit Scoring En
 - Production images must have valid Cosign signatures (enforced by OpenShift Image Policies)
 
 ### Rule 04 - Naming & Label Conventions ✅
-- **Release name prefix**: `credit-scoring-engine-{env}`
+- **Release name prefix**: `pe-eng-credit-scoring-engine-{env}`
 - **Mandatory labels**:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
@@ -70,7 +70,7 @@ kubectl apply -f k8s/configmap.yaml
 ### Production Environment
 ```bash
 # Create secrets first (not included in this repo for security)
-kubectl create secret generic credit-scoring-engine-secrets-prod \
+kubectl create secret generic pe-eng-credit-scoring-engine-secrets-prod \
   --from-literal=EXPERIAN_API_URL="https://api.experian.com/credit" \
   --from-literal=EQUIFAX_API_URL="https://api.equifax.com/ews" \
   --from-literal=TRANSUNION_API_URL="https://api.transunion.com/credit"
