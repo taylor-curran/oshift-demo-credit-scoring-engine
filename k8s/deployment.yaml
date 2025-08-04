@@ -103,7 +103,7 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-ml-models-config-prod
       - name: logs-volume
         emptyDir: {}
       restartPolicy: Always

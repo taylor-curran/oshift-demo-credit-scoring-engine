@@ -40,7 +40,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ml-models-config
+  name: pe-eng-ml-models-config-prod
   namespace: credit-scoring
   labels:
     app.kubernetes.io/name: credit-scoring-engine
