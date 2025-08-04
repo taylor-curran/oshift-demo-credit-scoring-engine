@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: credit-scoring-engine
+  name: pe-eng-credit-scoring-engine-dev
   labels:
     app.kubernetes.io/name: credit-scoring-engine
     app.kubernetes.io/version: "3.1.0"
@@ -39,6 +39,7 @@ spec:
             cpu: "2000m"
             memory: "2Gi"
         securityContext:
+          runAsNonRoot: true
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
@@ -46,17 +47,17 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-engine-config
+              name: pe-eng-credit-scoring-engine-dev-config
               key: SPRING_PROFILES_ACTIVE
         - name: JVM_OPTS
           valueFrom:
             configMapKeyRef:
-              name: credit-scoring-engine-config
+              name: pe-eng-credit-scoring-engine-dev-config
               key: JVM_OPTS
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: credit-scoring-engine-creds
+              name: pe-eng-credit-scoring-engine-dev-creds
               key: DATABASE_URL
         volumeMounts:
         - name: tmp-volume
