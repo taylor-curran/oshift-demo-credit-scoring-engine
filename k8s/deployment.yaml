@@ -28,21 +28,22 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: credit-scoring-engine
-        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:abc123def456789012345678901234567890123456789012345678901234567890
+        image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:7d865e959b2466f8a5fc08551a3a0a14e8d8b5e6f7c9a8b3d4e5f6a7b8c9d0e1
         ports:
         - containerPort: 8080
           name: http
         securityContext:
-          runAsNonRoot: true
+          allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
-          seccompProfile:
-            type: RuntimeDefault
         resources:
           requests:
             cpu: "1800m"
@@ -77,8 +78,12 @@ spec:
           mountPath: /tmp
         - name: cache-volume
           mountPath: /app/cache
+        - name: logs-volume
+          mountPath: /app/logs
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: cache-volume
+        emptyDir: {}
+      - name: logs-volume
         emptyDir: {}
