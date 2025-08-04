@@ -1,0 +1,120 @@
+replicaCount: 4
+
+image:
+  repository: registry.bank.internal/credit-scoring-engine
+  pullPolicy: IfNotPresent
+  tag: "3.1.0"
+  digest: "sha256:7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: credit-scoring.internal.banking.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 3Gi
+  requests:
+    cpu: 1200m
+    memory: 1800Mi
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 4
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  SPRING_PROFILES_ACTIVE: "production,scoring"
+  JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 17.+}]'
+  JVM_OPTS: "-Xmx2560m -XX:+UseG1GC -XX:+UseStringDeduplication"
+  EXPERIAN_API_URL: "https://api.experian.com/credit"
+  EQUIFAX_API_URL: "https://api.equifax.com/ews"
+  TRANSUNION_API_URL: "https://api.transunion.com/credit"
+  CREDIT_API_TIMEOUT: "15000"
+  FICO_MODEL_VERSION: "9.0"
+  VANTAGE_MODEL_VERSION: "4.0"
+  CUSTOM_MODEL_PATH: "/models/proprietary-score-v2.3.pkl"
+  INCOME_VERIFICATION_API: "https://api.theworknumber.com"
+  BANK_STATEMENT_ANALYZER: "https://api.plaid.com/v2"
+  MIN_CREDIT_SCORE: "580"
+  MAX_DTI_RATIO: "0.43"
+  MIN_INCOME_VERIFICATION: "true"
+  FCRA_COMPLIANCE_MODE: "true"
+  ECOA_COMPLIANCE_MODE: "true"
+  ADVERSE_ACTION_NOTIFICATIONS: "true"
+  ML_FEATURE_COUNT: "247"
+  MODEL_REFRESH_INTERVAL: "24h"
+  A_B_TEST_ENABLED: "true"
+
+extraCaps: []
+
+labels:
+  app.kubernetes.io/name: credit-scoring-engine
+  app.kubernetes.io/version: "3.1.0"
+  app.kubernetes.io/part-of: retail-banking
+  environment: prod
+  managed-by: helm
