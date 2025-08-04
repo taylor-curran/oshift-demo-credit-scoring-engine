@@ -26,7 +26,10 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/path: "/actuator/prometheus"
+        co.elastic.logs/enabled: "true"
+        co.elastic.logs/json.keys_under_root: "true"
+        co.elastic.logs/json.add_error_key: "true"
     spec:
       securityContext:
         runAsNonRoot: true
