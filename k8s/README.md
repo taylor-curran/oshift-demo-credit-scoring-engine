@@ -6,9 +6,9 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 
 ### ✅ Rule 01 - Resource Requests & Limits
 - CPU requests: 1200m (60% of 2000m limit)
-- Memory requests: 1228Mi (60% of 2048Mi limit)
+- Memory requests: 1843Mi (60% of 3072Mi limit)
 - CPU limits: 2000m (within ≤ 4 vCPU baseline)
-- Memory limits: 2048Mi (within ≤ 2 Gi baseline)
+- Memory limits: 3072Mi (matches Cloud Foundry manifest requirements)
 
 ### ✅ Rule 02 - Pod Security Baseline
 - `runAsNonRoot: true` (container level)
