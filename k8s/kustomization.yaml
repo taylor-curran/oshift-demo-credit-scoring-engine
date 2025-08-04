@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: credit-scoring-engine-dev
+  labels:
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: banking-platform
+    environment: dev
+    managed-by: helm
+
+resources:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+- networkpolicy.yaml
+
+commonLabels:
+  app.kubernetes.io/name: credit-scoring-engine
+  app.kubernetes.io/version: "3.1.0"
+  app.kubernetes.io/part-of: banking-platform
+  environment: dev
+  managed-by: helm
+
+namePrefix: banking-
+
+images:
+- name: registry.bank.internal/credit-scoring-engine
+  newTag: "3.1.0"
