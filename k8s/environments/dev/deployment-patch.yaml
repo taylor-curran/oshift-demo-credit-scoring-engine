@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banking-credit-scoring-engine-prod
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: credit-scoring-engine
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1024Mi"
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "development,scoring"
+        - name: JVM_OPTS
+          value: "-Xmx768m -XX:+UseG1GC"

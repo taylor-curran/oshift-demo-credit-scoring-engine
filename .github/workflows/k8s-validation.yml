@@ -1,0 +1,101 @@
+name: K8s Standards Validation
+
+on:
+  pull_request:
+    paths:
+      - 'k8s/**'
+      - '.github/workflows/k8s-validation.yml'
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'k8s/**'
+
+jobs:
+  k8s-standards-check:
+    runs-on: ubuntu-latest
+    name: Validate K8s Standards Compliance
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+        
+    - name: Validate YAML syntax
+      run: |
+        echo "🔍 Validating YAML syntax for all k8s manifests..."
+        for file in k8s/*.yaml k8s/*.yml; do
+          if [ -f "$file" ]; then
+            echo "Checking $file..."
+            kubectl --dry-run=client apply -f "$file" || exit 1
+          fi
+        done
+        echo "✅ All YAML files are syntactically valid"
+        
+    - name: Check Resource Limits (Rule 01)
+      run: |
+        echo "🔍 Checking Rule 01: Resource Requests & Limits..."
+        if ! grep -q "requests:" k8s/deployment.yaml; then
+          echo "❌ Missing resource requests"
+          exit 1
+        fi
+        if ! grep -q "limits:" k8s/deployment.yaml; then
+          echo "❌ Missing resource limits"
+          exit 1
+        fi
+        echo "✅ Rule 01: Resource limits properly configured"
+        
+    - name: Check Security Context (Rule 02)
+      run: |
+        echo "🔍 Checking Rule 02: Pod Security Baseline..."
+        if ! grep -q "runAsNonRoot: true" k8s/deployment.yaml; then
+          echo "❌ Missing runAsNonRoot: true"
+          exit 1
+        fi
+        if ! grep -q "readOnlyRootFilesystem: true" k8s/deployment.yaml; then
+          echo "❌ Missing readOnlyRootFilesystem: true"
+          exit 1
+        fi
+        if ! grep -q 'drop: \["ALL"\]' k8s/deployment.yaml; then
+          echo "❌ Missing capabilities drop ALL"
+          exit 1
+        fi
+        echo "✅ Rule 02: Security context properly configured"
+        
+    - name: Check Image Provenance (Rule 03)
+      run: |
+        echo "🔍 Checking Rule 03: Image Provenance..."
+        if grep -q ":latest" k8s/*.yaml; then
+          echo "❌ Found :latest tag in manifests"
+          exit 1
+        fi
+        if ! grep -q "@sha256:" k8s/deployment.yaml; then
+          echo "❌ Missing SHA digest in image reference"
+          exit 1
+        fi
+        echo "✅ Rule 03: Image provenance properly configured"
+        
+    - name: Check Labels (Rule 04)
+      run: |
+        echo "🔍 Checking Rule 04: Naming & Label Conventions..."
+        required_labels=("app.kubernetes.io/name" "app.kubernetes.io/version" "app.kubernetes.io/part-of" "environment" "managed-by")
+        for label in "${required_labels[@]}"; do
+          if ! grep -q "$label:" k8s/deployment.yaml; then
+            echo "❌ Missing required label: $label"
+            exit 1
+          fi
+        done
+        echo "✅ Rule 04: Labels properly configured"
+        
+    - name: Standards Compliance Summary
+      run: |
+        echo "🎉 K8s Standards Compliance Check Complete!"
+        echo "✅ Rule 01: Resource Requests & Limits - PASSED"
+        echo "✅ Rule 02: Pod Security Baseline - PASSED"  
+        echo "✅ Rule 03: Image Provenance - PASSED"
+        echo "✅ Rule 04: Naming & Labels - PASSED"
+        echo ""
+        echo "🏆 All k8s standards compliance checks passed successfully!"
