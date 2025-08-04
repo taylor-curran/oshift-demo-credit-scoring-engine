@@ -23,6 +23,10 @@ spec:
         app.kubernetes.io/part-of: retail-banking
         environment: prod
         managed-by: helm
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -103,7 +107,7 @@ spec:
         emptyDir: {}
       - name: models-volume
         configMap:
-          name: ml-models-config
+          name: pe-eng-ml-models-config-prod
       - name: logs-volume
         emptyDir: {}
       restartPolicy: Always
