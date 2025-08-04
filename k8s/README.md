@@ -1,65 +1,75 @@
-# Kubernetes Deployment for Credit Scoring Engine
+# Kubernetes Manifests for Credit Scoring Engine
 
-This directory contains Kubernetes manifests for deploying the Credit Scoring Engine application in compliance with organizational k8s standards.
+This directory contains Kubernetes manifests that comply with enterprise k8s standards for the Credit Scoring Engine application.
 
 ## Standards Compliance
 
-### Rule 02 - Security Context Baseline
-- ✅ `runAsNonRoot: true` - All containers run as non-root user (1001)
-- ✅ `seccompProfile.type: RuntimeDefault` - Seccomp profile applied
-- ✅ `readOnlyRootFilesystem: true` - Root filesystem is read-only
-- ✅ `capabilities.drop: ["ALL"]` - All capabilities dropped
+### Rule 01 - Resource Requests & Limits ✅
+- **CPU Requests**: 500m (0.5 vCPU)
+- **CPU Limits**: 2000m (2 vCPU) 
+- **Memory Requests**: 1536Mi (~1.5GB)
+- **Memory Limits**: 3072Mi (3GB)
+- **Ratio**: Requests are ~75% of limits for HPA headroom
 
-### Rule 03 - Image Provenance
-- ✅ No `:latest` tags - Uses pinned version `3.1.0` with SHA digest
-- ✅ Registry allow-list - Uses `registry.bank.internal/*` approved registry
-- ✅ Signed images - Production images must have valid Cosign signatures
+### Rule 02 - Pod Security Baseline ✅
+- **runAsNonRoot**: `true` (runs as user 1001)
+- **seccompProfile**: `RuntimeDefault`
+- **readOnlyRootFilesystem**: `true`
+- **capabilities**: Drop `["ALL"]`
+- **allowPrivilegeEscalation**: `false`
 
-### Rule 04 - Naming & Label Conventions
-- ✅ Release name prefix: `pe-eng-credit-scoring-engine-prod`
-- ✅ Mandatory labels:
-  - `app.kubernetes.io/name: credit-scoring-engine`
-  - `app.kubernetes.io/version: "3.1.0"`
-  - `app.kubernetes.io/part-of: retail-banking`
-  - `environment: prod`
-  - `managed-by: helm`
+### Rule 03 - Image Provenance ✅
+- **Registry**: `registry.bank.internal` (trusted internal registry)
+- **Tag**: Pinned to `3.1.0` (no `:latest`)
+- **Digest**: SHA256 digest for immutable reference
+- **Signature**: Ready for Cosign verification
 
-### Rule 05 - Logging & Observability
-- ✅ Prometheus annotations for metrics scraping
-- ✅ Health probes configured for Spring Boot Actuator endpoints
-- ✅ Structured logging via JSON stdout (application level)
+### Rule 04 - Naming & Label Conventions ✅
+- **Release Name**: `pe-eng-credit-scoring-engine-prod`
+- **Standard Labels**:
+  - `app.kubernetes.io/name`: `credit-scoring-engine`
+  - `app.kubernetes.io/version`: `3.1.0`
+  - `app.kubernetes.io/part-of`: `retail-banking`
+  - `environment`: `prod`
+  - `managed-by`: `helm`
 
-### Rule 06 - Health Probes
-- ✅ Liveness probe: `/actuator/health/liveness`
-- ✅ Readiness probe: `/actuator/health/readiness`
-- ✅ Appropriate timeouts and failure thresholds
+### Rule 05 - Logging & Observability ✅
+- **Prometheus Scraping**: `prometheus.io/scrape: "true"`
+- **Metrics Port**: `prometheus.io/port: "8080"`
+- **Prometheus Path**: `/actuator/prometheus`
+- **JSON Logging**: Application configured for structured stdout logging
+- **Auto-discovery**: Service automatically appears in Grafana dashboards
+
+### Rule 06 - Health Probes ✅
+- **Liveness Probe**: `/actuator/health/liveness` endpoint
+- **Readiness Probe**: `/actuator/health/readiness` endpoint
+- **Spring Boot Actuator**: JVM application health monitoring with proper timeouts
+
+## Files
+
+- `namespace.yaml` - Dedicated namespace with proper labels
+- `deployment.yaml` - Main application deployment with security contexts
+- `service.yaml` - ClusterIP service for internal communication
+- `configmap.yaml` - ML model configuration data
+- `secret.yaml` - Secure storage for sensitive configuration
+- `networkpolicy.yaml` - Network security policies
+- `kustomization.yaml` - Kustomize configuration for deployment
+- `Chart.yaml` - Helm chart metadata
+- `values.yaml` - Configurable values for different environments
 
 ## Deployment
 
 ```bash
-# Apply all manifests
+# Apply manifests directly
+kubectl apply -f k8s/
+
+# Or use Kustomize
 kubectl apply -k k8s/
 
-# Or apply individually
-kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/configmap.yaml
-kubectl apply -f k8s/secret.yaml
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-kubectl apply -f k8s/networkpolicy.yaml
+# Or use Helm
+helm install credit-scoring-engine k8s/ --namespace credit-scoring --create-namespace
 ```
 
-## Resource Requirements
+## Migration from Cloud Foundry
 
-- **CPU**: 1000m requests, 2000m limits per pod
-- **Memory**: 2Gi requests, 3Gi limits per pod
-- **Replicas**: 4 instances for high availability
-- **Storage**: Read-only root filesystem with temporary volumes
-
-## Security Features
-
-- Non-root user execution (UID 1001)
-- Read-only root filesystem
-- Network policies restricting ingress/egress
-- Secrets management for sensitive data
-- Capability dropping for enhanced security
+This replaces the Cloud Foundry `manifest.yml` with Kubernetes-native deployment patterns while maintaining the same application configuration and scaling characteristics.
