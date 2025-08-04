@@ -26,7 +26,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/metrics"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -118,6 +118,14 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 10
           failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /actuator/health/startup
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
@@ -130,3 +138,5 @@ spec:
       - name: models-volume
         configMap:
           name: credit-scoring-models
+      serviceAccountName: credit-scoring-engine
+      automountServiceAccountToken: false
