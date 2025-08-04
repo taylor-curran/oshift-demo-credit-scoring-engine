@@ -51,8 +51,7 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-            drop:
-            - ALL
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "1200m"
@@ -135,8 +134,7 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-            drop:
-            - ALL
+            drop: ["ALL"]
         resources:
           requests:
             cpu: "50m"
