@@ -28,13 +28,21 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
       containers:
       - name: credit-scoring-engine
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          allowPrivilegeEscalation: false
         image: registry.bank.internal/credit-scoring-engine:3.1.0@sha256:a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890
         ports:
         - containerPort: 8080
@@ -91,23 +99,62 @@ spec:
           value: "true"
         livenessProbe:
           httpGet:
-            path: /actuator/health/liveness
+            path: /actuator/health
             port: 8080
           initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health/readiness
+            path: /actuator/health
             port: 8080
           initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 1
         volumeMounts:
         - name: tmp-volume
           mountPath: /tmp
         - name: models-volume
           mountPath: /models
+        - name: logs-volume
+          mountPath: /var/log/app
+      - name: fluent-bit
+        image: registry.bank.internal/fluent-bit:2.1.8
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          seccompProfile:
+            type: RuntimeDefault
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /var/log/app
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+        env:
+        - name: LOKI_URL
+          value: "http://loki.observability.svc.cluster.local:3100"
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         emptyDir: {}
+      - name: logs-volume
+        emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config-prod

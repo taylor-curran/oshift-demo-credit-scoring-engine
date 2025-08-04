@@ -15,9 +15,10 @@ data:
     management.endpoint.health.show-details=always
     management.health.probes.enabled=true
     
-    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","logger":"%logger{36}","message":"%msg","thread":"%thread"}%n
     logging.level.com.banking.credit=INFO
     logging.level.org.springframework=WARN
+    logging.level.org.springframework.web=INFO
     
     spring.datasource.url=jdbc:postgresql://credit-postgres-primary:5432/creditdb
     spring.datasource.username=${DB_USERNAME}
