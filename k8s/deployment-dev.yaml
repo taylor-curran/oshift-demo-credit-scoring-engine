@@ -54,11 +54,11 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "500m"
+            cpu: "300m"
             memory: "1536Mi"
           limits:
-            cpu: "2000m"
-            memory: "3072Mi"
+            cpu: "500m"
+            memory: "2560Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "development,scoring"
@@ -124,9 +124,37 @@ spec:
         - name: models-volume
           mountPath: /models
           readOnly: true
+      - name: fluent-bit
+        image: quay.io/redhat-openshift-approved/fluent-bit:2.1.10@sha256:8f7b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
       volumes:
       - name: tmp-volume
         emptyDir: {}
       - name: models-volume
         configMap:
           name: pe-eng-ml-models-config-dev
+      - name: fluent-bit-config
+        configMap:
+          name: pe-eng-fluent-bit-config-dev

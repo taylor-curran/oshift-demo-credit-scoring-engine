@@ -54,10 +54,10 @@ spec:
           allowPrivilegeEscalation: false
         resources:
           requests:
-            cpu: "500m"
-            memory: "2Gi"
+            cpu: "300m"
+            memory: "1800Mi"
           limits:
-            cpu: "2000m"
+            cpu: "500m"
             memory: "3Gi"
         env:
         - name: SPRING_PROFILES_ACTIVE

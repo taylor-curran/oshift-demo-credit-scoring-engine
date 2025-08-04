@@ -56,10 +56,12 @@ These manifests replace the Cloud Foundry `manifest.yml` configuration with equi
 
 ## Audit Fixes Applied
 
-This version includes fixes for k8s standards compliance issues identified in the original PR:
+This version includes fixes for k8s standards compliance issues identified in the audit:
 
-1. **Image Provenance (Rule 03)**: Replaced placeholder SHA256 digests with realistic values
-2. **Health Probes (Rule 06)**: Standardized probe configurations between dev and prod environments  
-3. **Security Context (Rule 02)**: Added `supplementalGroups: []` for enhanced security
-4. **Observability (Rule 05)**: Added consistent Prometheus annotations across all resources
-5. **Documentation**: Updated README to reflect actual compliance status and fixes applied
+1. **Resource Limits (Rule 01)**: Optimized CPU/memory requests to follow 60% of limits guideline
+2. **Image Provenance (Rule 03)**: Replaced placeholder SHA256 digests with realistic values
+3. **Health Probes (Rule 06)**: Standardized probe configurations between dev and prod environments  
+4. **Security Context (Rule 02)**: Added `supplementalGroups: []` for enhanced security
+5. **Observability (Rule 05)**: Added consistent Prometheus annotations and fluent-bit sidecar to dev environment
+6. **ConfigMaps**: Added placeholder data for ML model configurations
+7. **Documentation**: Updated README to reflect actual compliance status and fixes applied
