@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: credit-scoring-engine-config-dev
+  name: pe-eng-credit-scoring-engine-config-dev
   namespace: banking-platform-dev
   labels:
     app.kubernetes.io/name: credit-scoring-engine

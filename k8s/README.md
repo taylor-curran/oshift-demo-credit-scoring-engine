@@ -16,7 +16,7 @@ This directory contains Kubernetes manifests for the Credit Scoring Engine that 
 - Registry from allowlist: `registry.bank.internal/*`
 
 ### Rule 04 - Naming & Label Conventions ✅
-- Release name prefix: `credit-scoring-engine-dev`
+- Release name prefix: `pe-eng-credit-scoring-engine-dev`
 - Mandatory labels:
   - `app.kubernetes.io/name: credit-scoring-engine`
   - `app.kubernetes.io/version: "3.1.0"`
