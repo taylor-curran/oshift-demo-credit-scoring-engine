@@ -11,3 +11,8 @@ metadata:
     managed-by: helm
 data:
   proprietary-score-v2.3.pkl: |
+    model_version: "2.3"
+    feature_count: 247
+    model_type: "proprietary_credit_scoring"
+    training_date: "2024-12-15"
+    accuracy_score: 0.94
