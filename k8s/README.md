@@ -37,26 +37,40 @@ This directory contains Kubernetes manifests that are fully compliant with the k
 
 ## Files
 
-- `deployment.yaml` - Production deployment (4 replicas)
+- `deployment-prod.yaml` - Production deployment (4 replicas)
 - `deployment-dev.yaml` - Development deployment (2 replicas)
-- `service.yaml` - Production service
-- `service-dev.yaml` - Development service
 - `service-prod.yaml` - Production service
+- `service-dev.yaml` - Development service
 - `fluent-bit-configmap-dev.yaml` - Dev logging configuration
 - `fluent-bit-configmap-prod.yaml` - Production logging configuration
+- `hpa.yaml` - Horizontal Pod Autoscaler for production
+- `ingress.yaml` - Ingress configuration for production
+- `servicemonitor.yaml` - Prometheus ServiceMonitor for production
+- `namespace.yaml` - Namespace definition
+- `configmap.yaml` - ML models configuration
+- `kustomization.yaml` - Kustomize configuration
 
 ## Deployment
 
 ```bash
 # Deploy development environment
+kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/fluent-bit-configmap-dev.yaml
 kubectl apply -f k8s/deployment-dev.yaml
 kubectl apply -f k8s/service-dev.yaml
 
 # Deploy production environment
+kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/fluent-bit-configmap-prod.yaml
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/deployment-prod.yaml
+kubectl apply -f k8s/service-prod.yaml
+kubectl apply -f k8s/hpa.yaml
+kubectl apply -f k8s/ingress.yaml
+kubectl apply -f k8s/servicemonitor.yaml
+
+# Or use Kustomize
+kubectl apply -k k8s/
 ```
 
 ## Notes
