@@ -34,8 +34,8 @@ data:
     ab.test.enabled={{ .Values.env.abTestEnabled }}
     
     logging.level.com.banking.credit=INFO
-    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
-    logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+    logging.pattern.console={"timestamp":"%d{yyyy-MM-dd HH:mm:ss}","level":"%level","logger":"%logger","message":"%msg"}%n
+    logging.pattern.file={"timestamp":"%d{yyyy-MM-dd HH:mm:ss}","thread":"%thread","level":"%-5level","logger":"%logger{36}","message":"%msg"}%n
     
     management.endpoints.web.exposure.include=health,info,metrics,prometheus
     management.endpoint.health.show-details=always

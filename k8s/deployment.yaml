@@ -1,24 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: pe-eng-credit-scoring-engine-dev
   labels:
-    app: credit-scoring
-    version: latest
+    app.kubernetes.io/name: credit-scoring-engine
+    app.kubernetes.io/version: "3.1.0"
+    app.kubernetes.io/part-of: retail-banking
+    environment: dev
+    managed-by: helm
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: credit-scoring
-      env: development
+      app.kubernetes.io/name: credit-scoring-engine
+      environment: dev
   template:
     metadata:
       labels:
-        application: credit-scoring-engine
-        ver: "3.1.0"
-        business-unit: retail-banking
-        env: dev
-        tool: helm
+        app.kubernetes.io/name: credit-scoring-engine
+        app.kubernetes.io/version: "3.1.0"
+        app.kubernetes.io/part-of: retail-banking
+        environment: dev
+        managed-by: helm
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
@@ -35,7 +38,7 @@ spec:
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
-        image: "credit-scoring-engine:3.1.0"
+        image: "registry.bank.internal/credit-scoring-engine:3.1.0"
         ports:
         - containerPort: 8080
           name: http
@@ -94,49 +97,49 @@ spec:
           value: "true"
         envFrom:
         - configMapRef:
-            name: postgres-primary-config
+            name: pe-eng-credit-scoring-engine-postgres-primary-config
         - secretRef:
-            name: postgres-primary-secret
+            name: pe-eng-credit-scoring-engine-postgres-primary-secret
         - configMapRef:
-            name: postgres-replica-config
+            name: pe-eng-credit-scoring-engine-postgres-replica-config
         - secretRef:
-            name: postgres-replica-secret
+            name: pe-eng-credit-scoring-engine-postgres-replica-secret
         - configMapRef:
-            name: redis-cluster-config
+            name: pe-eng-credit-scoring-engine-redis-cluster-config
         - secretRef:
-            name: redis-cluster-secret
+            name: pe-eng-credit-scoring-engine-redis-cluster-secret
         - configMapRef:
-            name: model-storage-s3-config
+            name: pe-eng-credit-scoring-engine-model-storage-s3-config
         - secretRef:
-            name: model-storage-s3-secret
+            name: pe-eng-credit-scoring-engine-model-storage-s3-secret
         - configMapRef:
-            name: credit-bureau-proxy-config
+            name: pe-eng-credit-scoring-engine-credit-bureau-proxy-config
         - secretRef:
-            name: credit-bureau-proxy-secret
+            name: pe-eng-credit-scoring-engine-credit-bureau-proxy-secret
         - configMapRef:
-            name: encryption-service-config
+            name: pe-eng-credit-scoring-engine-encryption-service-config
         - secretRef:
-            name: encryption-service-secret
+            name: pe-eng-credit-scoring-engine-encryption-service-secret
         - configMapRef:
-            name: audit-trail-kafka-config
+            name: pe-eng-credit-scoring-engine-audit-trail-kafka-config
         - secretRef:
-            name: audit-trail-kafka-secret
+            name: pe-eng-credit-scoring-engine-audit-trail-kafka-secret
         livenessProbe:
           httpGet:
-            path: /api/v1/credit/health/detailed
+            path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 1
         volumeMounts:
         - name: ml-models
           mountPath: /models
