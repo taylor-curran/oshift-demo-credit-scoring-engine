@@ -104,20 +104,20 @@ env:
 probes:
   liveness:
     httpGet:
-      path: /api/v1/credit/health/detailed
+      path: /actuator/health/liveness
       port: 8080
-    initialDelaySeconds: 60
+    initialDelaySeconds: 30
     periodSeconds: 30
     timeoutSeconds: 10
     failureThreshold: 3
   readiness:
     httpGet:
-      path: /actuator/health
+      path: /actuator/health/readiness
       port: 8080
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 3
+    failureThreshold: 1
 
 volumes:
   mlModels:
