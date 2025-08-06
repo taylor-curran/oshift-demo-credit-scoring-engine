@@ -29,14 +29,16 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: ["ALL"]
       containers:
       - name: credit-scoring-engine
-        image: "[REGISTRY]/credit-scoring-engine:[TAG]"
+        securityContext:
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        image: "credit-scoring-engine:3.1.0"
         ports:
         - containerPort: 8080
           name: http
