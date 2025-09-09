@@ -1,0 +1,16 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "credit-scoring-engine.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
