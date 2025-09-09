@@ -1,0 +1,34 @@
+{{- if .Values.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  labels:
+    {{- include "credit-scoring-engine.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "credit-scoring-engine.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "credit-scoring-engine.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
