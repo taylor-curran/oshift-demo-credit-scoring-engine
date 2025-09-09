@@ -156,3 +156,9 @@ services:
     enabled: true
     configMapName: pe-eng-credit-scoring-engine-audit-trail-kafka-config
     secretName: pe-eng-credit-scoring-engine-audit-trail-kafka-secret
+
+rbac:
+  create: true
+
+networkPolicy:
+  enabled: true
